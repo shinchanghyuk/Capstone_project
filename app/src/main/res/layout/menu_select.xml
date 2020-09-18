@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/Relative_btn"
+        style="@style/menu_btn"
+        android:text="상대매칭"
+        app:layout_constraintLeft_toRightOf="@+id/guideline1"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+    <Button
+        android:id="@+id/Mercenary_btn"
+        style="@style/menu_btn"
+        android:layout_marginLeft="20dp"
+        android:text="용병모집"
+        app:layout_constraintLeft_toRightOf="@+id/Relative_btn"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+    <Button
+        android:id="@+id/Stadium_btn"
+        style="@style/menu_btn"
+        android:layout_marginTop="30dp"
+        android:text="구장정보 확인"
+        app:layout_constraintLeft_toRightOf="@+id/guideline1"
+        app:layout_constraintTop_toBottomOf="@+id/Relative_btn" />
+
+    <Button
+        android:id="@+id/Promotion_btn"
+        style="@style/menu_btn"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:text="팀 홍보"
+        app:layout_constraintLeft_toRightOf="@+id/Stadium_btn"
+        app:layout_constraintTop_toBottomOf="@+id/Mercenary_btn" />
+
+    <Button
+        android:id="@+id/Declaration_btn"
+        style="@style/menu_btn"
+        android:layout_marginTop="30dp"
+        android:text="유저신고"
+        app:layout_constraintLeft_toRightOf="@+id/guideline1"
+        app:layout_constraintTop_toBottomOf="@+id/Stadium_btn" />
+
+    <Button
+        android:id="@+id/Preferences_btn"
+        style="@style/menu_btn"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:text="환경설정"
+        app:layout_constraintLeft_toRightOf="@+id/Declaration_btn"
+        app:layout_constraintTop_toBottomOf="@+id/Promotion_btn" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="205dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="15dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

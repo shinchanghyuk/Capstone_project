@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/txtArea"
+        style="@style/text_style"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="15dp"
+        android:text="선택된 지역들"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_listview"
+        android:background="@drawable/edit_background"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:scrollbars="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/txtArea"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <ListView
+        android:id="@+id/selList"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtArea" />
+
+    <ListView
+        android:id="@+id/leftList"
+        android:layout_width="180dp"
+        android:layout_height="300dp"
+        android:layout_margin="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/spinner_background"
+        android:entries="@array/area"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selList" />
+
+    <ListView
+        android:id="@+id/rightList"
+        android:layout_width="180dp"
+        android:layout_height="300dp"
+        android:layout_margin="16dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/spinner_background"
+        android:entries="@array/seoul_area"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/leftList"
+        app:layout_constraintTop_toBottomOf="@+id/selList" />
+
+    <Button
+        android:id="@+id/endPlaceBtn"
+        style="@style/relative_btn"
+        android:layout_width="wrap_content"
+        android:layout_margin="20dp"
+        android:text="확인"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rightList" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="50dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

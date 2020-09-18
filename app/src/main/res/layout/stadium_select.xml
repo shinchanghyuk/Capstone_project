@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".MainActivity">
+
+    <EditText
+        style="@style/edit_style"
+        android:id="@+id/stadium_edit"
+        android:layout_margin="5dp"
+        android:layout_width="310dp"
+        android:hint="구장 이름을 입력하세요"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        style="@style/relative_btn"
+        android:id="@+id/stadium_search"
+        android:text="검색"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/stadium_edit"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <fragment
+        android:id="@+id/stadium_map"
+        class="com.google.android.gms.maps.MapFragment"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stadium_edit"
+        map:cameraTargetLat="37.568256"
+        map:cameraTargetLng="126.897240"
+        map:cameraZoom="15" />
+
+    <ListView
+        android:id="@+id/stadium_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stadium_map" />
+</androidx.constraintlayout.widget.ConstraintLayout>

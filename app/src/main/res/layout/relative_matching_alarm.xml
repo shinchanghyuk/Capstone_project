@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background">
+
+    <TextView
+        style="@style/alarm_text_style"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="지역"
+        android:id="@+id/region_tv"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/regionV"
+        style="@style/edit_style"
+        app:layout_constraintTop_toBottomOf="@+id/region_tv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/relative_btn2"
+        app:layout_constraintTop_toBottomOf="@+id/regionV"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:text="지역설정"
+        android:textSize="20dp"
+        android:id="@+id/tm_alarm_btnRegion" />
+
+    <TextView
+        style="@style/alarm_text_style"
+        app:layout_constraintTop_toBottomOf="@id/tm_alarm_btnRegion"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="실력"
+        android:id="@+id/skill_tv" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/skill_Radio"
+        app:layout_constraintTop_toBottomOf="@+id/skill_tv"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <RadioButton
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="상" />
+        <RadioButton
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="중" />
+        <RadioButton
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="하" />
+    </RadioGroup>
+
+    <TextView
+        style="@style/alarm_text_style"
+        app:layout_constraintTop_toBottomOf="@id/skill_Radio"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="시간"
+        android:id="@+id/time_tv" />
+
+    <EditText
+        android:id="@+id/stTime"
+        android:layout_width="110dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        style="@style/edit_style"
+        android:editable="false"
+        android:padding="5dp"
+        android:text="시작 시간"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_tv" />
+
+    <EditText
+        android:id="@+id/endTime"
+        style="@style/edit_style"
+        android:layout_width="110dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="70dp"
+        android:editable="false"
+        android:padding="5dp"
+        android:text=" 끝 시간"
+        app:layout_constraintLeft_toRightOf="@+id/stTime"
+        app:layout_constraintTop_toBottomOf="@+id/time_tv" />
+
+    <TextView
+        style="@style/alarm_text_style"
+        app:layout_constraintTop_toBottomOf="@+id/stTime"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="인원"
+        android:id="@+id/person_tv"/>
+
+    <EditText
+        android:inputType="number"
+        style="@style/edit_style"
+        android:id="@+id/tm_alarm_playerNum"
+        android:layout_width="100dp"
+        android:textSize="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/person_tv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/endBtn"
+        style="@style/relative_btn"
+        android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="30dp"
+        android:text="설정확인" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
