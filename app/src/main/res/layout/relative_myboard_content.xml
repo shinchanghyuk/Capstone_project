@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/my_tm_btnMatcing_pc"
@@ -57,7 +56,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/tableL"
-        android:background="@drawable/edit">
+        android:background="@drawable/edit_background">
         <TableRow
             android:layout_gravity="center"
             android:layout_width="match_parent"

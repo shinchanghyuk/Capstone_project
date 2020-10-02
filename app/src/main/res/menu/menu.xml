@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_one"
+        android:enabled="true"
+        android:icon="@drawable/ic_supervisor_account_black_24dp"
+        android:title="상대매칭"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_two"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="용병모집"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_three"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="팀 홍보"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_four"
+        android:enabled="true"
+        android:icon="@drawable/ic_location_on_black_24dp"
+        android:title="구장정보" />
+
+    <item
+        android:id="@+id/action_five"
+        android:enabled="true"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="내 정보"
+        app:showAsAction="ifRoom" />
+
+</menu>

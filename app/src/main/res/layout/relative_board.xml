@@ -4,31 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/myboard_btn"
-        style="@style/relative_btn"
-        android:layout_width="170dp"
-        android:text="내 게시판"
+    <Spinner
+        android:id="@+id/search_spinner"
+        style="@style/spinner_style"
+        android:layout_margin="7dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/write_btn"
-        style="@style/relative_btn"
-        android:layout_width="110dp"
-        android:text="글쓰기"
-        app:layout_constraintLeft_toRightOf="@id/myboard_btn"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/alarm_btn"
-        style="@style/relative_btn"
-        android:layout_width="110dp"
-        android:text="알람"
-        app:layout_constraintLeft_toRightOf="@id/write_btn"
+    <EditText
+        android:id="@+id/search_edit"
+        style="@style/edit_style"
+        android:padding="10dp"
+        app:layout_constraintLeft_toRightOf="@+id/search_spinner"
+        app:layout_constraintRight_toLeftOf="@+id/search_btn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -36,21 +26,7 @@
         style="@style/view_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/write_btn" />
-
-    <Spinner
-        android:id="@+id/search_spinner"
-        style="@style/spinner_style"
-        android:layout_margin="7dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/line" />
-
-    <EditText
-        android:id="@+id/search_edit"
-        style="@style/edit_style"
-        app:layout_constraintLeft_toRightOf="@+id/search_spinner"
-        app:layout_constraintRight_toLeftOf="@+id/search_btn"
-        app:layout_constraintTop_toTopOf="@id/line" />
+        app:layout_constraintTop_toBottomOf="@+id/search_spinner" />
 
     <Button
         android:id="@+id/search_btn"
@@ -59,29 +35,45 @@
         android:layout_margin="7dp"
         android:text="검색"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/line"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/write_btn"
+        style="@style/relative_btn"
+        android:layout_width="80dp"
+        android:text="글쓰기"
+        app:layout_constraintRight_toLeftOf="@+id/alarm_btn"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+    <Button
+        android:id="@+id/alarm_btn"
+        style="@style/relative_btn"
+        android:layout_width="80dp"
+        android:text="알람"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="100dp" />
+        app:layout_constraintGuide_begin="58dp" />
 
     <TextView
         android:id="@+id/tv1"
         style="@style/text_style"
         android:text="등록된 게시글"
-        app:layout_constraintTop_toTopOf="@id/guideline"
+        android:layout_marginTop="23dp"
+        app:layout_constraintTop_toBottomOf="@id/search_spinner"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <TableLayout
-        android:id="@+id/tm_boardTop"
+        android:id="@+id/relativeBoard_title"
         style="@style/table_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv1">
+        app:layout_constraintTop_toBottomOf="@+id/alarm_btn">
         <TableRow
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
@@ -90,25 +82,38 @@
             android:layout_height="match_parent" >
             <TextView
                 style="@style/table_text_style"
+                android:layout_weight="0.5"
                 android:text="매칭현황" />
             <TextView
                 style="@style/table_text_style"
-                android:layout_weight="4"
+                android:layout_weight="3"
                 android:text="제목" />
             <TextView
                 style="@style/table_text_style"
+                android:layout_weight="0.5"
                 android:text="작성일자" />
             <TextView
                 style="@style/table_text_style"
+                android:layout_weight="0.5"
                 android:text="작성자" />
         </TableRow>
     </TableLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tmRecyclerV"
+            android:id="@+id/relativeBoard_Recycler"
             style="@style/recycler_style"
-            app:layout_constraintTop_toBottomOf="@id/tm_boardTop"
+            app:layout_constraintTop_toBottomOf="@id/relativeBoard_title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+       style="@style/BottomNavigation_style"
+        android:id="@+id/BottomNavigation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:labelVisibilityMode="unlabeled"
+        app:itemIconTint="@drawable/bottomnavi_item_color"
+        app:menu="@menu/menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

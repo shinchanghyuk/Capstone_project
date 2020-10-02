@@ -30,10 +30,10 @@ public class RelativeMyBoardAdapter extends RecyclerView.Adapter<RelativeMyBoard
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView1 = itemView.findViewById(R.id.tm_item1);
-            textView2 = itemView.findViewById(R.id.tm_item2);
-            textView3 = itemView.findViewById(R.id.tm_item3);
-            textView4 = itemView.findViewById(R.id.tm_item4);
+            textView1 = itemView.findViewById(R.id.tv1);
+            textView2 = itemView.findViewById(R.id.tv1);
+            textView3 = itemView.findViewById(R.id.tv1);
+            textView4 = itemView.findViewById(R.id.tv1);
         }
     }
     RelativeMyBoardAdapter(ArrayList<RelativeMyBoardItem> list, String mUserName, String[] mTitle, String[] mMatchDate, String[] mNum,
@@ -56,7 +56,7 @@ public class RelativeMyBoardAdapter extends RecyclerView.Adapter<RelativeMyBoard
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
-        View view = inflater.inflate(R.layout.recycler_item, parent, false) ;
+        View view = inflater.inflate(R.layout.board_recycler_item, parent, false) ;
         RelativeMyBoardAdapter.ViewHolder vh = new RelativeMyBoardAdapter.ViewHolder(view) ;
         return vh;
     }
