@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,43 +13,37 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public  class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> {
+    private ArrayList<PlaceItem> arrayList;
+    private Context context;
 
-    private ArrayList<BoardItem> mData = null;
+    public BoardAdapter(ArrayList<PlaceItem> arrayList, Context context) {
+        this.arrayList = arrayList;
+        this.context = context;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.board_place_item, parent, false);
+        ViewHolder holder = new ViewHolder(view);
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        holder.choicePlace.setText(arrayList.get(position).getRegion());
+    }
+    @Override
+    public int getItemCount() {
+        return arrayList.size();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView1;
+        private TextView choicePlace;
+
         ViewHolder(View itemView) {
             super(itemView);
 
-            textView1 = itemView.findViewById(R.id.tm_item1);
+            choicePlace = itemView.findViewById(R.id.boardPlace_recycler_item);
         }
-    }
-
-    BoardAdapter(ArrayList<BoardItem> list)
-    {
-        mData = list;
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
-
-        View view = inflater.inflate(R.layout.place_recycler_item, parent, false) ;
-        BoardAdapter.ViewHolder bVH = new BoardAdapter.ViewHolder(view) ;
-        return bVH;
-    }
-
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        BoardItem item = mData.get(position);
-        holder.textView1.setText(item.getPlace());
-    }
-
-    @Override
-    public int getItemCount() {
-        return mData.size();
     }
 }

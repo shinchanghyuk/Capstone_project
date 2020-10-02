@@ -8,11 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MenuActivity extends AppCompatActivity {
     Button menu_btn[];
-    String username;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_select);
-        setTitle("종목선택");
 
         menu_btn = new Button[6];
 
@@ -23,14 +21,10 @@ public class MenuActivity extends AppCompatActivity {
             menu_btn[i] = findViewById(btn_id[i]);
         }
 
-        Intent intent = getIntent();
-        username = intent.getExtras().getString("name");
-
         menu_btn[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, RelatvieBoardActivity.class);
-                intent.putExtra("name", username);
+                Intent intent = new Intent(MenuActivity.this, RelativeBoardActivity.class);
                 startActivity(intent);
             }
         });
@@ -67,7 +61,8 @@ public class MenuActivity extends AppCompatActivity {
         menu_btn[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MenuActivity.this, MypageActivity.class);
+                startActivity(intent);
             }
         });
     }

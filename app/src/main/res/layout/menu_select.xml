@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
+
+    <TextView
+        style="@style/title_style"
+        android:id="@+id/title"
+        android:textColor="@color/title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
     <Button
         android:id="@+id/Relative_btn"
-        style="@style/menu_btn"
+        style="@style/menuBtn_style"
         android:text="상대매칭"
+        android:layout_marginTop="50dp"
         app:layout_constraintLeft_toRightOf="@+id/guideline1"
-        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <Button
         android:id="@+id/Mercenary_btn"
-        style="@style/menu_btn"
+        style="@style/menuBtn_style"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
         android:text="용병모집"
         app:layout_constraintLeft_toRightOf="@+id/Relative_btn"
-        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <Button
         android:id="@+id/Stadium_btn"
-        style="@style/menu_btn"
+        style="@style/menuBtn_style"
         android:layout_marginTop="30dp"
         android:text="구장정보 확인"
         app:layout_constraintLeft_toRightOf="@+id/guideline1"
@@ -32,7 +39,7 @@
 
     <Button
         android:id="@+id/Promotion_btn"
-        style="@style/menu_btn"
+        style="@style/menuBtn_style"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
         android:text="팀 홍보"
@@ -41,7 +48,7 @@
 
     <Button
         android:id="@+id/Declaration_btn"
-        style="@style/menu_btn"
+        style="@style/menuBtn_style"
         android:layout_marginTop="30dp"
         android:text="유저신고"
         app:layout_constraintLeft_toRightOf="@+id/guideline1"
@@ -49,7 +56,7 @@
 
     <Button
         android:id="@+id/Preferences_btn"
-        style="@style/menu_btn"
+        style="@style/menuBtn_style"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
         android:text="환경설정"
@@ -61,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="205dp" />
+        app:layout_constraintGuide_begin="100dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"

@@ -1,31 +1,34 @@
 package com.example.capstone_project;
 
 public class RelativeBoardItem {
-    private String matching_check  = null;
-    private String contents = null;
-    private String write_day = null;
-    private String write_user = null;
+    private String matching;
+    private String title;
+    private String day;
+    private String user;
 
-    public void setMatching_check (String m_check){
-        matching_check = m_check;
+    public RelativeBoardItem() { }
+    public void setMatching(String matching) {
+        this.matching = matching;
     }
-    public void setContents (String con){
-        contents = con;
+    public String getMatching() {
+        return matching;
     }
-    public void setWrite_day (String w_day){ write_day = w_day; }
-    public  void setWrite_user(String w_user) {
-        write_user = w_user;
+    public void setTitle(String title) {
+        this.title = title;
     }
-    public String getMatching_check() {
-        return this.matching_check;
+    public String getTitle() {
+        return title;
     }
-    public String getContents() {
-        return this.contents;
+    public void setDay(String day) {
+        this.day = day;
     }
-    public String getWrite_day() {
-        return this.write_day;
+    public String getDay() {
+        return day;
     }
-    public String getWrite_user() {
-        return this.write_user;
+    public String getUser() {
+        return user;
+    }
+    public void setUser(String user) {
+        this.user = user;
     }
 }

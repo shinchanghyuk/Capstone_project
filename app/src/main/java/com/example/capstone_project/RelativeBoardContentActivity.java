@@ -2,129 +2,99 @@ package com.example.capstone_project;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RelativeBoardContentActivity extends AppCompatActivity {
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-    Intent intent;
-    int number;
-    TextView rb_reigonTv, rb_dateTv, rb_abliTv, rb_numTv, rb_content;
-    Button tm_menu_btn;
+import java.util.ArrayList;
+
+public class RelativeBoardContentActivity extends AppCompatActivity {
+    private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
+    private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
+    private TextView matching_tv, place_tv, date_tv, person_tv, ability_tv, content_tv, title_tv, time_tv;
+    private Button list_btn, reply_btn;
+    private String matching, day, title, content, ability, starttime, endtime, person;
+    private ArrayList<String> place;
+    private int number;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relative_board_content);
 
-        rb_abliTv = findViewById(R.id.rb_abliTv);
-        rb_dateTv = findViewById(R.id.rb_dateTv);
-        rb_reigonTv = findViewById(R.id.rb_regionTv);
-        rb_numTv = findViewById(R.id.rb_numTv);
-        rb_content = findViewById(R.id.tm_con);
+        matching_tv = findViewById(R.id.matching_tv);
+        place_tv = findViewById(R.id.place_tv);
+        date_tv = findViewById(R.id.date_tv);
+        time_tv = findViewById(R.id.time_tv);
+        person_tv = findViewById(R.id.person_tv);
+        ability_tv = findViewById(R.id.ability_tv);
+        title_tv = findViewById(R.id.title_tv);
+        content_tv = findViewById(R.id.content_tv);
+        list_btn = findViewById(R.id.list_btn);
+        reply_btn= findViewById(R.id.reply_btn);
 
-        intent = getIntent();
-        number = intent.getIntExtra("number" , -1);
+        Intent intent = getIntent();
+        number = intent.getIntExtra("boardNum", 0);
+        Log.d("pp", String.valueOf(number));
 
-        String[]  num = intent.getStringArrayExtra("num");
-        String[]  region = intent.getStringArrayExtra("region");
-        String[]  date = intent.getStringArrayExtra("date");
-        String[]  cont = intent.getStringArrayExtra("con");
-        String[] ability = intent.getStringArrayExtra("ability");
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("board").child("relative");
 
-        switch (number)
-        {
-            case 0:
-                rb_numTv.setText(num[0]);
-                rb_reigonTv.setText(region[0]);
-                rb_dateTv.setText(date[0]);
-                rb_abliTv.setText(ability[0]);
-                rb_content.setText(cont[0]);
-                break;
-            case 1:
-                rb_numTv.setText(num[1]);
-                rb_reigonTv.setText(region[1]);
-                rb_dateTv.setText(date[1]);
-                rb_abliTv.setText(ability[1]);
-                rb_content.setText(cont[1]);
-                break;
-            case 2:
-                rb_numTv.setText(num[2]);
-                rb_reigonTv.setText(region[2]);
-                rb_dateTv.setText(date[2]);
-                rb_abliTv.setText(ability[2]);
-                rb_content.setText(cont[2]);
-                break;
-            case 3:
-                rb_numTv.setText(num[3]);
-                rb_reigonTv.setText(region[3]);
-                rb_dateTv.setText(date[3]);
-                rb_abliTv.setText(ability[3]);
-                rb_content.setText(cont[3]);
-                break;
+        databaseReference.orderByChild("number").equalTo(number).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
+                    RelativeBoardContentItem relativeBoardItem = snapshot.getValue(RelativeBoardContentItem.class);
+                    // RelativeBoardContentItem 객체에 데이터를 담음
+                   matching = relativeBoardItem.getMatching();
+                   place = relativeBoardItem.getPlace();
+                    day = relativeBoardItem.getDay();
+                    title = relativeBoardItem.getTitle();
+                    content = relativeBoardItem.getContent();
+                    ability = relativeBoardItem.getAbility();
+                    starttime = relativeBoardItem.getStarttime();
+                    endtime = relativeBoardItem.getEndtime();
+                    person = relativeBoardItem.getPerson();
+                }
 
-            case 4:
-                rb_numTv.setText(num[4]);
-                rb_reigonTv.setText(region[4]);
-                rb_dateTv.setText(date[4]);
-                rb_abliTv.setText(ability[4]);
-                rb_content.setText(cont[4]);
-                break;
-            case 5:
-                rb_numTv.setText(num[5]);
-                rb_reigonTv.setText(region[5]);
-                rb_dateTv.setText(date[5]);
-                rb_abliTv.setText(ability[5]);
-                rb_content.setText(cont[5]);
-                break;
-            case 6:
-                rb_numTv.setText(num[6]);
-                rb_reigonTv.setText(region[6]);
-                rb_dateTv.setText(date[6]);
-                rb_abliTv.setText(ability[6]);
-                rb_content.setText(cont[6]);
-                break;
-            case 7:
-                rb_numTv.setText(num[7]);
-                rb_reigonTv.setText(region[7]);
-                rb_dateTv.setText(date[7]);
-                rb_abliTv.setText(ability[7]);
-                rb_content.setText(cont[7]);
-                break;
-            case 8:
-                rb_numTv.setText(num[8]);
-                rb_reigonTv.setText(region[8]);
-                rb_dateTv.setText(date[8]);
-                rb_abliTv.setText(ability[8]);
-                rb_content.setText(cont[8]);
-                break;
-            case 9:
-                rb_numTv.setText(num[9]);
-                rb_reigonTv.setText(region[9]);
-                rb_dateTv.setText(date[9]);
-                rb_abliTv.setText(ability[9]);
-                rb_content.setText(cont[9]);
-                break;
-            case 10:
-                rb_numTv.setText(num[10]);
-                rb_reigonTv.setText(region[10]);
-                rb_dateTv.setText(date[10]);
-                rb_abliTv.setText(ability[10]);
-                rb_content.setText(cont[10]);
-                break;
-        }
+                matching_tv.setText(matching);
+                place_tv.setText(String.valueOf(place));
+                date_tv.setText(day);
+                time_tv.setText(starttime + " ~ " + endtime);
+                title_tv.setText(title);
+                person_tv.setText(person);
+                ability_tv.setText(ability);
+                content_tv.setText(content);
 
-        tm_menu_btn = findViewById(R.id.tm_btnList);
-
-        tm_menu_btn.setOnClickListener(new View.OnClickListener() {
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+        list_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RelativeBoardContentActivity.this, RelatvieBoardActivity.class);
+                Intent intent = new Intent(RelativeBoardContentActivity.this, RelativeBoardActivity.class);
                 startActivity(intent);
             }
         });
-    }
 
+        reply_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 댓글 넣었을 시 동작
+            }
+        });
+    }
 }

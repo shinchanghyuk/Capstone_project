@@ -26,7 +26,7 @@
     app:layout_constraintTop_toBottomOf="@+id/stadium_nameTv"/>
 
 <TableLayout
-    android:background="@drawable/edit"
+    android:background="@drawable/edit_background"
     android:layout_margin="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
