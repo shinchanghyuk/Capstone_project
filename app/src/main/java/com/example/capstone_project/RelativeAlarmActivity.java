@@ -20,7 +20,7 @@ public class RelativeAlarmActivity extends AppCompatActivity {
     Button tm_alarm_btnRegion, endBtn;
     public static Context maContext;
     TextView regionV;
-//asdfsadfㅁㄴㅇㄻㄴㅇㄻㄴㅇㄹasda
+
     public void incomD(String str) {
         regionV.setText(str);
     }
