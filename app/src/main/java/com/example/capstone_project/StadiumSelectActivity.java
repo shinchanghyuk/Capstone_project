@@ -119,7 +119,7 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
                             = new LatLng(place.getLatitude()
                             , place.getLongitude());
 
-                    //String markerSnippet = getCurrentAddress(latLng);
+                    //String markerSnippet = getCurrentAddress(latLng); //현재위치
 
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng);
