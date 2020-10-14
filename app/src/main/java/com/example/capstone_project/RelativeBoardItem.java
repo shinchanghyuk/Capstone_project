@@ -5,6 +5,7 @@ public class RelativeBoardItem {
     private String title;
     private String day;
     private String user;
+    private String boardnumber;
 
     public RelativeBoardItem() { }
     public void setMatching(String matching) {
@@ -31,4 +32,6 @@ public class RelativeBoardItem {
     public void setUser(String user) {
         this.user = user;
     }
+    public String getBoardnumber() { return boardnumber; }
+    public void setBoardnumber(String number) { this.boardnumber = number; }
 }

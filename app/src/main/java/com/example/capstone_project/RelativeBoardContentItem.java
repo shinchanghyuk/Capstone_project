@@ -3,10 +3,9 @@ package com.example.capstone_project;
 import java.util.ArrayList;
 
 public class RelativeBoardContentItem {
-    private String matching, title, day, user, ability, content;
-    private String endtime, person, starttime;
-    private ArrayList<String> place;
-    private int number;
+        private String matching, title, day, user, ability, content;
+        private String endtime, person, starttime, place;
+        private int number;
 
     public RelativeBoardContentItem() {
     }
@@ -83,11 +82,11 @@ public class RelativeBoardContentItem {
         this.starttime = starttime;
     }
 
-    public ArrayList<String> getPlace() {
+    public String getPlace() {
         return place;
     }
 
-    public void setPlace(ArrayList<String> place) {
+    public void setPlace(String place) {
         this.place = place;
     }
 

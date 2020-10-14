@@ -21,7 +21,7 @@ public class CityPlaceAdapter extends RecyclerView.Adapter<CityPlaceAdapter.View
     private ArrayList<PlaceItem> arrayList;
     private Context context;
 
-    public CityPlaceAdapter(ArrayList<PlaceItem> arrayList, Context context, RecyclerView city_recyclerView) {
+    public CityPlaceAdapter(ArrayList<PlaceItem> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
     }

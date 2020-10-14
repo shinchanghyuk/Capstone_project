@@ -32,8 +32,8 @@ public class PlaceActivity extends AppCompatActivity {
     private ArrayList<TotalPlaceItem> total_arrayList;
     private PlaceItem placeItem; // 아이템
     private TotalPlaceItem totalPlaceItem; // 아이템
-    private ArrayList<String> choiceList; // 선택 된 지역들 담는 배열 리스트
-    private ArrayList<Integer> choiceNumber; // 선택 된 지역들 번호를 담는 배열 리스트
+    private String choicePlace = "x"; // 선택 된 지역담는 문자열
+    private int choiceNumber = 0; // 선택 된 지역들 번호를 Integer
     private RecyclerView.ViewHolder holder; // 리사이클러뷰 아이템 뷰에 접근하기 위한 holder
     private List<String> listGu1, listGu2; // 서울 구, 인천 구를 담는 배열리스트
     private int num;
@@ -47,14 +47,17 @@ public class PlaceActivity extends AppCompatActivity {
         confirm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("region", choiceList);
-                setResult(RESULT_OK, intent);
-                finish();
+                if (choicePlace.equals("x")) {
+                    Toast.makeText(getApplicationContext(), "지역을 선택하세요", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent();
+                    intent.putExtra("region", choicePlace);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }
-
     public void init() {
         confirm_btn = findViewById(R.id.confirm_btn);
         city_recyclerView = findViewById(R.id.city_recyclerview);
@@ -81,8 +84,6 @@ public class PlaceActivity extends AppCompatActivity {
         gu_arrayList1 = new ArrayList<>();
         gu_arrayList2 = new ArrayList<>();
         total_arrayList = new ArrayList<>();
-        choiceList = new ArrayList<>();
-        choiceNumber = new ArrayList<>();
 
         List<String> listCity = Arrays.asList(getResources().getStringArray(R.array.city));
         listGu1 = Arrays.asList(getResources().getStringArray(R.array.seoul_gu));
@@ -93,7 +94,7 @@ public class PlaceActivity extends AppCompatActivity {
             placeItem.setRegion(listCity.get(i));
             city_arrayList.add(placeItem);
         }
-        city_adapter = new CityPlaceAdapter(city_arrayList, this, city_recyclerView);
+        city_adapter = new CityPlaceAdapter(city_arrayList, this);
         city_recyclerView.setAdapter(city_adapter);
         city_adapter.notifyDataSetChanged();
 
@@ -103,7 +104,7 @@ public class PlaceActivity extends AppCompatActivity {
             gu_arrayList1.add(placeItem);
         }
 
-        gu_adapter = new GuPlaceAdapter(gu_arrayList1, this, choiceList.size());
+        gu_adapter = new GuPlaceAdapter(gu_arrayList1, this, choiceNumber);
         gu_recyclerView1.setAdapter(gu_adapter);
         gu_adapter.notifyDataSetChanged();
 
@@ -112,7 +113,7 @@ public class PlaceActivity extends AppCompatActivity {
             placeItem.setRegion(listGu2.get(i));
             gu_arrayList2.add(placeItem);
         }
-        gu_adapter = new GuPlaceAdapter(gu_arrayList2, this, choiceList.size());
+        gu_adapter = new GuPlaceAdapter(gu_arrayList2, this, choiceNumber);
         gu_recyclerView2.setAdapter(gu_adapter);
         gu_adapter.notifyDataSetChanged();
 
@@ -152,55 +153,58 @@ public class PlaceActivity extends AppCompatActivity {
         if (num == 0) { // 서울 클릭
             holder = (RecyclerView.ViewHolder)
                     gu_recyclerView1.findViewHolderForAdapterPosition(position);
-            choiceNumber.add(position);
         } else if (num == 1) { // 인천 클릭
             holder = (RecyclerView.ViewHolder)
                     gu_recyclerView2.findViewHolderForAdapterPosition(position);
-            choiceNumber.add(position);
         }
 
         holder.itemView.setEnabled(false);
         holder.itemView.setAlpha((float) 0.7);
         holder.itemView.setBackgroundColor(Color.parseColor("#f2f2f2"));
 
-        // for (int i = 0; i < 3; i++) { // 데이터가 비어 있을 때
-        choiceList.add(String.valueOf(choiceRegion));
+        choicePlace = choiceRegion;
+        choiceNumber = position;
         total();
     }
 
     public void total() {
-        for (int i = 0; i < choiceList.size(); i++) { // 데이터가 들어 있을 때
-            totalPlaceItem = new TotalPlaceItem();
-            totalPlaceItem.setRegion(choiceList.get(i));
-            totalPlaceItem.setCancel(R.drawable.ic_cancel_black_24dp);
-            total_arrayList.add(totalPlaceItem);
-
+        if(choicePlace.equals("x")) {
             total_adapter = new TotalPlaceAdapter(total_arrayList, this);
             total_recyclerView.setAdapter(total_adapter);
+        } else {
+        //   for (int i = 0; i < choiceList.size(); i++) { // 데이터가 들어 있을 때
+                totalPlaceItem = new TotalPlaceItem();
+                totalPlaceItem.setRegion(choicePlace);
+                totalPlaceItem.setCancel(R.drawable.ic_cancel_black_24dp);
+                total_arrayList.add(totalPlaceItem);
 
-            total_adapter.notifyDataSetChanged();
+                total_adapter = new TotalPlaceAdapter(total_arrayList, this);
+                total_recyclerView.setAdapter(total_adapter);
+
+                total_adapter.notifyDataSetChanged();
+            }
         }
-    }
-    public void cancel(String place, int position) {
+    public void cancel(String place) {
         total_arrayList.clear();
 
         if (String.valueOf(Arrays.asList(listGu1)).contains(place)) {
             holder = (RecyclerView.ViewHolder)
-                    gu_recyclerView1.findViewHolderForAdapterPosition(choiceNumber.get(position));
+                    gu_recyclerView1.findViewHolderForAdapterPosition(choiceNumber);
         }
 
         if (String.valueOf(Arrays.asList(listGu2)).contains(place)) {
             holder = (RecyclerView.ViewHolder)
-                    gu_recyclerView2.findViewHolderForAdapterPosition(choiceNumber.get(position));
+                    gu_recyclerView2.findViewHolderForAdapterPosition(choiceNumber);
         }
 
         holder.itemView.setEnabled(true);
         holder.itemView.setAlpha(1);
         holder.itemView.setBackgroundColor(Color.parseColor("#ffffff")); // 선택 취소 된 아이템 뷰 활성화
 
-        choiceList.remove(position);
-        choiceNumber.remove(position);
-        gu_adapter = new GuPlaceAdapter(choiceList.size()); // size 변경하기 위함
+        choicePlace = "x";
+        choiceNumber = 0;
+
+        gu_adapter = new GuPlaceAdapter(choiceNumber); // size 변경하기 위함
         total();
     }
 }

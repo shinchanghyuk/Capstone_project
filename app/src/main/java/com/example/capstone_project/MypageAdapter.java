@@ -37,8 +37,8 @@ public class MypageAdapter extends RecyclerView.Adapter<MypageAdapter.ViewHolder
                         public void onClick(View v) {
                             switch (position) {
                                 case 0 :
-                                    Intent intent = new Intent(v.getContext(), RelativeMyBoardActivity.class);
-                                    context.startActivity(intent);
+                                  //  Intent intent = new Intent(v.getContext(), RelativeMyBoardActivity.class);
+                                  //  context.startActivity(intent);
                                     break;
                                 case 1:
                                     break;

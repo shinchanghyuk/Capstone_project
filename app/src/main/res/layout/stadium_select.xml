@@ -8,23 +8,36 @@
     android:background="#ffffff"
     tools:context=".MainActivity">
 
-    <EditText
-        style="@style/edit_style"
-        android:id="@+id/stadium_edit"
-        android:layout_margin="5dp"
-        android:layout_width="310dp"
-        android:hint="구장 이름을 입력하세요"
+    <Spinner
+        android:id="@+id/search_spinner"
+        style="@style/spinner_style"
+        android:layout_margin="7dp"
+        android:entries="@array/search"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/stadium_edit"
+        style="@style/edit_style"
+        android:padding="10dp"
+        app:layout_constraintLeft_toRightOf="@+id/search_spinner"
+        app:layout_constraintRight_toLeftOf="@+id/search_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/line"
+        style="@style/view_style"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_spinner" />
+
     <Button
-        android:layout_width="90dp"
-        android:layout_height="40dp"
+        android:id="@+id/stadium_btn"
         style="@style/relative_btn"
-        android:id="@+id/stadium_search"
+        android:layout_width="80dp"
+        android:layout_margin="7dp"
         android:text="검색"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@+id/stadium_edit"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <fragment

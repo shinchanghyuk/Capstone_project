@@ -51,13 +51,12 @@
         <activity android:name=".RelativeBoardActivity"></activity>
         <activity android:name=".RelativeWritingActivity"></activity>
         <activity android:name=".RelativeAlarmActivity"></activity>
-        <activity android:name=".RelativeMyBoardActivity"></activity>
         <activity android:name=".PlaceActivity"></activity>
         <activity android:name=".RelativeBoardContentActivity"></activity>
-        <activity android:name=".RelativeMyContentActivity"></activity>
         <activity android:name=".StadiumSelectActivity"></activity>
         <activity android:name=".StadiumDetailsActivity"></activity>
         <activity android:name=".MypageActivity"></activity>
+        <activity android:name=".RelativeReviseActivity"></activity>
     </application>
 
 </manifest>

@@ -7,9 +7,33 @@
     <TextView
         style="@style/text_style"
         android:id="@+id/matching_tv"
+        android:textSize="18dp"
         android:layout_marginTop="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+    <Button
+        android:id="@+id/matching_btn"
+        style="@style/relative_btn"
+        android:visibility="gone"
+        android:text="매칭완료"
+        app:layout_constraintRight_toLeftOf="@+id/update_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/update_btn"
+        style="@style/relative_btn"
+        android:visibility="gone"
+        android:text="수정"
+        app:layout_constraintRight_toLeftOf="@+id/delete_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/delete_btn"
+        style="@style/relative_btn"
+        android:visibility="gone"
+        android:text="삭제"
+        app:layout_constraintRight_toLeftOf="@+id/list_btn"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/list_btn"
@@ -22,6 +46,7 @@
     <TableLayout
         style="@style/table_style"
         android:id="@+id/info_table"
+
         android:layout_height="wrap_content"
         android:background="@drawable/table_background"
         app:layout_constraintTop_toBottomOf="@+id/list_btn"

@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +26,7 @@ public class MypageActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.place);
+        setContentView(R.layout.mypage);
 
         recyclerView = findViewById(R.id.mypage_recyclerview);
 
@@ -33,10 +34,13 @@ public class MypageActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        DividerItemDecoration dividerItemDecoration =
+                new DividerItemDecoration(recyclerView.getContext(),new LinearLayoutManager(this).getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
         arrayList = new ArrayList<>();
 
         List<String> listPage = Arrays.asList(getResources().getStringArray(R.array.mypage));
-
 
         for (int i = 0; i < listPage.size(); i++) {
             MypageItem mypageItem = new MypageItem();

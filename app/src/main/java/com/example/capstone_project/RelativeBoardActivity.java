@@ -42,8 +42,7 @@ public class RelativeBoardActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
     private String sort, sort_standard, sort_search;
     private EditText search_edit; // 사용자가 검색하고자 하는 내용
-    private ArrayList<String> search_place;
-    private int boardNum; // 데이터베이스에 저장 된 게시물 갯수
+    //private ArrayList<String> search_place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +68,10 @@ public class RelativeBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RelativeBoardActivity.this, RelativeWritingActivity.class);
-                intent.putExtra("boardNum", boardNum);
                 startActivity(intent);
             }
         });
+
         // 알람 버튼을 눌렀을 때 동작
         alarm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +92,8 @@ public class RelativeBoardActivity extends AppCompatActivity {
                     sort_standard = "day";
                 } else if (sort.equals("인원")) {
                     sort_standard = "person";
+                } else if (sort.equals("작성자")) {
+                    sort_standard = "user";
                 }
 
                 databaseReference.orderByChild(sort_standard).equalTo(sort_search).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -108,9 +109,10 @@ public class RelativeBoardActivity extends AppCompatActivity {
                         if (arrayList.size() == 0) {
                             Toast.makeText(getApplicationContext(), "원하시는 조건의 게시글이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
                             init();
+                        } else {
+                            adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+                            Toast.makeText(getApplicationContext(), arrayList.size() + "건의 게시물을 찾았습니다.", Toast.LENGTH_SHORT).show();
                         }
-                        adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
-                        Toast.makeText(getApplicationContext(), arrayList.size() + "건의 게시물을 찾았습니다.", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -170,14 +172,11 @@ public class RelativeBoardActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
-                boardNum = 0;
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
                     RelativeBoardItem relativeBoardItem = snapshot.getValue(RelativeBoardItem.class);
                     // RelativeBoardItem 객체에 데이터를 담음
                     arrayList.add(relativeBoardItem);
-                    boardNum++;
-                    Log.d("num", String.valueOf(boardNum));
-                    // 담은 데이터들을 배열리스트에 넣고 리사이클러뷰로 보낼 준비
                 }
                 adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
             }

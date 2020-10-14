@@ -10,46 +10,61 @@
         android:text="내 게시물"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline3" />
+
     <TableLayout
-        android:id="@+id/tm_boardTop"
+        android:id="@+id/relativeMyBoard_title"
         style="@style/table_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv1">
-    <TableRow
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        <TextView
-            style="@style/table_text_style"
-            android:text="매칭현황" />
-        <TextView
-            style="@style/table_text_style"
-            android:layout_weight="4"
-            android:text="제목" />
-        <TextView
-            style="@style/table_text_style"
-            android:text="작성일자" />
-        <TextView
-            style="@style/table_text_style"
-            android:text="작성자" />
-    </TableRow>
+        <TableRow
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                style="@style/table_text_style"
+                android:layout_weight="0.5"
+                android:text="매칭현황" />
+            <TextView
+                style="@style/table_text_style"
+                android:layout_weight="3"
+                android:text="제목" />
+            <TextView
+                style="@style/table_text_style"
+                android:layout_weight="0.5"
+                android:text="작성일자" />
+            <TextView
+                style="@style/table_text_style"
+                android:layout_weight="0.5"
+                android:text="작성자" />
+        </TableRow>
     </TableLayout>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="140dp" />
+        app:layout_constraintGuide_begin="30dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tmRecyclerV"
-        app:layout_constraintTop_toBottomOf="@id/tm_boardTop"
+        android:id="@+id/relativeMyBoard_Recycler"
+        app:layout_constraintTop_toBottomOf="@id/relativeMyBoard_title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         style="@style/recycler_style"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        style="@style/BottomNavigation_style"
+        android:id="@+id/BottomNavigation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:labelVisibilityMode="unlabeled"
+        app:itemIconTint="@drawable/bottomnavi_item_color"
+        app:menu="@menu/menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

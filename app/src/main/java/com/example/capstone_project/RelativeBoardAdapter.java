@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class RelativeBoardAdapter extends RecyclerView.Adapter<RelativeBoardAdapter.ViewHolder> {
     private ArrayList<RelativeBoardItem> arrayList;
+    private String boardnumber;
     private Context context;
 
     public RelativeBoardAdapter(ArrayList<RelativeBoardItem> arrayList, Context context) {
@@ -29,6 +30,7 @@ public class RelativeBoardAdapter extends RecyclerView.Adapter<RelativeBoardAdap
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
+
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.matching.setText(arrayList.get(position).getMatching());
@@ -39,16 +41,14 @@ public class RelativeBoardAdapter extends RecyclerView.Adapter<RelativeBoardAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boardnumber = arrayList.get(position).getBoardnumber();
+                Log.d("number", boardnumber);
                 Intent intent = new Intent(v.getContext(), RelativeBoardContentActivity.class);
-                intent.putExtra("boardNum", position);
-                Log.d("posi", String.valueOf(position));
+                intent.putExtra("boardnumber", boardnumber);
                 context.startActivity(intent);
             }
         });
     }
-    // 테이블 타이틀 디자인
-    // 화면 이동 시 게시판 나오게(데이터 베이스 다시 하기 - 제목이랑 사용자 비교 해서 검색 불러오기 )
-
     @Override
     public int getItemCount() {
         return arrayList.size();

@@ -49,7 +49,7 @@
         android:id="@+id/alarm_btn"
         style="@style/relative_btn"
         android:layout_width="80dp"
-        android:text="알람"
+        android:text="알림"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
