@@ -35,7 +35,6 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stadium_select);
 
-
         stadium_Data.add("월드컵 경기장");
         stadium_Data.add("난지천 공원 축구장");
         stadium_Data.add("한강시민공원 축구장");
@@ -59,7 +58,7 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(stadium_Data.get(position)=="월드컵 경기장"){
                     gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.568256, 126.897240),15));
-                    stadium = "월드컵경기장";
+                    stadium = "월드컵 경기장";
                 } else if(stadium_Data.get(position)=="한강시민공원 축구장"){
                     gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.5342321, 126.9150377),15));
                     stadium = "한강시민공원 축구장";
@@ -116,7 +115,6 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
                 //이벤트 처리 추가
                 String markerid = marker.getId();
                 Intent intent = new Intent(StadiumSelectActivity.this, StadiumDetailsActivity.class);
-                intent.putExtra("stadium",markerid);
                 intent.putExtra("stadiumname", stadium);
                 startActivity(intent);
                 return false;

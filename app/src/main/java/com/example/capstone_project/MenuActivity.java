@@ -64,10 +64,12 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+        //DB관리
         menu_btn[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MenuActivity.this, DBmanage.class);
+                startActivity(intent);
             }
         });
     }

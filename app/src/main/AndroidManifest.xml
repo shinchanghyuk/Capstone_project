@@ -57,6 +57,7 @@
         <activity android:name=".RelativeMyContentActivity"></activity>
         <activity android:name=".StadiumSelectActivity"></activity>
         <activity android:name=".StadiumDetailsActivity"></activity>
+        <activity android:name=".DBmanage"></activity>
     </application>
 
 </manifest>
