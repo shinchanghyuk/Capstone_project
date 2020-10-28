@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="search">
+    <string-array name="relativeboard_search">
         <item>검색</item>
         <item>지역</item>
         <item>날짜</item>
@@ -8,10 +8,18 @@
         <item>작성자</item>
     </string-array>
 
+    <string-array name="teamboard_search">
+        <item>검색</item>
+        <item>지역</item>
+        <item>팀실력</item>
+        <item>작성자</item>
+    </string-array>
+
     <string-array name="stadium_search">
         <item>지역</item>
         <item>장소</item>
     </string-array>
+
     <string-array name="ability">
         <item>실력</item>
         <item>상</item>

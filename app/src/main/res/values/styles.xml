@@ -45,6 +45,7 @@
     <style name="relative_writing_edit">
         <item name="android:background">@drawable/edit_background</item>
         <item name="android:editable">false</item>
+        <item name="android:textColor">#000000</item>
         <item name="android:padding">5dp</item>
         <item name="android:layout_width">110dp</item>
         <item name="android:layout_height">35dp</item>
@@ -64,7 +65,7 @@
     <style name="relative_writing_tv">
         <item name="android:background">@drawable/edit_background</item>
         <item name="android:textColor">#000000</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">17dp</item>
         <item name="android:layout_width">250dp</item>
         <item name="android:layout_height">45dp</item>
         <item name="android:layout_margin">10dp</item>
@@ -100,6 +101,18 @@
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="mypage_text_style">
+        <item name ="android:layout_width">match_parent</item>
+        <item name ="android:layout_height">100dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:background">#f2f2f2</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>f
+        <item name="android:textColor">#000000</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
     <!-- Text style -->
 
@@ -151,8 +164,9 @@
     <!-- Spinner style -->
     <style name="spinner_style">
         <item name="android:background">@drawable/spinner_background</item>
-        <item name="android:padding">1dp</item>
-        <item name="android:entries">@array/search</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingTop">7dp</item>
+        <item name="android:layout_margin">7dp</item>
         <item name ="android:layout_width">80dp</item>
         <item name ="android:layout_height">40dp</item>
     </style>
@@ -161,6 +175,7 @@
     <style name="edit_style">
         <item name="android:layout_width">220dp</item>
         <item name="android:layout_height">40dp</item>
+        <item name="android:textColor">#000000</item>
         <item name="android:background">@drawable/edit_background</item>
         <item name="android:layout_marginTop">7dp</item>
     </style>
@@ -200,7 +215,6 @@
     <style name ="BottomNavigation_style">
         <item name ="android:layout_width">match_parent</item>
         <item name ="android:layout_height">wrap_content</item>
-        <item name ="android:background">@color/title</item>
     </style>
 
     <style name="table_style">

@@ -41,29 +41,29 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class RelativeReviseActivity extends AppCompatActivity {
+public class TeamReviseActivity extends AppCompatActivity {
 
     Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog dialog;
     private Button place_btn, date_btn, revise_btn;
     private TextView date_textView, place_textView;
-    private EditText title_edit, person_edit, content_edit;
-    private Spinner startTime, endTime, ability_spinner;
-    private String[] spinnerTime, spinnerAbility;
-    private String title, day, sTime, eTime, person, content, ability, key, boardnumber, place;
+    private EditText title_edit, person_edit, content_edit, name_edit;
+    private Spinner ability_spinner;
+    private String[] spinnerAbility;
+    private String title, day, name, person, content, ability, key, boardnumber, place;
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference, databaseReference2;    // 파이버에시스 연결(경로) 선언
-    private int spinnerNum, abilityNum, sTimeNum, eTimeNum;
+    private int spinnerNum, abilityNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.relative_writing);
+        setContentView(R.layout.team_writing);
 
         init();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("board").child("relative");
+        databaseReference = firebaseDatabase.getReference("board").child("team");
 
         Query query = databaseReference.orderByChild("boardnumber").equalTo(boardnumber);
 
@@ -71,16 +71,15 @@ public class RelativeReviseActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                    RelativeBoardItem relativeBoardItem = snapshot.getValue(RelativeBoardItem.class);
+                    TeamBoardItem teamBoardItem = snapshot.getValue(TeamBoardItem.class);
 
-                    place = relativeBoardItem.getPlace();
-                    day = relativeBoardItem.getDay();
-                    title = relativeBoardItem.getTitle();
-                    content = relativeBoardItem.getContent();
-                    ability = relativeBoardItem.getAbility();
-                    sTime = relativeBoardItem.getStarttime();
-                    eTime = relativeBoardItem.getEndtime();
-                    person = relativeBoardItem.getPerson();
+                    place = teamBoardItem.getPlace();
+                    day = teamBoardItem.getDay();
+                    title = teamBoardItem.getTitle();
+                    name = teamBoardItem.getName();
+                    content = teamBoardItem.getContent();
+                    ability = teamBoardItem.getAbility();
+                    person = teamBoardItem.getPerson();
                 }
 
                 if (ability.equals("상")) {
@@ -91,51 +90,17 @@ public class RelativeReviseActivity extends AppCompatActivity {
                     abilityNum = 3;
                 }
 
-                 for (int i = 0; i < spinnerTime.length; i++) {
-                    if (spinnerTime[i].equals(sTime)) {
-                        sTimeNum = i;
-                    }
-                    if (spinnerTime[i].equals(eTime)) {
-                        eTimeNum = i;
-                    }
-                }
                     place_textView.setText(place);
                     date_textView.setText(day);
                     ability_spinner.setSelection(abilityNum);
-                    startTime.setSelection(sTimeNum);
-                    endTime.setSelection(eTimeNum);
+                    name_edit.setText(name);
                     title_edit.setText(title);
                     content_edit.setText(content);
                     person_edit.setText(person);
                 }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
-                }
-        });
-
-        startTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sTime = (String) parent.getItemAtPosition(position);
-                    spinnerNum = position;
-                }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        endTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                eTime = (String) parent.getItemAtPosition(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -169,7 +134,6 @@ public class RelativeReviseActivity extends AppCompatActivity {
         revise_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dateChange();
             }
         });
@@ -185,20 +149,14 @@ public class RelativeReviseActivity extends AppCompatActivity {
         person_edit = findViewById(R.id.person);
         ability_spinner = findViewById(R.id.ability);
         content_edit = findViewById(R.id.content_edit);
-        startTime = findViewById(R.id.startTime);
-        endTime = findViewById(R.id.endTime);
+        name_edit = findViewById(R.id.name);
 
-        spinnerTime = getResources().getStringArray(R.array.time);
         spinnerAbility = getResources().getStringArray(R.array.ability);
 
-        SpinnerAdapter spinnerAdapter1 = new SpinnerAdapter(spinnerTime, this);
-        SpinnerAdapter spinnerAdapter3 = new SpinnerAdapter(spinnerAbility, this);
+        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerAbility, this);
+        ability_spinner.setAdapter(spinnerAdapter);
 
-        startTime.setAdapter(spinnerAdapter1);
-        endTime.setAdapter(spinnerAdapter1);
-        ability_spinner.setAdapter(spinnerAdapter3);
-
-        dialog = new DatePickerDialog(RelativeReviseActivity.this, listener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+        dialog = new DatePickerDialog(TeamReviseActivity.this, listener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
         dialog.getDatePicker().setMinDate(myCalendar.getTimeInMillis()); // 현재 월/일 이전은 선택 불가하게 설정
 
         Intent intent = getIntent();
@@ -237,18 +195,17 @@ public class RelativeReviseActivity extends AppCompatActivity {
         person = person_edit.getText().toString();
         content = content_edit.getText().toString();
 
-        if (title.isEmpty() || content.isEmpty() || day.isEmpty() || (sTime.equals("시간선택"))
-                || (eTime.equals("시간선택")) || (ability.equals("실력")) || person.isEmpty() || (place.isEmpty())) {
+        if (title.isEmpty() || content.isEmpty() || day.isEmpty() || (name.isEmpty())
+                || (ability.equals("실력")) || person.isEmpty() || (place.isEmpty())) {
             Toast.makeText(getApplicationContext(), "빈칸 없이 모두다 입력해주세요", Toast.LENGTH_SHORT).show();
         }
         else {
-            databaseReference2 = firebaseDatabase.getReference("board").child("relative").child(key);
+            databaseReference2 = firebaseDatabase.getReference("board").child("team").child(key);
 
             Map<String, Object> boardChange = new HashMap<>();
             boardChange.put("place", place);
             boardChange.put("day", day);
-            boardChange.put("starttime", sTime);
-            boardChange.put("endtime", eTime);
+            boardChange.put("name", name);
             boardChange.put("person", person);
             boardChange.put("title", title);
             boardChange.put("content", content);

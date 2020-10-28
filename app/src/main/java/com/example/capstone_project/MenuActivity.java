@@ -41,13 +41,15 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, StadiumSelectActivity.class);
                 startActivity(intent);
+
             }
         });
 
         menu_btn[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MenuActivity.this, TeamBoardActivity.class);
+                startActivity(intent);
             }
         });
 

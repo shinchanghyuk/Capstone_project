@@ -9,7 +9,6 @@
     <Spinner
         android:id="@+id/search_spinner"
         style="@style/spinner_style"
-
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,14 +41,6 @@
         style="@style/relative_btn"
         android:layout_width="80dp"
         android:text="글쓰기"
-        app:layout_constraintRight_toLeftOf="@+id/alarm_btn"
-        app:layout_constraintTop_toBottomOf="@+id/guideline" />
-
-    <Button
-        android:id="@+id/alarm_btn"
-        style="@style/relative_btn"
-        android:layout_width="80dp"
-        android:text="알림"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
@@ -73,18 +64,19 @@
         style="@style/table_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alarm_btn">
+        app:layout_constraintTop_toBottomOf="@+id/write_btn">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp">
 
             <TextView
                 style="@style/table_text_style"
                 android:layout_weight="0.5"
-                android:text="매칭현황" />
+                android:text="모집현황" />
 
             <TextView
                 style="@style/table_text_style"
@@ -94,7 +86,7 @@
             <TextView
                 style="@style/table_text_style"
                 android:layout_weight="0.5"
-                android:text="매칭일자" />
+                android:text="모집기간" />
 
             <TextView
                 style="@style/table_text_style"

@@ -46,7 +46,6 @@
     <TableLayout
         style="@style/table_style"
         android:id="@+id/info_table"
-
         android:layout_height="wrap_content"
         android:background="@drawable/table_background"
         app:layout_constraintTop_toBottomOf="@+id/list_btn"
@@ -59,7 +58,7 @@
                 style="@style/table_text_style"
                 android:background="@drawable/border_background"
                 android:layout_height="30dp"
-                android:text="지역" />
+                android:text="활동지역" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/place_tv" />
@@ -72,7 +71,7 @@
                 android:background="@drawable/border_background"
                 style="@style/table_text_style"
                 android:layout_height="30dp"
-                android:text="날짜" />
+                android:text="매칭날짜" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/date_tv" />
@@ -85,7 +84,7 @@
             android:background="@drawable/border_background"
             style="@style/table_text_style"
             android:layout_height="30dp"
-            android:text="시간" />
+            android:text="매칭시간" />
         <TextView
             style="@style/table_text_style2"
             android:id="@+id/time_tv" />
@@ -98,7 +97,7 @@
                 android:background="@drawable/border_background"
                 style="@style/table_text_style"
                 android:layout_height="30dp"
-                android:text="인원" />
+                android:text="경기인원" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/person_tv" />
@@ -112,7 +111,7 @@
                 style="@style/table_text_style"
                 android:layout_weight="1"
                 android:layout_height="30dp"
-                android:text="실력" />
+                android:text="팀 실력" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/ability_tv" />

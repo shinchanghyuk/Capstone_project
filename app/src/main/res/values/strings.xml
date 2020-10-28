@@ -3,4 +3,6 @@
     <string name="id">test</string>
     <string name="passwd">test</string>
     <string name="kakao_app_key">64f2934f655e4c837f9056e25680c827</string>
+    <string name="facebook_app_id" translatable="false">396945631467029</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb396945631467029</string>
 </resources>

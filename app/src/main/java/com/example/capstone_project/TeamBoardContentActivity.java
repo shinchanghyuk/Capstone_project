@@ -24,22 +24,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RelativeBoardContentActivity extends AppCompatActivity {
+public class TeamBoardContentActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference, databaseReference2;    // 파이버에시스 연결(경로) 선언
-    private TextView matching_tv, place_tv, date_tv, person_tv, ability_tv, content_tv, title_tv, time_tv;
-    private Button matching_btn, update_btn, delete_btn, list_btn, reply_btn;
-    private String matching, day, title, content, ability, starttime, endtime, person, user, current_user, boardnumber, key, place;
+    private TextView matching_tv, place_tv, date_tv, person_tv, ability_tv, content_tv, title_tv, name_tv;
+    private Button update_btn, delete_btn, list_btn, reply_btn;
+    private String matching, day, title, content, ability, name, person, user, current_user, boardnumber, key, place;
     private FirebaseAuth auth; // 파이어베이스 인증 객체
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.relative_board_content);
+        setContentView(R.layout.team_board_content);
 
         init();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("board").child("relative");
+        databaseReference = firebaseDatabase.getReference("board").child("team");
 
         Log.d("number", boardnumber);
 
@@ -49,26 +49,25 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                    RelativeBoardItem relativeBoardItem = snapshot.getValue(RelativeBoardItem.class);
-                    // RelativeBoardContentItem 객체에 데이터를 담음
+                    TeamBoardItem teamBoardItem = snapshot.getValue(TeamBoardItem.class);
+                    // TeamBoardItem 객체에 데이터를 담음
                     key = snapshot.getKey();
-                    matching = relativeBoardItem.getMatching();
-                    place = relativeBoardItem.getPlace();
-                    day = relativeBoardItem.getDay();
-                    title = relativeBoardItem.getTitle();
-                    content = relativeBoardItem.getContent();
-                    ability = relativeBoardItem.getAbility();
-                    starttime = relativeBoardItem.getStarttime();
-                    endtime = relativeBoardItem.getEndtime();
-                    person = relativeBoardItem.getPerson();
-                    user = relativeBoardItem.getUser();
+                    matching = teamBoardItem.getMatching();
+                    place = teamBoardItem.getPlace();
+                    day = teamBoardItem.getDay();
+                    title = teamBoardItem.getTitle();
+                    name = teamBoardItem.getName();
+                    content = teamBoardItem.getContent();
+                    ability = teamBoardItem.getAbility();
+                    person = teamBoardItem.getPerson();
+                    user = teamBoardItem.getUser();
                 }
 
                 matching_tv.setText(matching);
                 place_tv.setText(place);
                 date_tv.setText(day);
-                time_tv.setText(starttime + " ~ " + endtime);
                 title_tv.setText(title);
+                name_tv.setText(name);
                 person_tv.setText(person);
                 ability_tv.setText(ability);
                 content_tv.setText(content);
@@ -78,7 +77,6 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
                 current_user = firebaseUser.getDisplayName();
 
                 if(current_user.equals(user)) {
-                matching_btn.setVisibility(View.VISIBLE);
                 update_btn.setVisibility(View.VISIBLE);
                 delete_btn.setVisibility(View.VISIBLE);
             }
@@ -89,38 +87,26 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
             }
         });
 
-        matching_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ConfirmDialog dialog = new ConfirmDialog(RelativeBoardContentActivity.this);
-                if(matching.equals("매칭 중")) {
-                    dialog.operation("matching1", "relative");
-                } else if(matching.equals("매칭완료")) {
-                    dialog.operation("matching2", "relative");
-                }
-            }
-        });
-
         update_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfirmDialog dialog = new ConfirmDialog(RelativeBoardContentActivity.this);
-                dialog.operation("update", "relative");
+                ConfirmDialog dialog = new ConfirmDialog(TeamBoardContentActivity.this);
+                dialog.operation("update", "team");
             }
         });
 
         delete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfirmDialog dialog = new ConfirmDialog(RelativeBoardContentActivity.this);
-                dialog.operation("delete", "relative");
+                ConfirmDialog dialog = new ConfirmDialog(TeamBoardContentActivity.this);
+                dialog.operation("delete","team");
             }
         });
 
         list_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RelativeBoardContentActivity.this, RelativeBoardActivity.class);
+                Intent intent = new Intent(TeamBoardContentActivity.this, TeamBoardActivity.class);
                 startActivity(intent);
             }
         });
@@ -137,12 +123,11 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         matching_tv = findViewById(R.id.matching_tv);
         place_tv = findViewById(R.id.place_tv);
         date_tv = findViewById(R.id.date_tv);
-        time_tv = findViewById(R.id.time_tv);
+        name_tv = findViewById(R.id.name_tv);
         person_tv = findViewById(R.id.person_tv);
         ability_tv = findViewById(R.id.ability_tv);
         title_tv = findViewById(R.id.title_tv);
         content_tv = findViewById(R.id.content_tv);
-        matching_btn = findViewById(R.id.matching_btn);
         update_btn = findViewById(R.id.update_btn);
         delete_btn = findViewById(R.id.delete_btn);
         list_btn = findViewById(R.id.list_btn);
@@ -151,34 +136,16 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         Intent intent = getIntent();
         boardnumber = intent.getStringExtra("boardnumber"); // 누른 게시글의 번호
     }
-    public void matchingChange() {
-        if(matching.equals("매칭 중")) { // DB의 matching 값이 매칭 중일때
-            matching = "매칭완료";
-            matching_btn.setText("매칭취소");
-            Toast.makeText(getApplicationContext(), "매칭이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
-        }
-        else if(matching.equals("매칭완료")){ // DB의 matching 값이 매칭 완료일때
-            matching = "매칭 중";
-            matching_btn.setText("매칭완료");
-            Toast.makeText(getApplicationContext(), "매칭이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
-        }
-
-        databaseReference2 = firebaseDatabase.getReference("board").child("relative").child(key);
-        Map<String, Object> matchingOk = new HashMap<>();
-        matchingOk.put("matching", matching);
-        databaseReference2.updateChildren(matchingOk);
-        matching_tv.setText(matching);
-    }
     public void boardDelete() {
-        databaseReference2 = firebaseDatabase.getReference("board").child("relative").child(key);
+        databaseReference2 = firebaseDatabase.getReference("board").child("team").child(key);
         databaseReference2.removeValue();
-        Intent intent = new Intent(RelativeBoardContentActivity.this, RelativeBoardActivity.class);
+        Intent intent = new Intent(TeamBoardContentActivity.this, TeamBoardActivity.class);
         startActivity(intent);
-    }
+}
 
     public void boardUpdate() {
-        databaseReference2 = firebaseDatabase.getReference("board").child("relative").child(key);
-        Intent intent = new Intent(getApplicationContext(), RelativeReviseActivity.class);
+        databaseReference2 = firebaseDatabase.getReference("board").child("team").child(key);
+        Intent intent = new Intent(getApplicationContext(), TeamReviseActivity.class);
         intent.putExtra("bordernumber", boardnumber);
         intent.putExtra("key", key);
         startActivityForResult(intent, 1);

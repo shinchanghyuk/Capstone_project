@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 public class MypageItem {
     private String title ;
     private int moveImage;
-
     public String getTitle() {
         return title;
     }

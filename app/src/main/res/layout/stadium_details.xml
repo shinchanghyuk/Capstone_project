@@ -10,7 +10,7 @@
 
 <TextView
     style="@style/text_style"
-    android:text="구장 이름"
+    android:text="구장이름"
     android:layout_marginLeft="20dp"
     android:id="@+id/stadium_nameTv"
     app:layout_constraintTop_toBottomOf="@+id/guideline"
@@ -26,23 +26,18 @@
     app:layout_constraintTop_toBottomOf="@+id/stadium_nameTv"/>
 
 <TableLayout
-    android:background="@drawable/edit_background"
-    android:layout_margin="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    style="@style/table_style"
+    android:background="@drawable/table_background"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/stadium_imageView">
-
     <TableRow
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             style="@style/table_text_style"
             android:background="@drawable/border_background"
             android:layout_height="30dp"
-            android:layout_weight="1"
             android:text="주소">
         </TextView>
         <TextView
@@ -53,15 +48,13 @@
 
     <TableRow
         android:layout_marginTop="5dp"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             style="@style/table_text_style"
             android:layout_height="30dp"
-            android:layout_weight="1"
             android:background="@drawable/border_background"
-            android:text="운영 시간">
+            android:text="운영시간">
         </TextView>
         <TextView
             android:id="@+id/stadium_time"
@@ -71,15 +64,13 @@
 
     <TableRow
         android:layout_marginTop="5dp"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             style="@style/table_text_style"
             android:layout_height="30dp"
-            android:layout_weight="1"
             android:background="@drawable/border_background"
-            android:text="시설 정보">
+            android:text="시설정보">
         </TextView>
         <TextView
             android:id="@+id/stadium_special"
@@ -89,15 +80,13 @@
 
     <TableRow
         android:layout_marginTop="5dp"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             style="@style/table_text_style"
             android:layout_height="30dp"
-            android:layout_weight="1"
             android:background="@drawable/border_background"
-            android:text="이용 가격">
+            android:text="이용가격">
         </TextView>
         <TextView
             android:id="@+id/stadium_charge"
@@ -107,15 +96,13 @@
 
     <TableRow
         android:layout_marginTop="5dp"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             style="@style/table_text_style"
             android:layout_height="30dp"
-            android:layout_weight="1"
             android:background="@drawable/border_background"
-            android:text="시설 전화">
+            android:text="시설전화">
         </TextView>
         <TextView
             android:id="@+id/stadium_tele"
