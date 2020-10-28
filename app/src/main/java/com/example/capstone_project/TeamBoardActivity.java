@@ -1,22 +1,17 @@
 package com.example.capstone_project;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,17 +22,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class RelativeBoardActivity extends AppCompatActivity {
-    Button search_btn, write_btn, alarm_btn;
+public class TeamBoardActivity extends AppCompatActivity {
+    Button search_btn, write_btn;
     Spinner search_spinner;
     BottomNavigationView bottomNavigationView;  // 바텀 네이게이션 뷰 선언
     private RecyclerView recyclerView;  // 리사이클러뷰 선언
     private RecyclerView.LayoutManager layoutManager;   // 레이아웃 매니저 선언
     private RecyclerView.Adapter adapter;   // 리사이클러뷰 어댑터 선언
-    private ArrayList<RelativeBoardItem> arrayList; // 아이템 담을 배열리스트 선언
+    private ArrayList<TeamBoardItem> arrayList; // 아이템 담을 배열리스트 선언
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
     private String sort, sort_standard, sort_search;
@@ -47,7 +41,7 @@ public class RelativeBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.relative_board);
+        setContentView(R.layout.team_board);
 
         init();
 
@@ -67,16 +61,7 @@ public class RelativeBoardActivity extends AppCompatActivity {
         write_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RelativeBoardActivity.this, RelativeWritingActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // 알람 버튼을 눌렀을 때 동작
-        alarm_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RelativeBoardActivity.this, RelativeAlarmActivity.class);
+                Intent intent = new Intent(TeamBoardActivity.this, TeamWritingActivity.class);
                 startActivity(intent);
             }
         });
@@ -88,10 +73,8 @@ public class RelativeBoardActivity extends AppCompatActivity {
 
                 if (sort.equals("지역")) {
                     sort_standard = "place";
-                } else if (sort.equals("날짜")) {
+                } else if (sort.equals("요일")) {
                     sort_standard = "day";
-                } else if (sort.equals("인원")) {
-                    sort_standard = "person";
                 } else if (sort.equals("작성자")) {
                     sort_standard = "user";
                 }
@@ -102,9 +85,9 @@ public class RelativeBoardActivity extends AppCompatActivity {
                         arrayList.clear();
 
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                            RelativeBoardItem relativeBoardItem = snapshot.getValue(RelativeBoardItem.class);
+                            TeamBoardItem teamBoardItem = snapshot.getValue(TeamBoardItem.class);
                             // RelativeBoardItem 객체에 데이터를 담음
-                            arrayList.add(relativeBoardItem);
+                            arrayList.add(teamBoardItem);
                         }
                         if (arrayList.size() == 0) {
                             Toast.makeText(getApplicationContext(), "원하시는 조건의 게시글이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
@@ -128,23 +111,23 @@ public class RelativeBoardActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.action_one:
-                        Intent intent1 = new Intent(RelativeBoardActivity.this, RelativeBoardActivity.class);
+                        Intent intent1 = new Intent(TeamBoardActivity.this, RelativeBoardActivity.class);
                         startActivity(intent1);
                         break;
 
                     case R.id.action_two:
 
                     case R.id.action_three:
-                        Intent intent3 = new Intent(RelativeBoardActivity.this, TeamBoardActivity.class);
+                        Intent intent3 = new Intent(TeamBoardActivity.this, TeamBoardActivity.class);
                         startActivity(intent3);
-                        break;
+
                     case R.id.action_four:
-                        Intent intent4 = new Intent(RelativeBoardActivity.this, StadiumSelectActivity.class);
+                        Intent intent4 = new Intent(TeamBoardActivity.this, StadiumSelectActivity.class);
                         startActivity(intent4);
                         break;
 
                     case R.id.action_five:
-                        Intent intent5 = new Intent(RelativeBoardActivity.this, MypageActivity.class);
+                        Intent intent5 = new Intent(TeamBoardActivity.this, MypageActivity.class);
                         startActivity(intent5);
                         break;
                 }
@@ -157,7 +140,6 @@ public class RelativeBoardActivity extends AppCompatActivity {
         search_spinner = findViewById(R.id.search_spinner);
         search_edit = findViewById(R.id.search_edit);
         write_btn = findViewById(R.id.write_btn);
-        alarm_btn = findViewById(R.id.alarm_btn);
         search_btn = findViewById(R.id.search_btn);
         bottomNavigationView = findViewById(R.id.BottomNavigation);
 
@@ -168,18 +150,18 @@ public class RelativeBoardActivity extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("board").child("relative");
+        databaseReference = firebaseDatabase.getReference("board").child("team");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
 
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                            RelativeBoardItem relativeBoardItem = snapshot.getValue(RelativeBoardItem.class);
-                            // RelativeBoardItem 객체에 데이터를 담음
-                            arrayList.add(relativeBoardItem);
-                        }
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
+                   TeamBoardItem teamBoardItem = snapshot.getValue(TeamBoardItem.class);
+                    // RelativeBoardItem 객체에 데이터를 담음
+                    arrayList.add(teamBoardItem);
+                }
                 adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
             }
 
@@ -188,10 +170,10 @@ public class RelativeBoardActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
             }
         });
-        adapter = new RelativeBoardAdapter(arrayList, this);
+        adapter = new TeamBoardAdapter(arrayList, this);
         recyclerView.setAdapter(adapter);
 
-        spinnerSearch = getResources().getStringArray(R.array.relativeboard_search);
+        spinnerSearch = getResources().getStringArray(R.array.teamboard_search);
         SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerSearch, this);
         search_spinner.setAdapter(spinnerAdapter);
     }

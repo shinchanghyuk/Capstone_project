@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class RelativeBoardAdapter extends RecyclerView.Adapter<RelativeBoardAdapter.ViewHolder> {
-    private ArrayList<RelativeBoardItem> arrayList;
+public class TeamBoardAdapter extends RecyclerView.Adapter<TeamBoardAdapter.ViewHolder> {
+    private ArrayList<TeamBoardItem> arrayList;
     private String boardnumber;
     private Context context;
 
-    public RelativeBoardAdapter(ArrayList<RelativeBoardItem> arrayList, Context context) {
+    public TeamBoardAdapter(ArrayList<TeamBoardItem> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
     }
@@ -43,7 +43,7 @@ public class RelativeBoardAdapter extends RecyclerView.Adapter<RelativeBoardAdap
             public void onClick(View v) {
                 boardnumber = arrayList.get(position).getBoardnumber();
                 Log.d("number", boardnumber);
-                Intent intent = new Intent(v.getContext(), RelativeBoardContentActivity.class);
+                Intent intent = new Intent(v.getContext(), TeamBoardContentActivity.class);
                 intent.putExtra("boardnumber", boardnumber);
                 context.startActivity(intent);
             }

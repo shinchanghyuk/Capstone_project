@@ -7,23 +7,23 @@ public class Board {
     private String title;
     private String day;
     private String user;
-    private ArrayList<String> place;
+    private String place;
     private String starttime;
     private String endtime;
     private String ability;
     private String person;
-    private int number;
+    private String boardnumber;
     private String content;
     // private String uid;
 
-    public Board(String matching, String title, String day, String user, ArrayList<String> place, String starttime, int number, String endtime, String ability, String person, String content) {
+    public Board(String matching, String title, String day, String user, String place, String starttime, String boardnumber, String endtime, String ability, String person, String content) {
         this.matching = matching;
         this.title = title;
         this.day = day;
         this.user = user;
         this.place = place;
         this.starttime = starttime;
-        this.number = number;
+        this.boardnumber = boardnumber;
         this.endtime = endtime;
         this.ability = ability;
         this.person = person;
@@ -62,11 +62,11 @@ public class Board {
         this.user = user;
     }
 
-    public ArrayList<String> getPlace() {
+    public String getPlace() {
         return place;
     }
 
-    public void setPlace(ArrayList<String> place) {
+    public void setPlace(String place) {
         this.place = place;
     }
 
@@ -110,12 +110,12 @@ public class Board {
         this.content = content;
     }
 
-    public int getNumber() {
-        return number;
+    public String getBoardnumber() {
+        return boardnumber;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setBoardnumber(String number) {
+        this.boardnumber = number;
     }
 }
 

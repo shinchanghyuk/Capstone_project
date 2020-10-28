@@ -7,9 +7,33 @@
     <TextView
         style="@style/text_style"
         android:id="@+id/matching_tv"
+        android:textSize="18dp"
         android:layout_marginTop="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+    <Button
+        android:id="@+id/matching_btn"
+        style="@style/relative_btn"
+        android:visibility="gone"
+        android:text="매칭완료"
+        app:layout_constraintRight_toLeftOf="@+id/update_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/update_btn"
+        style="@style/relative_btn"
+        android:visibility="gone"
+        android:text="수정"
+        app:layout_constraintRight_toLeftOf="@+id/delete_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/delete_btn"
+        style="@style/relative_btn"
+        android:visibility="gone"
+        android:text="삭제"
+        app:layout_constraintRight_toLeftOf="@+id/list_btn"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/list_btn"
@@ -34,7 +58,7 @@
                 style="@style/table_text_style"
                 android:background="@drawable/border_background"
                 android:layout_height="30dp"
-                android:text="지역" />
+                android:text="활동지역" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/place_tv" />
@@ -47,7 +71,7 @@
                 android:background="@drawable/border_background"
                 style="@style/table_text_style"
                 android:layout_height="30dp"
-                android:text="날짜" />
+                android:text="매칭날짜" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/date_tv" />
@@ -60,7 +84,7 @@
             android:background="@drawable/border_background"
             style="@style/table_text_style"
             android:layout_height="30dp"
-            android:text="시간" />
+            android:text="매칭시간" />
         <TextView
             style="@style/table_text_style2"
             android:id="@+id/time_tv" />
@@ -73,7 +97,7 @@
                 android:background="@drawable/border_background"
                 style="@style/table_text_style"
                 android:layout_height="30dp"
-                android:text="인원" />
+                android:text="경기인원" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/person_tv" />
@@ -87,7 +111,7 @@
                 style="@style/table_text_style"
                 android:layout_weight="1"
                 android:layout_height="30dp"
-                android:text="실력" />
+                android:text="팀 실력" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/ability_tv" />

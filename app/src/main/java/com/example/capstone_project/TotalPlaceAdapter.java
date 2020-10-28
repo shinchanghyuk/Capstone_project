@@ -36,12 +36,11 @@ public class TotalPlaceAdapter extends RecyclerView.Adapter<TotalPlaceAdapter.Vi
         holder.totalPlace.setText(arrayList.get(position).getRegion());
         holder.cancelImage.setImageResource(arrayList.get(position).getCancel());
 
-
         holder.cancelImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String total = arrayList.get(position).getRegion();
-                ((PlaceActivity) context).cancel(total, position);
+                ((PlaceActivity) context).cancel(total);
             }
         });
     }

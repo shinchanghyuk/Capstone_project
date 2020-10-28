@@ -44,9 +44,8 @@ public class GuPlaceAdapter extends RecyclerView.Adapter<GuPlaceAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.gu.setText(arrayList.get(position).getRegion());
-        // 취소 되었을 때 0으로 바뀌어야하는데 안바뀜
 
-      if (holder.isItemSelected(position)) {
+        if (holder.isItemSelected(position)) {
             holder.itemView.setEnabled(false);
             holder.itemView.setAlpha((float) 0.7);
             holder.itemView.setBackgroundColor(Color.parseColor("#f2f2f2"));
@@ -58,14 +57,14 @@ public class GuPlaceAdapter extends RecyclerView.Adapter<GuPlaceAdapter.ViewHold
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                holder.toggleItemSelected(position);
 
-                if (size < 3) {
+                if (size < 1) {
+                    holder.toggleItemSelected(position); // 선택 된 position만 계속 선택되게 함
                     String choiceRegion = arrayList.get(position).getRegion();
                     size++;
                     ((PlaceActivity) context).choice(choiceRegion, position);
                 } else {
-                    Toast.makeText(v.getContext(), "지역들을 모두 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "이미 지역을 선택하였습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

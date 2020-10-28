@@ -1,11 +1,13 @@
 package com.example.capstone_project;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -28,10 +30,31 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
     ArrayList<String> stadium_Data = new ArrayList<String>();
     GroundOverlayOptions videoMark;
     String stadium;
+    private String[] spinnerSearch;
+    private Spinner search_spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stadium_select);
+
+        search_spinner = findViewById(R.id.search_spinner);
+
+        spinnerSearch = getResources().getStringArray(R.array.stadium_search);
+        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerSearch, this);
+        search_spinner.setAdapter(spinnerAdapter);
+
+        search_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+              //  sort = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         stadium_Data.add("월드컵 경기장");
         stadium_Data.add("난지천 공원 축구장");
@@ -56,7 +79,7 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(stadium_Data.get(position)=="월드컵 경기장"){
                     gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.568256, 126.897240),15));
-                    stadium = "월드컵경기장";
+                    stadium = "월드컵 경기장";
                 } else if(stadium_Data.get(position)=="한강시민공원 축구장"){
                     gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.5342321, 126.9150377),15));
                     stadium = "한강시민공원 축구장";
@@ -113,7 +136,6 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
                 //이벤트 처리 추가
                 String markerid = marker.getId();
                 Intent intent = new Intent(StadiumSelectActivity.this, StadiumDetailsActivity.class);
-                intent.putExtra("stadium",markerid);
                 intent.putExtra("stadiumname", stadium);
                 startActivity(intent);
                 return false;

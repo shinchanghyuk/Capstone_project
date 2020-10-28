@@ -1,13 +1,26 @@
 package com.example.capstone_project;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
-public class RelativeBoardContentItem {
-        private String matching, title, day, user, ability, content;
-        private String endtime, person, starttime, place;
-        private int number;
+public class TeamBoardItem {
+    private String matching, title, day, user, ability, content, name;
+    private String person, place, boardnumber;
+    public TeamBoardItem() {
 
-    public RelativeBoardContentItem() {
+    }
+    public TeamBoardItem(String matching, String title, String day, String user, String place, String name, String boardnumber, String ability, String person, String content) {
+        this.matching = matching;
+        this.title = title;
+        this.day = day;
+        this.user = user;
+        this.place = place;
+        this.name = name;
+        this.boardnumber = boardnumber;
+        this.ability = ability;
+        this.person = person;
+        this.content = content;
     }
 
     public String getMatching() {
@@ -58,12 +71,12 @@ public class RelativeBoardContentItem {
         this.content = content;
     }
 
-    public String getEndtime() {
-        return endtime;
+    public String getName() {
+        return name;
     }
 
-    public void setEndtime(String endtime) {
-        this.endtime = endtime;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPerson() {
@@ -74,14 +87,6 @@ public class RelativeBoardContentItem {
         this.person = person;
     }
 
-    public String getStarttime() {
-        return starttime;
-    }
-
-    public void setStarttime(String starttime) {
-        this.starttime = starttime;
-    }
-
     public String getPlace() {
         return place;
     }
@@ -90,11 +95,12 @@ public class RelativeBoardContentItem {
         this.place = place;
     }
 
-    public int getNumber() {
-        return number;
+    public String getBoardnumber() {
+        return boardnumber;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setBoardnumber(String boardnumber) {
+        this.boardnumber = boardnumber;
     }
 }
+
