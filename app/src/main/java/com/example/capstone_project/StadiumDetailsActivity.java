@@ -3,6 +3,8 @@ package com.example.capstone_project;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.ByteArrayOutputStream;
+
 public class StadiumDetailsActivity extends AppCompatActivity {
 
     MyDBHelper myHelper;
@@ -18,6 +22,8 @@ public class StadiumDetailsActivity extends AppCompatActivity {
 
     String na,ad,ti,ch,te;
     String stadiumName;
+
+    int i =0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +46,7 @@ public class StadiumDetailsActivity extends AppCompatActivity {
         //생성자(MyDBHelper 생성)
         myHelper = new MyDBHelper(this);
 
+
         //db 가져오기
         sqlDB = myHelper.getReadableDatabase();
         //포인터 역할
@@ -53,7 +60,6 @@ public class StadiumDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        int i=0;
         while (cursor.moveToNext()){
             na = cursor.getString(0);
             ad = cursor.getString(1);
@@ -62,9 +68,7 @@ public class StadiumDetailsActivity extends AppCompatActivity {
             te = cursor.getString(4);
 
             //na = na.replace("\r","").replace("\n","");
-
             //Toast.makeText(getApplicationContext(), stadiumName+1+1+na+1+1, Toast.LENGTH_SHORT).show();
-
 
             if(stadiumName.equals(na)){
                 stadium_nameTv.setText(na);
