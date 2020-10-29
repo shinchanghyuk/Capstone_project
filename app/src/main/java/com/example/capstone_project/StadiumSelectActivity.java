@@ -132,10 +132,10 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-                Cursor cursor;
-                cursor = sqlDB.rawQuery("SELECT * FROM placeTBL;", null);
-                cursor.close();
-                sqlDB.close();
+                //Cursor cursor;
+                //cursor = sqlDB.rawQuery("SELECT * FROM placeTBL;", null);
+                //cursor.close();
+                //sqlDB.close();
                 //이벤트 처리 추가
                 String markerid = marker.getId();
                 Intent intent = new Intent(StadiumSelectActivity.this, StadiumDetailsActivity.class);
