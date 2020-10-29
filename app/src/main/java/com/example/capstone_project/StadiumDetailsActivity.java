@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import java.io.ByteArrayOutputStream;
 
 public class StadiumDetailsActivity extends AppCompatActivity {
@@ -20,7 +22,7 @@ public class StadiumDetailsActivity extends AppCompatActivity {
     MyDBHelper myHelper;
     SQLiteDatabase sqlDB;
 
-    String na,ad,ti,ch,te;
+    String na,ad,ti,ch,te,im;
     String stadiumName;
 
     int i =0;
@@ -46,7 +48,6 @@ public class StadiumDetailsActivity extends AppCompatActivity {
         //생성자(MyDBHelper 생성)
         myHelper = new MyDBHelper(this);
 
-
         //db 가져오기
         sqlDB = myHelper.getReadableDatabase();
         //포인터 역할
@@ -66,6 +67,7 @@ public class StadiumDetailsActivity extends AppCompatActivity {
             ti = cursor.getString(2);
             ch = cursor.getString(3);
             te = cursor.getString(4);
+            im = cursor.getString(5);
 
             //na = na.replace("\r","").replace("\n","");
             //Toast.makeText(getApplicationContext(), stadiumName+1+1+na+1+1, Toast.LENGTH_SHORT).show();
@@ -76,14 +78,15 @@ public class StadiumDetailsActivity extends AppCompatActivity {
                 stadium_time.setText(ti);
                 stadium_charge.setText(ch);
                 stadium_tele.setText(te);
-                stadium_image.setImageResource(R.drawable.a);
+                Glide.with(this).load(im).into(stadium_image);
+                //stadium_image.setImageResource(R.drawable.a);
            }
 
 
             i++;
-            cursor.close();
-            sqlDB.close();
         }
+        cursor.close();
+        sqlDB.close();
 
 /*
         if(stadium.equals("m0")){
