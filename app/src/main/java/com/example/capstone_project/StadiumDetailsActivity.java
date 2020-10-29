@@ -21,11 +21,9 @@ public class StadiumDetailsActivity extends AppCompatActivity {
 
     MyDBHelper myHelper;
     SQLiteDatabase sqlDB;
-
     String na,ad,ti,ch,te,im;
     String stadiumName;
-
-    int i =0;
+    int i =0; //카운트 변수
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,9 +67,6 @@ public class StadiumDetailsActivity extends AppCompatActivity {
             te = cursor.getString(4);
             im = cursor.getString(5);
 
-            //na = na.replace("\r","").replace("\n","");
-            //Toast.makeText(getApplicationContext(), stadiumName+1+1+na+1+1, Toast.LENGTH_SHORT).show();
-
             if(stadiumName.equals(na)){
                 stadium_nameTv.setText(na);
                 stadium_address.setText(ad);
@@ -79,54 +74,10 @@ public class StadiumDetailsActivity extends AppCompatActivity {
                 stadium_charge.setText(ch);
                 stadium_tele.setText(te);
                 Glide.with(this).load(im).into(stadium_image);
-                //stadium_image.setImageResource(R.drawable.a);
            }
-
-
             i++;
         }
         cursor.close();
         sqlDB.close();
-
-/*
-        if(stadium.equals("m0")){
-            //월드컵
-            stadium_address.setText("서울특별시 마포구 성산2동 월드컵로 240");
-            stadium_time.setText("06:00 ~ 24:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("02-2128-2002");
-            stadium_image.setImageResource(R.drawable.a);
-        } else if(stadium.equals("m1")){
-            //난지천
-            stadium_address.setText("서울특별시 마포구 상암동");
-            stadium_time.setText("18:00 ~ 22:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("02-3153-9874");
-            stadium_image.setImageResource(R.drawable.b);
-        }else if(stadium.equals("m2")){
-            //한강시민공원
-            stadium_address.setText("서울특별시 영등포구 여의도동");
-            stadium_time.setText("06:00 ~ 20:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("02-782-2898");
-            stadium_image.setImageResource(R.drawable.c);
-        }else if(stadium.equals("m3")){
-            //의왕
-            stadium_address.setText("경기도 의왕시 포일동 155-2");
-            stadium_time.setText("06:00 ~ 24:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("031-426-1300");
-            stadium_image.setImageResource(R.drawable.d);
-        }else if(stadium.equals("m4")){
-            //자유공원
-            stadium_address.setText("경기도 안양시 동안구 호계동 1112");
-            stadium_time.setText("08:00 ~ 24:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("031-8045-2413");
-            stadium_image.setImageResource(R.drawable.e);
-        }
-
-
- */
     }
 }

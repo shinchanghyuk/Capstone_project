@@ -101,11 +101,9 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
-
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.568256, 126.897240),15));
         gMap.getUiSettings().setZoomControlsEnabled(true);
-
 
         Cursor cursor;
         cursor = sqlDB.rawQuery("SELECT * FROM placeTBL;", null);
@@ -124,18 +122,11 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
             markerOptions.position(new LatLng(ad, bd));
             markerOptions.alpha(0.7f);
             gMap.addMarker(markerOptions); //마커 설정 후 출력
-
-            //Toast.makeText(getApplicationContext(), name_array[i]+address_array[i]+"aaa"+bddress_array[i], Toast.LENGTH_SHORT).show();
         }
 
         gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
-                //Cursor cursor;
-                //cursor = sqlDB.rawQuery("SELECT * FROM placeTBL;", null);
-                //cursor.close();
-                //sqlDB.close();
                 //이벤트 처리 추가
                 String markerid = marker.getId();
                 Intent intent = new Intent(StadiumSelectActivity.this, StadiumDetailsActivity.class);
