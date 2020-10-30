@@ -65,7 +65,6 @@ public class MypageActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
     private String loginWay;
-    private Context context;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
