@@ -32,7 +32,8 @@ public class MenuActivity extends AppCompatActivity {
         menu_btn[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MenuActivity.this, MercenaryBoardActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -56,7 +57,8 @@ public class MenuActivity extends AppCompatActivity {
         menu_btn[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MenuActivity.this, StadiumSelectActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -36,35 +38,73 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class TeamWritingActivity extends AppCompatActivity {
+public class MercenaryWritingActivity extends AppCompatActivity {
 
     Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog dialog;
-    private Button place_btn, confirm_btn, date_btn;
-    private TextView date_textView,place_textView;
-    private EditText title_edit, person, content_edit, name;
-    private Spinner ability;
-    private String total_matching, total_title = "", total_day ="", total_user, total_name="", choicePlace="";
-    private String total_ability, total_person="", total_content="", boardNumber;
-    private String[] spinnerAbility;
+    private Button place_btn, date_btn, confirm_btn;
+    private TextView date_textView, place_textView;
+    private EditText title_edit, person, content_edit;
+    private Spinner startTime, endTime, ability;
+    private String total_matching, total_title = "", total_day ="", total_user, total_sTime, choicePlace="";
+    private String total_eTime, total_ability, total_person="", total_content="", boardNumber, total_type="";
+    private String[] spinnerTime1, spinnerTime2, spinnerAbility;
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
     private FirebaseAuth auth; // 파이어베이스 인증 객체
     private int spinnerNum; // 파이어베이스 안에 있는 데이터 갯수(게시판 갯수)
+    private RadioGroup type_radio;
+    private RadioButton radio1, radio2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.team_writing);
+        setContentView(R.layout.mercenary_writing);
 
         init();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("board").child("team").push();
+        databaseReference = firebaseDatabase.getReference("board").child("mercenary").push();
 
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
         total_user = user.getDisplayName();
+
+        type_radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.radio1) {
+                    total_type = "용병";
+                } else if (checkedId == R.id.radio2) {
+                    total_type = "팀";
+                }
+            }
+        });
+
+        startTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                total_sTime = (String) parent.getItemAtPosition(position);
+                spinnerNum = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        endTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                total_eTime = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         ability.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -94,29 +134,38 @@ public class TeamWritingActivity extends AppCompatActivity {
         });
 
         confirm_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userdata();
-            }
-        });
-    }
+        @Override
+        public void onClick(View v) {
+            userdata();
+        }
+    });
+}
     private void init() {
         date_btn = findViewById(R.id.date_btn);
         place_btn = findViewById(R.id.place_btn);
-        date_textView = findViewById(R.id.date_textView);
         confirm_btn = findViewById(R.id.btnUp);
+        date_textView = findViewById(R.id.date_textView);
         place_textView = findViewById(R.id.place_textView);
         title_edit = findViewById(R.id.title_edit);
         person = findViewById(R.id.person);
         ability = findViewById(R.id.ability);
         content_edit = findViewById(R.id.content_edit);
-        name = findViewById(R.id.name);
+        startTime = findViewById(R.id.startTime);
+        endTime = findViewById(R.id.endTime);
+        type_radio = findViewById(R.id.type_radio);
+        radio1 = findViewById(R.id.radio1);
+        radio2 = findViewById(R.id.radio2);
 
+        spinnerTime1 = getResources().getStringArray(R.array.time);
         spinnerAbility = getResources().getStringArray(R.array.ability);
 
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerAbility, this);
-        ability.setAdapter(spinnerAdapter);
-        dialog = new DatePickerDialog(TeamWritingActivity.this, listener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+        SpinnerAdapter spinnerAdapter1 = new SpinnerAdapter(spinnerTime1, this);
+        SpinnerAdapter spinnerAdapter3 = new SpinnerAdapter(spinnerAbility, this);
+        startTime.setAdapter(spinnerAdapter1);
+        endTime.setAdapter(spinnerAdapter1);
+        ability.setAdapter(spinnerAdapter3);
+
+        dialog = new DatePickerDialog(MercenaryWritingActivity.this, listener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
         dialog.getDatePicker().setMinDate(myCalendar.getTimeInMillis()); // 현재 월/일 이전은 선택 불가하게 설정
 
         Log.d("date", String.valueOf(myCalendar.get(Calendar.YEAR)));
@@ -134,31 +183,44 @@ public class TeamWritingActivity extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
 
             total_day = sdf.format(myCalendar.getTime()); // 현재 날짜를 변수에 넣기
+
             date_textView.setText(sdf.format(myCalendar.getTime()));
         }
     };
     private void userdata() {
-        total_matching = "모집 중";
+        total_matching = "매칭 중";
         total_title = title_edit.getText().toString();
         total_person = person.getText().toString();
         total_content = content_edit.getText().toString();
-        total_name = name.getText().toString();
         boardNumber = databaseReference.push().getKey();
 
-        if (total_title.isEmpty() || total_content.isEmpty() || total_day.isEmpty() || (total_name.equals("팀 이름"))
-                    || (total_ability.equals("실력")) || total_person.isEmpty() || (choicePlace.isEmpty())) {
-                Toast.makeText(getApplicationContext(), "빈칸 없이 모두다 입력해주세요", Toast.LENGTH_SHORT).show();
-            }
-            else {
-          TeamBoardItem teamBoardItem = new TeamBoardItem(total_matching, total_title, total_day, total_user,
-                    choicePlace, total_name, boardNumber, total_ability, total_person, total_content);
+        Log.d("content", total_content);
+        Log.d("title", total_title);
 
-                databaseReference.setValue(teamBoardItem);
-                Toast.makeText(getApplicationContext(), "게시물이 작성 되었습니다.", Toast.LENGTH_SHORT).show();
-                finish();
+        if (total_title.isEmpty() || total_content.isEmpty() || total_day.isEmpty() || total_type.isEmpty() || (total_sTime.equals("시간선택"))
+                || (total_eTime.equals("시간선택")) || (total_ability.equals("실력")) || total_person.isEmpty() || (choicePlace.isEmpty())) {
+            Toast.makeText(getApplicationContext(), "빈칸 없이 모두다 입력해주세요", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            MercenaryBoardItem mercenaryBoardItem = new MercenaryBoardItem(total_matching, total_title, total_day, total_user, total_type,
+                    choicePlace, total_sTime, boardNumber, total_eTime, total_ability, total_person, total_content);
+
+            databaseReference.setValue(mercenaryBoardItem);
+            Toast.makeText(getApplicationContext(), "게시물이 작성 되었습니다.", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
+ /*   private void spinnerChange(int length, int position) {
+        spinnerTime2 = new String[length - position];
 
+        for(int i = spinnerNum, j = 0; i < spinnerTime1.length; i++, j++) {
+            Log.d("spinn", String.valueOf(spinnerTime1.length));
+            spinnerTime2[j] = spinnerTime1[i];
+            Log.d("spinn", String.valueOf(spinnerTime2[i]));
+        }
+        SpinnerAdapter spinnerAdapter2 = new SpinnerAdapter(spinnerTime2, this);
+        endTime.setAdapter(spinnerAdapter2);
+    } */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 

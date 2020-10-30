@@ -78,6 +78,10 @@
         <activity android:name=".TeamWritingActivity"></activity>
         <activity android:name=".TeamBoardContentActivity"></activity>
         <activity android:name=".TeamReviseActivity"></activity>
+        <activity android:name=".MercenaryBoardActivity"></activity>
+        <activity android:name=".MercenaryBoardContentActivity"></activity>
+        <activity android:name=".MercenaryWritingActivity"></activity>
+        <activity android:name=".MercenaryReviseActivity"></activity>
     </application>
 
 </manifest>

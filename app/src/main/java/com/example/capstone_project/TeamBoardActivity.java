@@ -116,6 +116,9 @@ public class TeamBoardActivity extends AppCompatActivity {
                         break;
 
                     case R.id.action_two:
+                        Intent intent2 = new Intent(TeamBoardActivity.this, MercenaryBoardActivity.class);
+                        startActivity(intent2);
+                        break;
 
                     case R.id.action_three:
                         Intent intent3 = new Intent(TeamBoardActivity.this, TeamBoardActivity.class);

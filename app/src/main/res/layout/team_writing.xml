@@ -16,16 +16,12 @@
     <TextView
         android:id="@+id/place_textView"
         style="@style/relative_writing_tv"
-        android:paddingLeft="18dp"
-        android:paddingTop="13dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/date_textView" />
 
     <TextView
         android:id="@+id/date_textView"
         style="@style/relative_writing_tv"
-        android:paddingLeft="18dp"
-        android:paddingTop="13dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/place_btn" />
 
@@ -91,7 +87,6 @@
         android:textAlignment="center"
         android:hint="본문을 입력해주세요"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:privateImeOptions="defaultInputmode=korean"
         app:layout_constraintTop_toBottomOf="@+id/title_edit" />
 
     <Button

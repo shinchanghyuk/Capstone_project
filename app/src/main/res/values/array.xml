@@ -8,6 +8,13 @@
         <item>작성자</item>
     </string-array>
 
+    <string-array name="mercenaryboard_search">
+        <item>검색</item>
+        <item>지역</item>
+        <item>날짜</item>
+        <item>작성자</item>
+    </string-array>
+
     <string-array name="teamboard_search">
         <item>검색</item>
         <item>지역</item>

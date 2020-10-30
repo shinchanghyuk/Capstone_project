@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -30,24 +32,26 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class RelativeBoardActivity extends AppCompatActivity {
+public class MercenaryBoardActivity extends AppCompatActivity {
     Button search_btn, write_btn, alarm_btn;
     Spinner search_spinner;
     BottomNavigationView bottomNavigationView;  // 바텀 네이게이션 뷰 선언
     private RecyclerView recyclerView;  // 리사이클러뷰 선언
     private RecyclerView.LayoutManager layoutManager;   // 레이아웃 매니저 선언
     private RecyclerView.Adapter adapter;   // 리사이클러뷰 어댑터 선언
-    private ArrayList<RelativeBoardItem> arrayList; // 아이템 담을 배열리스트 선언
+    private ArrayList<MercenaryBoardItem> arrayList; // 아이템 담을 배열리스트 선언
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
-    private String sort, sort_standard, sort_search;
+    private String sort, sort_standard, sort_search, type, type_standard;
     private EditText search_edit; // 사용자가 검색하고자 하는 내용
     private String[] spinnerSearch;
+    private RadioGroup type_radio;
+    private RadioButton radio1, radio2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.relative_board);
+        setContentView(R.layout.mercenary_board);
 
         init();
 
@@ -67,7 +71,7 @@ public class RelativeBoardActivity extends AppCompatActivity {
         write_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RelativeBoardActivity.this, RelativeWritingActivity.class);
+                Intent intent = new Intent(MercenaryBoardActivity.this, MercenaryWritingActivity.class);
                 startActivity(intent);
             }
         });
@@ -76,7 +80,7 @@ public class RelativeBoardActivity extends AppCompatActivity {
         alarm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RelativeBoardActivity.this, RelativeAlarmActivity.class);
+                Intent intent = new Intent(MercenaryBoardActivity.this, RelativeAlarmActivity.class);
                 startActivity(intent);
             }
         });
@@ -90,8 +94,6 @@ public class RelativeBoardActivity extends AppCompatActivity {
                     sort_standard = "place";
                 } else if (sort.equals("날짜")) {
                     sort_standard = "day";
-                } else if (sort.equals("인원")) {
-                    sort_standard = "person";
                 } else if (sort.equals("작성자")) {
                     sort_standard = "user";
                 }
@@ -102,9 +104,46 @@ public class RelativeBoardActivity extends AppCompatActivity {
                         arrayList.clear();
 
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                            RelativeBoardItem relativeBoardItem = snapshot.getValue(RelativeBoardItem.class);
-                            // RelativeBoardItem 객체에 데이터를 담음
-                            arrayList.add(relativeBoardItem);
+                            MercenaryBoardItem mercenaryBoardItem = snapshot.getValue(MercenaryBoardItem.class);
+                            // MercenaryBoardItem 객체 재활용
+                            arrayList.add(mercenaryBoardItem);
+                        }
+                        if (arrayList.size() == 0) {
+                            Toast.makeText(getApplicationContext(), "원하시는 조건의 게시글이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                            init();
+                        } else {
+                            adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+                            Toast.makeText(getApplicationContext(), arrayList.size() + "건의 게시물을 찾았습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+
+        type_radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.radio1) {
+                    type = "용병";
+                } else if (checkedId == R.id.radio2) {
+                    type = "팀";
+                }
+                type_standard = "type";
+
+                databaseReference.orderByChild(type_standard).equalTo(type).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        arrayList.clear();
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
+                            MercenaryBoardItem mercenaryBoardItem = snapshot.getValue(MercenaryBoardItem.class);
+                            // MercenaryBoardItem 객체 재활용
+                            arrayList.add(mercenaryBoardItem);
                         }
                         if (arrayList.size() == 0) {
                             Toast.makeText(getApplicationContext(), "원하시는 조건의 게시글이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
@@ -128,26 +167,23 @@ public class RelativeBoardActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.action_one:
-                        Intent intent1 = new Intent(RelativeBoardActivity.this, RelativeBoardActivity.class);
+                        Intent intent1 = new Intent(MercenaryBoardActivity.this, RelativeBoardActivity.class);
                         startActivity(intent1);
                         break;
-
                     case R.id.action_two:
-                        Intent intent2 = new Intent(RelativeBoardActivity.this, MercenaryBoardActivity.class);
+                        Intent intent2 = new Intent(MercenaryBoardActivity.this, MercenaryBoardActivity.class);
                         startActivity(intent2);
                         break;
-
                     case R.id.action_three:
-                        Intent intent3 = new Intent(RelativeBoardActivity.this, TeamBoardActivity.class);
+                        Intent intent3 = new Intent(MercenaryBoardActivity.this, TeamBoardActivity.class);
                         startActivity(intent3);
                         break;
                     case R.id.action_four:
-                        Intent intent4 = new Intent(RelativeBoardActivity.this, StadiumSelectActivity.class);
+                        Intent intent4 = new Intent(MercenaryBoardActivity.this, StadiumSelectActivity.class);
                         startActivity(intent4);
                         break;
-
                     case R.id.action_five:
-                        Intent intent5 = new Intent(RelativeBoardActivity.this, MypageActivity.class);
+                        Intent intent5 = new Intent(MercenaryBoardActivity.this, MypageActivity.class);
                         startActivity(intent5);
                         break;
                 }
@@ -163,6 +199,9 @@ public class RelativeBoardActivity extends AppCompatActivity {
         alarm_btn = findViewById(R.id.alarm_btn);
         search_btn = findViewById(R.id.search_btn);
         bottomNavigationView = findViewById(R.id.BottomNavigation);
+        type_radio = findViewById(R.id.type_radio);
+        radio1 = findViewById(R.id.radio1);
+        radio2 = findViewById(R.id.radio2);
 
         recyclerView = findViewById(R.id.relativeBoard_Recycler);
         recyclerView.setHasFixedSize(true);
@@ -171,18 +210,18 @@ public class RelativeBoardActivity extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("board").child("relative");
+        databaseReference = firebaseDatabase.getReference("board").child("mercenary");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
 
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                            RelativeBoardItem relativeBoardItem = snapshot.getValue(RelativeBoardItem.class);
-                            // RelativeBoardItem 객체에 데이터를 담음
-                            arrayList.add(relativeBoardItem);
-                        }
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
+                    MercenaryBoardItem mercenaryBoardItem = snapshot.getValue(MercenaryBoardItem.class);
+                    // mercenaryBoardItem 객체에 데이터를 담음
+                    arrayList.add(mercenaryBoardItem);
+                }
                 adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
             }
 
@@ -191,10 +230,10 @@ public class RelativeBoardActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
             }
         });
-        adapter = new RelativeBoardAdapter(arrayList, this);
+        adapter = new MercenaryBoardAdapter(arrayList, this);
         recyclerView.setAdapter(adapter);
 
-        spinnerSearch = getResources().getStringArray(R.array.relativeboard_search);
+        spinnerSearch = getResources().getStringArray(R.array.mercenaryboard_search);
         SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerSearch, this);
         search_spinner.setAdapter(spinnerAdapter);
     }
