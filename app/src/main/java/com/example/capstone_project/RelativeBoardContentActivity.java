@@ -52,7 +52,7 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
 
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleDate = new SimpleDateFormat("MM월 dd일 hh:mm:ss"); //수정(김)
         getTime = simpleDate.format(mDate);
 
 
