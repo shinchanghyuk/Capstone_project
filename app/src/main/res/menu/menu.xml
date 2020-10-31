@@ -32,7 +32,7 @@
     <item
         android:id="@+id/action_five"
         android:enabled="true"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_settings_black_24dp"
         android:title="내 정보"
         app:showAsAction="always"  />
 

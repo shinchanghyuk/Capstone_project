@@ -97,7 +97,7 @@
                 android:background="@drawable/border_background"
                 style="@style/table_text_style"
                 android:layout_height="30dp"
-                android:text="경기인원" />
+                android:text="매칭인원" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/person_tv" />
@@ -111,7 +111,7 @@
                 style="@style/table_text_style"
                 android:layout_weight="1"
                 android:layout_height="30dp"
-                android:text="팀 실력" />
+                android:text="실 력" />
             <TextView
                 style="@style/table_text_style2"
                 android:id="@+id/ability_tv" />
@@ -151,7 +151,7 @@
             style="@style/recycler_style"
             android:id="@+id/comment_RecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="105dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/comment_tv"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>

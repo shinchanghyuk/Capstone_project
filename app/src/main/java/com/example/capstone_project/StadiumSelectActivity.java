@@ -1,13 +1,14 @@
 package com.example.capstone_project;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -29,38 +30,35 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
     ListView list;
     ArrayList<String> stadium_Data = new ArrayList<String>();
     GroundOverlayOptions videoMark;
-    String stadium;
-    private String[] spinnerSearch;
-    private Spinner search_spinner;
+    String stadium = "월드컵 경기장";
+
+    String na;
+    double ad,bd;
+    MyDBHelper myHelper;
+    SQLiteDatabase sqlDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stadium_select);
 
-        search_spinner = findViewById(R.id.search_spinner);
+        myHelper = new MyDBHelper(this);
 
-        spinnerSearch = getResources().getStringArray(R.array.stadium_search);
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerSearch, this);
-        search_spinner.setAdapter(spinnerAdapter);
+        sqlDB = myHelper.getReadableDatabase();
+        Cursor cursor;
+        cursor = sqlDB.rawQuery("SELECT * FROM placeTBL;", null);
 
-        search_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-              //  sort = (String) parent.getItemAtPosition(position);
-            }
+        if (cursor.getCount() == 0){
+            Toast.makeText(getApplicationContext(), "DB값 없음.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        stadium_Data.add("월드컵 경기장");
-        stadium_Data.add("난지천 공원 축구장");
-        stadium_Data.add("한강시민공원 축구장");
-        stadium_Data.add("의왕 축구장");
-        stadium_Data.add("자유공원 축구장");
+        while (cursor.moveToNext()) {
+            na = cursor.getString(0);
+            ad = cursor.getDouble(1);
+            bd = cursor.getDouble(2);
+            stadium_Data.add(na);
+        }
 
         list = (ListView) findViewById(R.id.stadium_listview);
 
@@ -77,21 +75,24 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(stadium_Data.get(position)=="월드컵 경기장"){
-                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.568256, 126.897240),15));
-                    stadium = "월드컵 경기장";
-                } else if(stadium_Data.get(position)=="한강시민공원 축구장"){
-                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.5342321, 126.9150377),15));
-                    stadium = "한강시민공원 축구장";
-                } else if(stadium_Data.get(position)=="난지천 공원 축구장"){
-                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.5741465, 126.8816503),15));
-                    stadium = "난지천 공원 축구장";
-                } else if(stadium_Data.get(position)=="의왕 축구장"){
-                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.3882791,126.9861281),15));
-                    stadium = "의왕 축구장";
-                }else if(stadium_Data.get(position)=="자유공원 축구장"){
-                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.3808392,126.9613703),15));
-                    stadium = "자유공원 축구장";
+
+                Cursor cursor;
+                cursor = sqlDB.rawQuery("SELECT * FROM placeTBL;", null);
+
+                if (cursor.getCount() == 0){
+                    Toast.makeText(getApplicationContext(), "DB값 없음.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                while (cursor.moveToNext()) {
+                    na = cursor.getString(0);
+                    ad = cursor.getDouble(1);
+                    bd = cursor.getDouble(2);
+
+                    if(stadium_Data.get(position).equals(na)){
+                        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(ad,bd),15));
+                        stadium = na;
+                    }
                 }
             }
         });
@@ -100,35 +101,28 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
-
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.568256, 126.897240),15));
         gMap.getUiSettings().setZoomControlsEnabled(true);
 
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(new LatLng(37.568256, 126.897240));//월드컵
-        markerOptions.alpha(0.7f);
-        gMap.addMarker(markerOptions); //마커 설정 후 출력
+        Cursor cursor;
+        cursor = sqlDB.rawQuery("SELECT * FROM placeTBL;", null);
 
-        MarkerOptions markerOptions1 = new MarkerOptions();
-        markerOptions1.position(new LatLng(37.5741465, 126.8816503));//한강 시민
-        markerOptions1.alpha(0.7f);
-        gMap.addMarker(markerOptions1); //마커 설정 후 출력
+        if (cursor.getCount() == 0){
+            Toast.makeText(getApplicationContext(), "DB값 없음.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        MarkerOptions markerOptions2 = new MarkerOptions();
-        markerOptions2.position(new LatLng(37.5342321, 126.9150377));//난지천
-        markerOptions2.alpha(0.7f);
-        gMap.addMarker(markerOptions2); //마커 설정 후 출력
+        while (cursor.moveToNext()) {
+            na = cursor.getString(0);
+            ad = cursor.getDouble(1);
+            bd = cursor.getDouble(2);
 
-        MarkerOptions markerOptions3 = new MarkerOptions();
-        markerOptions3.position(new LatLng(37.3882791,126.9861281));//의왕 축구장
-        markerOptions3.alpha(0.7f);
-        gMap.addMarker(markerOptions3); //마커 설정 후 출력
-
-        MarkerOptions markerOptions4 = new MarkerOptions();
-        markerOptions4.position(new LatLng(37.3808392,126.9613703));//자유 공원 축구장
-        markerOptions4.alpha(0.7f);
-        gMap.addMarker(markerOptions4); //마커 설정 후 출력
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(new LatLng(ad, bd));
+            markerOptions.alpha(0.7f);
+            gMap.addMarker(markerOptions); //마커 설정 후 출력
+        }
 
         gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override

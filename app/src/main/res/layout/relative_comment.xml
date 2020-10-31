@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:layout_marginTop="5dp"
+    android:background="#f2f2f2">
+
+    <TextView
+        android:id="@+id/replyName"
+        style="@style/recycler_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="13dp"
+        android:layout_margin="5dp"
+        android:textSize="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/replyTime"
+        style="@style/recycler_text_style"
+        android:layout_width="150dp"
+        android:layout_height="13dp"
+        android:layout_margin="5dp"
+        android:layout_marginLeft="5dp"
+        android:textSize="12dp"
+        app:layout_constraintLeft_toRightOf="@+id/replyName"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rreplyCount"
+        style="@style/recycler_text_style"
+        android:layout_width="100dp"
+        android:layout_height="13dp"
+        android:gravity="right"
+        android:layout_margin="5dp"
+        android:textSize="12dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/replyTxt"
+        style="@style/recycler_text_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:maxLength="28"
+        android:gravity="center_vertical"
+        android:textSize="15dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/replyName" />
+</androidx.constraintlayout.widget.ConstraintLayout>

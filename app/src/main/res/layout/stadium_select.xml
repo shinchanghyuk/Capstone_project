@@ -17,10 +17,9 @@
     <EditText
         android:id="@+id/stadium_edit"
         style="@style/edit_style"
-        android:layout_marginLeft="8dp"
         android:padding="10dp"
         app:layout_constraintLeft_toRightOf="@+id/search_spinner"
-        app:layout_constraintRight_toLeftOf="@+id/search_btn"
+        app:layout_constraintRight_toLeftOf="@+id/stadium_btn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
