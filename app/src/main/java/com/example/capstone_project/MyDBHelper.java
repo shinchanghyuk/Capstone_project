@@ -13,7 +13,8 @@ public class MyDBHelper extends SQLiteOpenHelper {
     @Override
     //테이블 생성
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE stadiumTBL (Name CHAR(40) PRIMARY KEY, Address CHAR(40), time CHAR(20), Charge CHAR(5), tel CHAR(20));");
+        sqLiteDatabase.execSQL("CREATE TABLE stadiumTBL (Name CHAR(40) PRIMARY KEY, Address CHAR(40), time CHAR(20), Charge CHAR(20), tel CHAR(20), image CHAR(80));");
+        sqLiteDatabase.execSQL("CREATE TABLE placeTBL (Name CHAR(40) PRIMARY KEY, Address CHAR(20), Bddress CHAR(20));");
     }
 
     @Override
@@ -21,6 +22,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         //테이블 삭제
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS stadiumTBL");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS placeTBL");
         //후 생성
         onCreate(sqLiteDatabase);
     }

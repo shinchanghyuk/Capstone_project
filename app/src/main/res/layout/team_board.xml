@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@id/search_spinner" />
 
     <TableLayout
-        android:id="@+id/relativeBoard_title"
+        android:id="@+id/teamBoard_title"
         style="@style/table_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -69,28 +69,36 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="6dp"
             android:layout_marginBottom="5dp">
 
             <TextView
                 style="@style/table_text_style"
-                android:layout_weight="0.5"
+                android:layout_width="80dp"
+                android:gravity="left"
+                android:layout_marginLeft="10dp"
+                android:textSize="15dp"
                 android:text="모집현황" />
 
             <TextView
                 style="@style/table_text_style"
-                android:layout_weight="3"
+                android:textSize="15dp"
+                android:layout_marginLeft="30dp"
+                android:layout_width="80dp"
                 android:text="제목" />
 
             <TextView
                 style="@style/table_text_style"
-                android:layout_weight="0.5"
-                android:text="모집기간" />
+                android:textSize="15dp"
+                android:layout_marginLeft="100dp"
+                android:layout_width="40dp"
+                android:text="기간" />
 
             <TextView
                 style="@style/table_text_style"
-                android:layout_weight="0.5"
+                android:textSize="15dp"
+                android:layout_marginLeft="6.5dp"
+                android:layout_width="50dp"
                 android:text="작성자" />
         </TableRow>
     </TableLayout>
@@ -100,7 +108,7 @@
         style="@style/recycler_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relativeBoard_title" />
+        app:layout_constraintTop_toBottomOf="@id/teamBoard_title" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/BottomNavigation"

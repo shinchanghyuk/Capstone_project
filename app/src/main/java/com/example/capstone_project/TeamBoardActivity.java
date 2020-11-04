@@ -1,7 +1,9 @@
 package com.example.capstone_project;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,9 +22,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.view.Change;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TeamBoardActivity extends AppCompatActivity {
     Button search_btn, write_btn;
@@ -33,8 +41,8 @@ public class TeamBoardActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;   // 리사이클러뷰 어댑터 선언
     private ArrayList<TeamBoardItem> arrayList; // 아이템 담을 배열리스트 선언
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
-    private String sort, sort_standard, sort_search;
+    private DatabaseReference databaseReference, databaseReference2;    // 파이버에시스 연결(경로) 선언
+    private String sort, sort_standard, sort_search, key, matching, day, currentDay, month, day2;
     private EditText search_edit; // 사용자가 검색하고자 하는 내용
     private String[] spinnerSearch;
 
@@ -137,6 +145,7 @@ public class TeamBoardActivity extends AppCompatActivity {
                 return false;
             }
         });
+
     }
 
     private void init() {
@@ -145,6 +154,14 @@ public class TeamBoardActivity extends AppCompatActivity {
         write_btn = findViewById(R.id.write_btn);
         search_btn = findViewById(R.id.search_btn);
         bottomNavigationView = findViewById(R.id.BottomNavigation);
+
+        long now = System.currentTimeMillis();
+        Date mDate = new Date(now);
+        mDate = new Date(mDate.getTime()+(1000*60*60*24*-1));
+
+        SimpleDateFormat simpleDate = new SimpleDateFormat("MM/dd");
+
+        currentDay = simpleDate.format(mDate); // 어제 날짜를 받아와 currentDay 변수에 넣음
 
         recyclerView = findViewById(R.id.relativeBoard_Recycler);
         recyclerView.setHasFixedSize(true);
@@ -155,19 +172,35 @@ public class TeamBoardActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("board").child("team");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.orderByChild("day"); // 모집일자에 따라 정렬
+
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                   TeamBoardItem teamBoardItem = snapshot.getValue(TeamBoardItem.class);
+                    TeamBoardItem teamBoardItem = snapshot.getValue(TeamBoardItem.class);
                     // RelativeBoardItem 객체에 데이터를 담음
+                    key = snapshot.getKey();
+                    matching = teamBoardItem.getMatching();
+                    day = teamBoardItem.getDay();
                     arrayList.add(teamBoardItem);
-                }
-                adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
-            }
 
+                    if (day.equals(currentDay)) {
+                        matching = "모집완료";
+                    } else {
+                        matching ="모집 중";
+                    }   // 모집 기간이 만료 되었을 때 모집 완료로 변경
+
+                    adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+
+                    databaseReference2 = firebaseDatabase.getReference("board").child("team").child(key);
+                    Map<String, Object> matchingChange = new HashMap<>();
+                    matchingChange.put("matching", matching);
+                    databaseReference2.updateChildren(matchingChange);
+                }   // 해당 게시물의 매칭현황을 변경
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();

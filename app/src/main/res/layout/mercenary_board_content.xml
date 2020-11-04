@@ -56,6 +56,7 @@
             android:layout_height="match_parent">
             <TextView
                 style="@style/table_text_style"
+                android:layout_weight="1"
                 android:background="@drawable/border_background"
                 android:layout_height="30dp"
                 android:text="활동지역" />
@@ -70,6 +71,7 @@
             <TextView
                 android:background="@drawable/border_background"
                 style="@style/table_text_style"
+                android:layout_weight="1"
                 android:layout_height="30dp"
                 android:text="매칭날짜" />
             <TextView
@@ -83,6 +85,7 @@
         <TextView
             android:background="@drawable/border_background"
             style="@style/table_text_style"
+            android:layout_weight="1"
             android:layout_height="30dp"
             android:text="매칭시간" />
         <TextView
@@ -97,6 +100,7 @@
                 android:background="@drawable/border_background"
                 style="@style/table_text_style"
                 android:layout_height="30dp"
+                android:layout_weight="1"
                 android:text="매칭인원" />
             <TextView
                 style="@style/table_text_style2"

@@ -232,7 +232,7 @@ public class RelativeReviseActivity extends AppCompatActivity {
         } else if (requestCode == 1) {
         }
     }
-    private void dateChange() {
+    private void dateChange()  {
         title = title_edit.getText().toString();
         person = person_edit.getText().toString();
         content = content_edit.getText().toString();

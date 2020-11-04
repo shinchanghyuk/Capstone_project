@@ -1,9 +1,15 @@
 package com.example.capstone_project;
 
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
@@ -19,16 +25,17 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.FirebaseApp;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +58,6 @@ public class RelativeWritingActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
     private FirebaseAuth auth; // 파이어베이스 인증 객체
     private int spinnerNum; // 파이어베이스 안에 있는 데이터 갯수(게시판 갯수)
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,10 +155,6 @@ public class RelativeWritingActivity extends AppCompatActivity {
 
         dialog = new DatePickerDialog(RelativeWritingActivity.this, listener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
         dialog.getDatePicker().setMinDate(myCalendar.getTimeInMillis()); // 현재 월/일 이전은 선택 불가하게 설정
-
-        Log.d("date", String.valueOf(myCalendar.get(Calendar.YEAR)));
-        Log.d("date1", String.valueOf(myCalendar.get(Calendar.MONTH)));
-        Log.d("date2", String.valueOf(myCalendar.get(Calendar.DAY_OF_MONTH)));
     }
     private DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -189,7 +191,6 @@ public class RelativeWritingActivity extends AppCompatActivity {
 
             databaseReference.setValue(relativeBoardItem);
             Toast.makeText(getApplicationContext(), "게시물이 작성 되었습니다.", Toast.LENGTH_SHORT).show();
-            finish();
         }
     }
  /*   private void spinnerChange(int length, int position) {

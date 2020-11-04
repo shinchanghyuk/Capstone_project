@@ -4,15 +4,26 @@ public class User {
     private String name;
     private String uid;
     private String loginWay;
+    private String userToken;
 
     public User() {
     }
 
-    public User(String name, String uid, String loginWay) {
+    public User(String name, String uid, String loginWay, String userToken) {
         this.name = name;
         this.uid = uid;
         this.loginWay = loginWay;
+        this.userToken = userToken;
     }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
     public String getName() {
         return name;
     }
