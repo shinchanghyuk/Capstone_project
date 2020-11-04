@@ -40,7 +40,7 @@ public class RelativeAlarmActivity extends AppCompatActivity {
         person_edit = findViewById(R.id.person_edit);
         place_btn = findViewById(R.id.place_btn);
         confirm_btn = findViewById(R.id.confirm_btn);
-        ability_radio.findViewById(R.id.ability_radio);
+        ability_radio = findViewById(R.id.ability_radio);
         radio1.findViewById(R.id.radio1);
         radio2.findViewById(R.id.radio2);
         radio3.findViewById(R.id.radio3);

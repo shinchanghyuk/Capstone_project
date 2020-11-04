@@ -6,12 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RadioGroup
+        style="@style/radio_button_style"
+        android:id="@+id/type_radio"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio1"
+            android:text="용병" />
+        <RadioButton
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio2"
+            android:text="팀" />
+    </RadioGroup>
+
     <Button
         android:id="@+id/place_btn"
         style="@style/relative_btn2"
         android:text="활동지역 설정"
         app:layout_constraintLeft_toRightOf="@+id/place_textView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/type_radio" />
 
     <TextView
         android:id="@+id/place_textView"

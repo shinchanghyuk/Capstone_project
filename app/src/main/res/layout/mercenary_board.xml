@@ -36,20 +36,39 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <RadioGroup
+        style="@style/radio_button_style"
+        android:id="@+id/type_radio"
+        app:layout_constraintTop_toBottomOf="@+id/tv1"
+        app:layout_constraintLeft_toLeftOf="parent">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio1"
+            android:text="용병" />
+        <RadioButton
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio2"
+            android:text="팀" />
+    </RadioGroup>
+
     <Button
         android:id="@+id/write_btn"
         style="@style/relative_btn"
         android:layout_width="80dp"
         android:text="글쓰기"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/alarm_btn"
         app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="58dp" />
+    <Button
+        android:id="@+id/alarm_btn"
+        style="@style/relative_btn"
+        android:layout_width="80dp"
+        android:text="알림"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
     <TextView
         android:id="@+id/tv1"
@@ -60,11 +79,11 @@
         app:layout_constraintTop_toBottomOf="@id/search_spinner" />
 
     <TableLayout
-        android:id="@+id/teamBoard_title"
+        android:id="@+id/mercenaryBoard_title"
         style="@style/table_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/write_btn">
+        app:layout_constraintTop_toBottomOf="@+id/alarm_btn">
 
         <TableRow
             android:layout_width="match_parent"
@@ -78,7 +97,7 @@
                 android:gravity="left"
                 android:layout_marginLeft="10dp"
                 android:textSize="15dp"
-                android:text="모집현황" />
+                android:text="매칭현황" />
 
             <TextView
                 style="@style/table_text_style"
@@ -92,7 +111,7 @@
                 android:textSize="15dp"
                 android:layout_marginLeft="100dp"
                 android:layout_width="40dp"
-                android:text="기간" />
+                android:text="일자" />
 
             <TextView
                 style="@style/table_text_style"
@@ -103,12 +122,20 @@
         </TableRow>
     </TableLayout>
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="93dp" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/relativeBoard_Recycler"
         style="@style/recycler_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/teamBoard_title" />
+        app:layout_constraintTop_toBottomOf="@id/mercenaryBoard_title" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/BottomNavigation"

@@ -133,7 +133,7 @@ public class TeamWritingActivity extends AppCompatActivity {
             String myFormat = "MM/dd"; // 출력형식
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
 
-            total_day = "~" + sdf.format(myCalendar.getTime()); // 현재 날짜를 변수에 넣기
+            total_day = sdf.format(myCalendar.getTime()); // 현재 날짜를 변수에 넣기
             date_textView.setText(sdf.format(myCalendar.getTime()));
         }
     };

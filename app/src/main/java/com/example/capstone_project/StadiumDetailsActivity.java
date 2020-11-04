@@ -13,16 +13,17 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import java.io.ByteArrayOutputStream;
 
 public class StadiumDetailsActivity extends AppCompatActivity {
 
     MyDBHelper myHelper;
     SQLiteDatabase sqlDB;
-    String na,ad,ti,ch,te;
+    String na,ad,ti,ch,te,im;
     String stadiumName;
-
-    int i =0;
+    int i =0; //카운트 변수
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class StadiumDetailsActivity extends AppCompatActivity {
         TextView stadium_time = (TextView) findViewById(R.id.stadium_time);
         TextView stadium_charge = (TextView) findViewById(R.id.stadium_charge);
         TextView stadium_tele = (TextView) findViewById(R.id.stadium_tele);
+
         TextView stadium_nameTv = findViewById(R.id.stadium_nameTv);
         ImageView stadium_image = (ImageView) findViewById(R.id.stadium_imageView);
 
@@ -43,7 +45,6 @@ public class StadiumDetailsActivity extends AppCompatActivity {
 
         //생성자(MyDBHelper 생성)
         myHelper = new MyDBHelper(this);
-
 
         //db 가져오기
         sqlDB = myHelper.getReadableDatabase();
@@ -64,9 +65,7 @@ public class StadiumDetailsActivity extends AppCompatActivity {
             ti = cursor.getString(2);
             ch = cursor.getString(3);
             te = cursor.getString(4);
-
-            //na = na.replace("\r","").replace("\n","");
-            //Toast.makeText(getApplicationContext(), stadiumName+1+1+na+1+1, Toast.LENGTH_SHORT).show();
+            im = cursor.getString(5);
 
             if(stadiumName.equals(na)){
                 stadium_nameTv.setText(na);
@@ -74,50 +73,11 @@ public class StadiumDetailsActivity extends AppCompatActivity {
                 stadium_time.setText(ti);
                 stadium_charge.setText(ch);
                 stadium_tele.setText(te);
-                stadium_image.setImageResource(R.drawable.a);
+                Glide.with(this).load(im).into(stadium_image);
             }
             i++;
         }
         cursor.close();
         sqlDB.close();
-
-/*
-        if(stadium.equals("m0")){
-            //월드컵
-            stadium_address.setText("서울특별시 마포구 성산2동 월드컵로 240");
-            stadium_time.setText("06:00 ~ 24:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("02-2128-2002");
-            stadium_image.setImageResource(R.drawable.a);
-        } else if(stadium.equals("m1")){
-            //난지천
-            stadium_address.setText("서울특별시 마포구 상암동");
-            stadium_time.setText("18:00 ~ 22:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("02-3153-9874");
-            stadium_image.setImageResource(R.drawable.b);
-        }else if(stadium.equals("m2")){
-            //한강시민공원
-            stadium_address.setText("서울특별시 영등포구 여의도동");
-            stadium_time.setText("06:00 ~ 20:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("02-782-2898");
-            stadium_image.setImageResource(R.drawable.c);
-        }else if(stadium.equals("m3")){
-            //의왕
-            stadium_address.setText("경기도 의왕시 포일동 155-2");
-            stadium_time.setText("06:00 ~ 24:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("031-426-1300");
-            stadium_image.setImageResource(R.drawable.d);
-        }else if(stadium.equals("m4")){
-            //자유공원
-            stadium_address.setText("경기도 안양시 동안구 호계동 1112");
-            stadium_time.setText("08:00 ~ 24:00");
-            stadium_charge.setText("유료");
-            stadium_tele.setText("031-8045-2413");
-            stadium_image.setImageResource(R.drawable.e);
-        }
- */
     }
 }

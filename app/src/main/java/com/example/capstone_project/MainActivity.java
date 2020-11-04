@@ -34,6 +34,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -43,6 +44,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private SignInButton google_login_btn; // 구글 로그인 버튼
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final int SIGN_Google = 100; // 구글 로그인 결과 코드
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
-    private String loginWay;
+    private String loginWay, userToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,11 +185,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-    private void userdata(String loginWay) {
-        currentUser = auth.getCurrentUser();
-        databaseReference = firebaseDatabase.getReference("users").child(currentUser.getUid());
-        User user = new User(currentUser.getDisplayName(), currentUser.getUid(), loginWay);
-        databaseReference.setValue(user);
+    private void userdata(final String loginWay) {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                userToken = instanceIdResult.getToken();
+                currentUser = auth.getCurrentUser();
+                databaseReference = firebaseDatabase.getReference("users").child(currentUser.getUid());
+
+                User user = new User(currentUser.getDisplayName(), currentUser.getUid(), loginWay, userToken);
+                databaseReference.setValue(user);
+            }
+        });
     }
 }
 
