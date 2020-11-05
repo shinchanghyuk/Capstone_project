@@ -30,12 +30,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
-
         holder.user.setText(arrayList.get(position).getUser());
         holder.writetime.setText(arrayList.get(position).getWritetime());
         holder.content.setText(arrayList.get(position).getContent());
         holder.recomcount.setText("답글 " + arrayList.get(position).getRecomcount()+ "개");
-
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +64,3 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
 }
-
-
-
-

@@ -9,7 +9,6 @@
     <Spinner
         android:id="@+id/search_spinner"
         style="@style/spinner_style"
-
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,7 +67,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_spinner" />
 
-    <TableLayout
+<TableLayout
         android:id="@+id/relativeBoard_title"
         style="@style/table_style"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -78,27 +77,36 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="6dp"
             android:layout_marginBottom="5dp">
 
             <TextView
                 style="@style/table_text_style"
-                android:layout_weight="0.5"
+                android:layout_width="80dp"
+                android:gravity="left"
+                android:layout_marginLeft="10dp"
+                android:textSize="15dp"
                 android:text="매칭현황" />
 
             <TextView
                 style="@style/table_text_style"
-                android:layout_weight="3"
+                android:textSize="15dp"
+                android:layout_marginLeft="30dp"
+                android:layout_width="80dp"
                 android:text="제목" />
 
             <TextView
                 style="@style/table_text_style"
-                android:layout_weight="0.5"
-                android:text="매칭일자" />
+                android:textSize="15dp"
+                android:layout_marginLeft="100dp"
+                android:layout_width="40dp"
+                android:text="일자" />
 
             <TextView
                 style="@style/table_text_style"
-                android:layout_weight="0.5"
+                android:textSize="15dp"
+                android:layout_marginLeft="6.5dp"
+                android:layout_width="50dp"
                 android:text="작성자" />
         </TableRow>
     </TableLayout>

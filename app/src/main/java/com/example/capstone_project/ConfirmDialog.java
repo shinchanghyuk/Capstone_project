@@ -56,18 +56,26 @@ public class ConfirmDialog {
                 @Override
                 public void onClick(View view) {
                     if (standard.equals("matching1") || standard.equals("matching2")) {
-                        ((RelativeBoardContentActivity) context).matchingChange();
+                        if(activity.equals("relative")) {
+                            ((RelativeBoardContentActivity) context).matchingChange();
+                        } else if(activity.equals("mercenary")) {
+                            ((MercenaryBoardContentActivity) context).matchingChange();
+                        }
                     } else if (standard.equals("delete")) {
                         if(activity.equals("relative")) {
                             ((RelativeBoardContentActivity) context).boardDelete();
                         } else if(activity.equals("team")) {
                             ((TeamBoardContentActivity) context).boardDelete();
+                        } else if(activity.equals("mercenary")) {
+                            ((MercenaryBoardContentActivity) context).boardDelete();
                         }
                     } else if (standard.equals("update")) {
                         if(activity.equals("relative")) {
                             ((RelativeBoardContentActivity) context).boardUpdate();
                         } else if(activity.equals("team")) {
                             ((TeamBoardContentActivity) context).boardUpdate();
+                        } else if(activity.equals("mercenary")) {
+                            ((MercenaryBoardContentActivity) context).boardUpdate();
                         }
                     } else if (standard.equals("logout")) {
                         ((MypageActivity) context).logout();

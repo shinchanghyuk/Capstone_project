@@ -1,9 +1,9 @@
 package com.example.capstone_project;
 
 public class CommentItem { //댓글 구동시 사용되는 아이템들
-    private String user, writetime, content, recomcount, boardnumber, commentnum;;
+    private String user, writetime, content, recomcount, boardnumber, commentnum;
 
-    public CommentItem(String boardnumber, String commentnum , String user,String  writetime,String  content,String recomcount) {
+    public CommentItem(String boardnumber, String commentnum, String user, String writetime, String content, String recomcount) {
 
         this.boardnumber = boardnumber;
         this.commentnum = commentnum;
@@ -11,37 +11,56 @@ public class CommentItem { //댓글 구동시 사용되는 아이템들
         this.writetime = writetime;
         this.recomcount = recomcount;
         this.content = content;
-
-
     }
 
-    public String getBoardnumber() { return boardnumber; }
+    public CommentItem() {
+    }
 
-    public void setBoardnumber(String boardnumber) { this.boardnumber = boardnumber; }
+    public String getBoardnumber() {
+        return boardnumber;
+    }
 
-    public String getCommentnum() { return commentnum; }
+    public void setBoardnumber(String boardnumber) {
+        this.boardnumber = boardnumber;
+    }
 
-    public void setCommentnum(String commentnum) { this.commentnum = commentnum; }
+    public String getCommentnum() {
+        return commentnum;
+    }
 
-    public String getUser() { return user; }
+    public void setCommentnum(String commentnum) {
+        this.commentnum = commentnum;
+    }
 
-    public void setUser(String user) { this.user = user; }
+    public String getUser() {
+        return user;
+    }
 
-    public String getWritetime() { return writetime; }
+    public void setUser(String user) {
+        this.user = user;
+    }
 
-    public void setWritetime(String writetime ) { this.writetime = writetime; }
+    public String getWritetime() {
+        return writetime;
+    }
 
-    public String getRecomcount() { return recomcount; }
+    public void setWritetime(String writetime) {
+        this.writetime = writetime;
+    }
 
-    public void setRecomcount(String recomcount) { this.recomcount = recomcount; }
+    public String getRecomcount() {
+        return recomcount;
+    }
 
-    public String getContent() { return content; }
+    public void setRecomcount(String recomcount) {
+        this.recomcount = recomcount;
+    }
 
-    public void setContent(String content) { this.content = content; }
+    public String getContent() {
+        return content;
+    }
 
-
-    public CommentItem() { }
-
+    public void setContent(String content) {
+        this.content = content;
+    }
 }
-
-

@@ -248,13 +248,13 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
 
 
     }
-
     public void matchingChange() {
-        if (matching.equals("매칭 중")) { // DB의 matching 값이 매칭 중일때
+        if(matching.equals("매칭 중")) { // DB의 matching 값이 매칭 중일때
             matching = "매칭완료";
             matching_btn.setText("매칭취소");
             Toast.makeText(getApplicationContext(), "매칭이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
-        } else if (matching.equals("매칭완료")) { // DB의 matching 값이 매칭 완료일때
+        }
+        else if(matching.equals("매칭완료")){ // DB의 matching 값이 매칭 완료일때
             matching = "매칭 중";
             matching_btn.setText("매칭완료");
             Toast.makeText(getApplicationContext(), "매칭이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -266,7 +266,6 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         databaseReference2.updateChildren(matchingOk);
         matching_tv.setText(matching);
     }
-
     public void boardDelete() {
         databaseReference2 = firebaseDatabase.getReference("board").child("relative").child(key);
         databaseReference2.removeValue();
@@ -281,7 +280,6 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         intent.putExtra("key", key);
         startActivityForResult(intent, 1);
     }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 

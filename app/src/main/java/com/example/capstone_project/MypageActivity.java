@@ -139,24 +139,27 @@ public class MypageActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
                 switch (menuItem.getItemId()) {
                     case R.id.action_one:
                         Intent intent1 = new Intent(MypageActivity.this, RelativeBoardActivity.class);
                         startActivity(intent1);
-                        return true;
+                      break;
                     case R.id.action_two:
-
+                        break;
                     case R.id.action_three:
-
+                        Intent intent3 = new Intent(MypageActivity.this, TeamBoardActivity.class);
+                        startActivity(intent3);
+                        break;
                     case R.id.action_four:
                         Intent intent4 = new Intent(MypageActivity.this, StadiumSelectActivity.class);
                         startActivity(intent4);
-                        return true;
+                        break;
 
                     case R.id.action_five:
                         Intent intent5 = new Intent(MypageActivity.this, MypageActivity.class);
                         startActivity(intent5);
-                        return true;
+                        menuItem.setChecked(true);
                 }
                 return false;
             }
