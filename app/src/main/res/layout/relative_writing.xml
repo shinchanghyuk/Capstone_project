@@ -73,7 +73,7 @@
         style="@style/relative_writing_edit"
         android:editable="true"
         android:layout_height="50dp"
-        android:maxLength="15"
+        android:maxLength="20"
         android:hint="제목을 입력해주세요"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"

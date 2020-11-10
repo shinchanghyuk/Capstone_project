@@ -44,8 +44,8 @@ public class TeamWritingActivity extends AppCompatActivity {
     private TextView date_textView,place_textView;
     private EditText title_edit, person, content_edit, name;
     private Spinner ability;
-    private String total_matching, total_title = "", total_day ="", total_user, total_name="", choicePlace="";
-    private String total_ability, total_person="", total_content="", boardNumber;
+    private String total_matching, total_title, total_day="", total_user, total_name, choicePlace="";
+    private String total_ability, total_person, total_content, boardNumber, total_uid;
     private String[] spinnerAbility;
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
@@ -65,6 +65,7 @@ public class TeamWritingActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
         total_user = user.getDisplayName();
+        total_uid = user.getUid();
 
         ability.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -116,6 +117,7 @@ public class TeamWritingActivity extends AppCompatActivity {
 
         SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerAbility, this);
         ability.setAdapter(spinnerAdapter);
+
         dialog = new DatePickerDialog(TeamWritingActivity.this, listener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
         dialog.getDatePicker().setMinDate(myCalendar.getTimeInMillis()); // 현재 월/일 이전은 선택 불가하게 설정
 
@@ -130,11 +132,11 @@ public class TeamWritingActivity extends AppCompatActivity {
             myCalendar.set(Calendar.MONTH, month); // 선택한 달로 설정
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth); // 선택한 일로 설정
 
-            String myFormat = "MM/dd"; // 출력형식
+            String myFormat = "yyyy/MM/dd"; // 출력형식
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
 
             total_day = sdf.format(myCalendar.getTime()); // 현재 날짜를 변수에 넣기
-            date_textView.setText(sdf.format(myCalendar.getTime()));
+            date_textView.setText(total_day);
         }
     };
     private void userdata() {
@@ -143,7 +145,7 @@ public class TeamWritingActivity extends AppCompatActivity {
         total_person = person.getText().toString();
         total_content = content_edit.getText().toString();
         total_name = name.getText().toString();
-        boardNumber = databaseReference.push().getKey();
+        boardNumber = databaseReference.getKey();
 
         if (total_title.isEmpty() || total_content.isEmpty() || total_day.isEmpty() || (total_name.equals("팀 이름"))
                     || (total_ability.equals("실력")) || total_person.isEmpty() || (choicePlace.isEmpty())) {
@@ -151,7 +153,7 @@ public class TeamWritingActivity extends AppCompatActivity {
             }
             else {
           TeamBoardItem teamBoardItem = new TeamBoardItem(total_matching, total_title, total_day, total_user,
-                    choicePlace, total_name, boardNumber, total_ability, total_person, total_content);
+                    choicePlace, total_name, boardNumber, total_ability, total_person, total_content, total_uid);
 
                 databaseReference.setValue(teamBoardItem);
                 Toast.makeText(getApplicationContext(), "게시물이 작성 되었습니다.", Toast.LENGTH_SHORT).show();

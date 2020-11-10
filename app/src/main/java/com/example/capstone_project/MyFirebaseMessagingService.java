@@ -19,6 +19,7 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
+    private Intent intent;
 
     public MyFirebaseMessagingService() {
     }
@@ -47,7 +48,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String messageTitle, String messageBody){
-        Intent intent = new Intent(this, RelativeBoardActivity.class);
+
+        if (messageTitle.equals("상대매칭 게시판 알림") || messageTitle.equals("상대매칭 게시판 댓글알림")) {
+            intent = new Intent(this, RelativeBoardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        } else if (messageTitle.equals("용병모집 게시판 알림") || messageTitle.equals("용병모집 게시판 댓글알림")) {
+            intent = new Intent(this, MercenaryBoardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_ONE_SHOT);
         //intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -68,7 +77,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Notification 채널을 설정합니다.
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelName = getString(R.string.default_notification_channel_id);
+            String channelName = "notification";
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }

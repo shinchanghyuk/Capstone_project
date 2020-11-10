@@ -1,9 +1,9 @@
 package com.example.capstone_project;
 
 public class CommentItem { //댓글 구동시 사용되는 아이템들
-    private String user, writetime, content, recomcount, boardnumber, commentnum;
+    private String user, writetime, content, recomcount, boardnumber, commentnum, uid;
 
-    public CommentItem(String boardnumber, String commentnum, String user, String writetime, String content, String recomcount) {
+    public CommentItem(String boardnumber, String commentnum, String user, String writetime, String content, String recomcount, String uid) {
 
         this.boardnumber = boardnumber;
         this.commentnum = commentnum;
@@ -11,17 +11,26 @@ public class CommentItem { //댓글 구동시 사용되는 아이템들
         this.writetime = writetime;
         this.recomcount = recomcount;
         this.content = content;
+        this.uid = uid;
     }
 
     public CommentItem() {
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getBoardnumber() {
         return boardnumber;
     }
 
-    public void setBoardnumber(String boardnumber) {
-        this.boardnumber = boardnumber;
+    public void setBoardnumber(String boardNumber) {
+        this.boardnumber = boardNumber;
     }
 
     public String getCommentnum() {

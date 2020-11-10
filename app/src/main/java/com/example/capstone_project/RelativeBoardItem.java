@@ -2,9 +2,9 @@ package com.example.capstone_project;
 
 public class RelativeBoardItem {
     private String matching, title, day, user, ability, content;
-    private String endtime, person, starttime, place, boardnumber;
+    private String endtime, person, starttime, place, boardnumber, uid;
 
-    public RelativeBoardItem(String matching, String title, String day, String user, String place, String starttime, String boardnumber, String endtime, String ability, String person, String content) {
+    public RelativeBoardItem(String matching, String title, String day, String user, String place, String starttime, String boardnumber, String endtime, String ability, String person, String content, String uid) {
         this.matching = matching;
         this.title = title;
         this.day = day;
@@ -16,6 +16,15 @@ public class RelativeBoardItem {
         this.ability = ability;
         this.person = person;
         this.content = content;
+        this.uid = uid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getBoardnumber() {

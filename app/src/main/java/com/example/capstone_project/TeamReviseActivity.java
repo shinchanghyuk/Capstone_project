@@ -91,7 +91,7 @@ public class TeamReviseActivity extends AppCompatActivity {
                 }
 
                     place_textView.setText(place);
-                    date_textView.setText(day);
+                    date_textView.setText(day.substring(5));
                     ability_spinner.setSelection(abilityNum);
                     name_edit.setText(name);
                     title_edit.setText(title);
@@ -171,12 +171,12 @@ public class TeamReviseActivity extends AppCompatActivity {
             myCalendar.set(Calendar.MONTH, month); // 선택한 달로 설정
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth); // 선택한 일로 설정
 
-            String myFormat = "MM/dd"; // 출력형식
+            String myFormat = "yyyy/MM/dd"; // 출력형식
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
 
             day = sdf.format(myCalendar.getTime()); // 현재 날짜를 변수에 넣기
 
-            date_textView.setText(sdf.format(myCalendar.getTime()));
+            date_textView.setText(day);
         }
     };
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

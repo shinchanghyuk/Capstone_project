@@ -55,7 +55,7 @@ public class MercenaryReviseActivity extends AppCompatActivity {
     private String title, day, sTime, eTime, person, content, ability, key, boardnumber, place, type;
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference, databaseReference2;    // 파이버에시스 연결(경로) 선언
-    private int spinnerNum, abilityNum, sTimeNum, eTimeNum;
+    private int spinnerNum1, spinnerNum2, abilityNum, sTimeNum, eTimeNum;
     private RadioGroup type_radio;
     private RadioButton radio1, radio2;
 
@@ -143,7 +143,7 @@ public class MercenaryReviseActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 sTime = (String) parent.getItemAtPosition(position);
-                    spinnerNum = position;
+                spinnerNum1 = position;
                 }
 
             @Override
@@ -156,6 +156,7 @@ public class MercenaryReviseActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 eTime = (String) parent.getItemAtPosition(position);
+                spinnerNum2 = position;
             }
 
             @Override
@@ -241,12 +242,12 @@ public class MercenaryReviseActivity extends AppCompatActivity {
             myCalendar.set(Calendar.MONTH, month); // 선택한 달로 설정
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth); // 선택한 일로 설정
 
-            String myFormat = "MM/dd"; // 출력형식
+            String myFormat = "yyyy/MM/dd"; // 출력형식
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
 
             day = sdf.format(myCalendar.getTime()); // 현재 날짜를 변수에 넣기
 
-            date_textView.setText(sdf.format(myCalendar.getTime()));
+            date_textView.setText(day);
         }
     };
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -268,8 +269,9 @@ public class MercenaryReviseActivity extends AppCompatActivity {
         if (title.isEmpty() || content.isEmpty() || day.isEmpty() || (sTime.equals("시간선택"))
                 || (eTime.equals("시간선택")) || (ability.equals("실력")) || person.isEmpty() || (place.isEmpty())) {
             Toast.makeText(getApplicationContext(), "빈칸 없이 모두다 입력해주세요", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else if (spinnerNum1 >= spinnerNum2) {
+            Toast.makeText(getApplicationContext(), "잘못된 시간 설정입니다.", Toast.LENGTH_SHORT).show();
+        } else {
             databaseReference2 = firebaseDatabase.getReference("board").child("mercenary").child(key);
 
             Map<String, Object> boardChange = new HashMap<>();

@@ -63,7 +63,7 @@ public class MypageActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private GoogleSignInClient googleSignInClient;
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
+    private DatabaseReference databaseReference, databaseReference2, databaseReference3, databaseReference4, databaseReference5;    // 파이버에시스 연결(경로) 선언
     private String loginWay;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,9 @@ public class MypageActivity extends AppCompatActivity {
 
         myinfo_tv = findViewById(R.id.myinfo_tv);
         recyclerView = findViewById(R.id.mypage_recyclerview);
-        bottomNavigationView = findViewById(R.id.BottomNavigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
+
+        bottomNavigationView.setSelectedItemId(R.id.action_five);
 
         auth = FirebaseAuth.getInstance(); // 파이어베이스 인증 객체 초기화
         currentUser = auth.getCurrentUser();
@@ -136,6 +138,8 @@ public class MypageActivity extends AppCompatActivity {
 
         adapter.notifyDataSetChanged();
 
+        bottomNavigationView.setSelectedItemId(R.id.action_five);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -146,6 +150,8 @@ public class MypageActivity extends AppCompatActivity {
                         startActivity(intent1);
                       break;
                     case R.id.action_two:
+                        Intent intent2 = new Intent(MypageActivity.this, MercenaryBoardActivity.class);
+                        startActivity(intent2);
                         break;
                     case R.id.action_three:
                         Intent intent3 = new Intent(MypageActivity.this, TeamBoardActivity.class);
@@ -164,10 +170,6 @@ public class MypageActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        Log.d("ddd", String.valueOf(currentUser.getEmail()));
-        Log.d("ddd", String.valueOf(currentUser.getDisplayName()));
-        googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
     }
     public void logout() {
         if (currentUser != null) { // 사용자 객체가 안 비어있다면 화면 이동
@@ -180,7 +182,7 @@ public class MypageActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             Intent intent = new Intent(MypageActivity.this, MainActivity.class);
                             startActivity(intent);
-                            Toast.makeText(getApplicationContext(), "로그아웃 성공", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "로그아웃이 성공적으로 마무리되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -193,11 +195,79 @@ public class MypageActivity extends AppCompatActivity {
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+
+                        databaseReference2 = firebaseDatabase.getReference("board").child("relative");
+                        Query query = databaseReference2.orderByChild("uid").equalTo(currentUser.getUid());
+
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    snapshot.getRef().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        databaseReference3 = firebaseDatabase.getReference("board").child("mercenary");
+                        Query query2 = databaseReference3.orderByChild("uid").equalTo(currentUser.getUid());
+
+                        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    snapshot.getRef().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        databaseReference4 = firebaseDatabase.getReference("board").child("team");
+                        Query query3 = databaseReference4.orderByChild("uid").equalTo(currentUser.getUid());
+
+                        query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    snapshot.getRef().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        databaseReference5 = firebaseDatabase.getReference("board").child("comment");
+                        Query query4 = databaseReference5.orderByChild("uid").equalTo(currentUser.getUid());
+
+                        query4.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    snapshot.getRef().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
                         databaseReference = firebaseDatabase.getReference("users").child(currentUser.getUid());
                         databaseReference.removeValue();
+
                         Intent intent = new Intent(MypageActivity.this, MainActivity.class);
                         startActivity(intent);
-                        Toast.makeText(getApplicationContext(), "회원탈퇴 성공", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "회원탈퇴가 성공적으로 마무리되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
