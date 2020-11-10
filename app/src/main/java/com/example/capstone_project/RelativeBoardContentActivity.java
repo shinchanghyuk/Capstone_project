@@ -24,6 +24,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,10 +37,13 @@ import java.util.Map;
 
 public class RelativeBoardContentActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference, databaseReference2, databaseReference3, databaseReference4;    // 파이버에시스 연결(경로) 선언
+    private DatabaseReference databaseReference, databaseReference2, databaseReference3, databaseReference4, databaseReference5;    // 파이버에시스 연결(경로) 선언
     private TextView matching_tv, place_tv, date_tv, person_tv, ability_tv, content_tv, title_tv, time_tv;
     private Button matching_btn, update_btn, delete_btn, list_btn, reply_btn;
-    private String matching, day, title, content, ability, starttime, endtime, person, user, current_user, boardnumber, key, place, commentkey, getTime, reply;
+    private String matching, day, title, content, ability, starttime, endtime, person, user,
+            current_user, current_uid, boardnumber, key, place, commentkey, getTime, reply, fcmToken,
+            alarm_content, alarm_title, fcmUrl, serverKey;
+    public static String uid; // 게시글을 작성한 사용자의 uid
     private FirebaseAuth auth; // 파이어베이스 인증 객체
     private EditText reply_edit;
     private ArrayList<CommentItem> arrayList; //댓글 아이템 담을 배열리스트
@@ -61,6 +69,7 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = auth.getCurrentUser();
         current_user = firebaseUser.getDisplayName();
+        current_uid = firebaseUser.getUid();
 
         Query query = databaseReference.orderByChild("boardnumber").equalTo(boardnumber);
 
@@ -81,6 +90,7 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
                     endtime = relativeBoardItem.getEndtime();
                     person = relativeBoardItem.getPerson();
                     user = relativeBoardItem.getUser();
+                    uid = relativeBoardItem.getUid();
                 }
 
                 matching_tv.setText(matching);
@@ -98,9 +108,9 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
                     delete_btn.setVisibility(View.VISIBLE);
                 }
 
-                if(matching.equals("매칭완료")) {
+                if (matching.equals("매칭완료")) {
                     matching_btn.setText("매칭취소");
-                }else if(matching.equals("매칭 중")){
+                } else if (matching.equals("매칭 중")) {
                     matching_btn.setText("매칭완료");
                 }
             }
@@ -112,7 +122,9 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         });
 
         databaseReference3 = firebaseDatabase.getReference("board").child("comment");
-        databaseReference3.orderByChild("boardnumber").equalTo(boardnumber).addValueEventListener(new ValueEventListener() {
+        Query query2 = databaseReference3.orderByChild("boardnumber").equalTo(boardnumber);
+
+        query2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
@@ -138,9 +150,9 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ConfirmDialog dialog = new ConfirmDialog(RelativeBoardContentActivity.this);
-                if(matching.equals("매칭 중")) {
+                if (matching.equals("매칭 중")) {
                     dialog.operation("matching1", "relative");
-                } else if(matching.equals("매칭완료")) {
+                } else if (matching.equals("매칭완료")) {
                     dialog.operation("matching2", "relative");
                 }
             }
@@ -208,15 +220,17 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         RecyclerDecoration spaceDecoration = new RecyclerDecoration(10);
         recyclerView.addItemDecoration(spaceDecoration);
         recyclerView.setLayoutManager(layoutManager);
+
+        fcmUrl = "https://fcm.googleapis.com/fcm/send";
+        serverKey = getResources().getString(R.string.server_key);
     }
 
     public void matchingChange() {
-        if(matching.equals("매칭 중")) { // DB의 matching 값이 매칭 중일때
+        if (matching.equals("매칭 중")) { // DB의 matching 값이 매칭 중일때
             matching = "매칭완료";
             matching_btn.setText("매칭취소");
             Toast.makeText(getApplicationContext(), "매칭이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
-        }
-        else if(matching.equals("매칭완료")){ // DB의 matching 값이 매칭 완료일때
+        } else if (matching.equals("매칭완료")) { // DB의 matching 값이 매칭 완료일때
             matching = "매칭 중";
             matching_btn.setText("매칭완료");
             Toast.makeText(getApplicationContext(), "매칭이 취소 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -228,6 +242,7 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         databaseReference2.updateChildren(matchingOk);
         matching_tv.setText(matching);
     }
+
     public void boardDelete() {
         databaseReference2 = firebaseDatabase.getReference("board").child("relative").child(key);
         databaseReference2.removeValue();
@@ -238,10 +253,11 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
     public void boardUpdate() {
         databaseReference2 = firebaseDatabase.getReference("board").child("relative").child(key);
         Intent intent = new Intent(getApplicationContext(), RelativeReviseActivity.class);
-        intent.putExtra("bordernumber", boardnumber);
+        intent.putExtra("boardnumber", boardnumber);
         intent.putExtra("key", key);
         startActivityForResult(intent, 1);
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -251,6 +267,7 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
             }
         }
     }
+
     private void upcomment() { //댓글 작성 버튼 클릭시 구동 부분
         reply = reply_edit.getText().toString(); // 작성한 글
         String replycount = "0"; //첫 댓글 작성시 답글 수 기본값 0으로 넣어주기
@@ -261,9 +278,64 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         if (reply.isEmpty()) {
             Toast.makeText(getApplicationContext(), "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show(); //입력을 하지 않고 버튼을 눌렀을때
         } else {
-            CommentItem commentItem = new CommentItem(boardnumber, commentkey, current_user, getTime, reply, replycount);
-            databaseReference4.setValue(commentItem); //파이어베이스 업로드 구문
+            CommentItem commentItem = new CommentItem(boardnumber, commentkey, current_user, getTime, reply, replycount, current_uid);
+            databaseReference4.setValue(commentItem); //파이어베이스 업로드 구문z
+
             Toast.makeText(getApplicationContext(), "댓글이 작성 되었습니다.", Toast.LENGTH_SHORT).show();
+
+            alarm_content = "게시물에 새로운 댓글이 달렸습니다.";
+            alarm_title = "상대매칭 게시판 댓글알림";
+
+            databaseReference5 = firebaseDatabase.getReference("users");
+            Query query3 = databaseReference5.orderByChild("uid").equalTo(uid);
+
+            if (!(uid.equals(current_uid))) { // 자신의 게시글일 때는 알림을 보내지 않음.
+                query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            User userItem = snapshot.getValue(User.class);
+                            fcmToken = userItem.getUserToken();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+
+                                        JSONObject root = new JSONObject();
+                                        JSONObject notification = new JSONObject();
+                                        notification.put("body", alarm_content);
+                                        notification.put("title", alarm_title);
+                                        root.put("notification", notification);
+                                        root.put("to", fcmToken);
+
+                                        URL Url = new URL(fcmUrl);
+                                        HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
+                                        // URL 연결
+                                        conn.setRequestMethod("POST");
+                                        conn.setDoOutput(true);
+                                        conn.setDoInput(true);
+                                        conn.addRequestProperty("Authorization", "key=" + serverKey);
+                                        conn.setRequestProperty("Accept", "application/json");
+                                        conn.setRequestProperty("Content-type", "application/json");
+                                        OutputStream os = conn.getOutputStream();
+                                        os.write(root.toString().getBytes("utf-8"));
+                                        os.flush();
+                                        conn.getResponseCode();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
     }
 }
+

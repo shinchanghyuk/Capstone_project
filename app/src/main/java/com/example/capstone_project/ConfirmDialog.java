@@ -78,7 +78,11 @@ public class ConfirmDialog {
                             ((MercenaryBoardContentActivity) context).boardUpdate();
                         }
                     } else if (standard.equals("logout")) {
-                        ((MypageActivity) context).logout();
+                        if(activity.equals("mypage")) {
+                            ((MypageActivity) context).logout();
+                        } else if(activity.equals("menu")) {
+                            ((MenuActivity) context).logout();
+                        }
                     } else if (standard.equals("withdrawal")) {
                         ((MypageActivity) context).withdrawal();
                     }

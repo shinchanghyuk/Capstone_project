@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.AccessToken;
-
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -42,8 +41,12 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -56,13 +59,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private GoogleApiClient googleApiClient; // 구글 API 클라이언트 객체
     private static final int SIGN_Google = 100; // 구글 로그인 결과 코드
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
-    private String loginWay, userToken;
+    private DatabaseReference databaseReference, databaseReference2;    // 파이버에시스 연결(경로) 선언
+    private String loginWay, userToken, uid, realarm, mealarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         google_login_btn = findViewById(R.id.google_login_btn);
         facebook_login_btn = (LoginButton) findViewById(R.id.facebook_login_btn);
 
@@ -120,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onStart();
 
         currentUser = auth.getCurrentUser(); // 현재 로그인 된 사용자의 객체를 가져옴
+
         if (currentUser != null) { // 사용자 객체가 안 비어있다면 화면 이동
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
             startActivity(intent);
@@ -151,14 +156,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         if (task.isSuccessful()) { // 로그인이 성공 되었을 때
                             loginWay = "구글";
                             userdata(loginWay);
-                            Toast.makeText(MainActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
                 });
     }
 
@@ -169,13 +170,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            loginWay ="페이스북";
-                            userdata(loginWay);
-                            Toast.makeText(MainActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                                loginWay = "페이스북";
+                                userdata(loginWay);
+                            } else {
+                                Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -185,19 +183,44 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-    private void userdata(final String loginWay) {
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                userToken = instanceIdResult.getToken();
-                currentUser = auth.getCurrentUser();
-                databaseReference = firebaseDatabase.getReference("users").child(currentUser.getUid());
 
-                User user = new User(currentUser.getDisplayName(), currentUser.getUid(), loginWay, userToken);
-                databaseReference.setValue(user);
+    private void userdata(final String loginWay) {
+        currentUser = auth.getCurrentUser();
+        databaseReference = firebaseDatabase.getReference("users");
+        Query query = databaseReference.orderByChild("uid").equalTo(currentUser.getUid());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User userItem = snapshot.getValue(User.class);
+                    uid = userItem.getUid();
+                }
+
+                if (uid == null) { // users 테이블에 유저 uid가 없을 때
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
+                        @Override
+                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                            userToken = instanceIdResult.getToken();
+
+                            realarm = "o"; mealarm = "o";
+                            databaseReference2 = firebaseDatabase.getReference("users").child(currentUser.getUid());
+                            User user = new User(currentUser.getDisplayName(), currentUser.getUid(), loginWay, userToken, realarm, mealarm);
+                            databaseReference2.setValue(user);
+                            // 이름, uid, 로그인 경로, 기기토큰을 담아서 users 테이블에 저장
+                        }
+                    });
+                 }
+                    Toast.makeText(MainActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                    startActivity(intent);
+                    // 로그인 성공 했으므로 화면 이동
+
+                }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
-}
-
-
+    }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        style="@style/alarm_text_style"
+        app:layout_constraintTop_toBottomOf="@+id/guideline"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="알림설정"
+        android:textSize="23dp"
+        android:id="@+id/alarm_title" />
+
+    <TextView
+        style="@style/alarm_text_style"
+        app:layout_constraintTop_toBottomOf="@+id/alarm_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="매칭지역"
+        android:id="@+id/place_title" />
+
+    <TextView
+        android:layout_width="330dp"
+        android:id="@+id/place_textView"
+        style="@style/relative_writing_tv"
+        app:layout_constraintTop_toBottomOf="@+id/place_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/relative_btn2"
+        app:layout_constraintTop_toBottomOf="@+id/place_textView"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:text="지역설정"
+        android:textSize="18dp"
+        android:id="@+id/place_btn" />
+
+    <TextView
+        style="@style/alarm_text_style"
+        app:layout_constraintTop_toBottomOf="@id/place_btn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="매칭일자"
+        android:layout_marginTop="30dp"
+        android:id="@+id/date_title" />
+
+    <TextView
+        android:id="@+id/date_textView"
+        style="@style/relative_writing_tv"
+        android:layout_width="330dp"
+        app:layout_constraintTop_toBottomOf="@+id/date_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/relative_btn2"
+        app:layout_constraintTop_toBottomOf="@+id/date_textView"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:text="지역설정"
+        android:textSize="18dp"
+        android:id="@+id/date_btn" />
+
+    <Button
+        android:id="@+id/confirm_btn"
+        style="@style/relative_btn2"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/date_btn"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:text="설정확인" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="80dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

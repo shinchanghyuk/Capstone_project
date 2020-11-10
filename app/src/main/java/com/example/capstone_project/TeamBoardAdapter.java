@@ -35,7 +35,7 @@ public class TeamBoardAdapter extends RecyclerView.Adapter<TeamBoardAdapter.View
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.matching.setText(arrayList.get(position).getMatching());
         holder.title.setText(arrayList.get(position).getTitle());
-        holder.day.setText(arrayList.get(position).getDay());
+        holder.day.setText(arrayList.get(position).getDay().substring(5));
         holder.user.setText(arrayList.get(position).getUser());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

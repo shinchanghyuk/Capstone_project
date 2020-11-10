@@ -2,9 +2,9 @@ package com.example.capstone_project;
 
 public class MercenaryBoardItem {
     private String matching, title, day, user, ability, content, type;
-    private String endtime, person, starttime, place, boardnumber;
+    private String endtime, person, starttime, place, boardnumber, uid;
 
-    public MercenaryBoardItem(String matching, String title, String day, String user, String type, String place, String starttime, String boardnumber, String endtime, String ability, String person, String content) {
+    public MercenaryBoardItem(String matching, String title, String day, String user, String type, String place, String starttime, String boardnumber, String endtime, String ability, String person, String content, String uid) {
         this.matching = matching;
         this.title = title;
         this.day = day;
@@ -17,8 +17,17 @@ public class MercenaryBoardItem {
         this.ability = ability;
         this.person = person;
         this.content = content;
+        this.uid = uid;
     }
     public MercenaryBoardItem() { }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getType() {
         return type;

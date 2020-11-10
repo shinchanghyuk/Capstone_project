@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public class TeamBoardItem {
     private String matching, title, day, user, ability, content, name;
-    private String person, place, boardnumber;
+    private String person, place, boardnumber, uid;
     public TeamBoardItem() {
 
     }
-    public TeamBoardItem(String matching, String title, String day, String user, String place, String name, String boardnumber, String ability, String person, String content) {
+    public TeamBoardItem(String matching, String title, String day, String user, String place, String name, String boardnumber, String ability, String person, String content, String uid) {
         this.matching = matching;
         this.title = title;
         this.day = day;
@@ -21,6 +21,15 @@ public class TeamBoardItem {
         this.ability = ability;
         this.person = person;
         this.content = content;
+        this.uid = uid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getMatching() {

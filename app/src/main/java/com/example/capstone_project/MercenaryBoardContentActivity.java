@@ -24,6 +24,11 @@ package com.example.capstone_project;
         import com.google.firebase.database.Query;
         import com.google.firebase.database.ValueEventListener;
 
+        import org.json.JSONObject;
+
+        import java.io.OutputStream;
+        import java.net.HttpURLConnection;
+        import java.net.URL;
         import java.text.SimpleDateFormat;
         import java.util.ArrayList;
         import java.util.Date;
@@ -32,17 +37,18 @@ package com.example.capstone_project;
 
 public class MercenaryBoardContentActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference, databaseReference2, databaseReference3, databaseReference4;    // 파이버에시스 연결(경로) 선언
+    private DatabaseReference databaseReference, databaseReference2, databaseReference3, databaseReference4, databaseReference5;    // 파이버에시스 연결(경로) 선언
     private TextView matching_tv, place_tv, date_tv, person_tv, ability_tv, content_tv, title_tv, time_tv;
     private Button matching_btn, update_btn, delete_btn, list_btn, reply_btn;
-    private String matching, day, title, content, ability, starttime, endtime, person, user, current_user, boardnumber, key, place, type;
-    private String commentkey, getTime, reply;
+    private String matching, day, title, content, ability, starttime, endtime, person, user, current_user, boardnumber,
+            key, place, type, commentkey, getTime, reply, fcmUrl, serverKey, fcmToken, alarm_content, alarm_title, current_uid;
     private FirebaseAuth auth; // 파이어베이스 인증 객체
     private EditText reply_edit;
     private ArrayList<CommentItem> arrayList; //댓글 아이템 담을 배열리스트
     private RecyclerView recyclerView; // 댓글 리사이클러뷰
     private RecyclerView.LayoutManager layoutManager; //댓글 리사이클러뷰 레이아웃 매니저
     private RecyclerView.Adapter adapter; //댓글 리사이클러뷰 어댑터
+    public static String uid; // 게시글을 작성한 사용자의 uid
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +62,13 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
         SimpleDateFormat simpleDate = new SimpleDateFormat("MM월 dd일 hh:mm:ss");
         getTime = simpleDate.format(mDate);
 
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        current_user = firebaseUser.getDisplayName();
+        current_uid = firebaseUser.getUid();
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("board").child("mercenary");
-        databaseReference3 = firebaseDatabase.getReference("board").child("comment");
 
         Query query = databaseReference.orderByChild("boardnumber").equalTo(boardnumber);
 
@@ -80,6 +90,7 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
                     endtime = mercenaryBoardItem.getEndtime();
                     person = mercenaryBoardItem.getPerson();
                     user = mercenaryBoardItem.getUser();
+                    uid = mercenaryBoardItem.getUid();
                 }
 
                 matching_tv.setText(type + " " + matching);
@@ -91,32 +102,33 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
                 ability_tv.setText(ability);
                 content_tv.setText(content);
 
-                auth = FirebaseAuth.getInstance();
-                FirebaseUser firebaseUser = auth.getCurrentUser();
-                current_user = firebaseUser.getDisplayName();
-
                 if(current_user.equals(user)) {
-                    matching_tv.setTextSize(15);
                     matching_btn.setVisibility(View.VISIBLE);
                     update_btn.setVisibility(View.VISIBLE);
                     delete_btn.setVisibility(View.VISIBLE);
+
+                    if(matching.equals("매칭완료")) {
+                        matching_tv.setTextSize(13);
+                        matching_btn.setText("매칭취소");
+                    }else if(matching.equals("매칭 중")){
+                        matching_tv.setTextSize(15);
+                        matching_btn.setText("매칭완료");
+                    }
+                } else {
+                        matching_tv.setTextSize(15);
+                    }
                 }
 
-                if(matching.equals("매칭완료")) {
-                    matching_tv.setTextSize(13);
-                    matching_btn.setText("매칭취소");
-                }else if(matching.equals("매칭 중")){
-                    matching_tv.setTextSize(15);
-                    matching_btn.setText("매칭완료");
-                }
-            }
-            @Override
+                @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
             }
         });
 
-        databaseReference3.orderByChild("boardnumber").equalTo(boardnumber).addValueEventListener(new ValueEventListener() {
+        databaseReference3 = firebaseDatabase.getReference("board").child("comment");
+        Query query2 = databaseReference3.orderByChild("boardnumber").equalTo(boardnumber);
+
+        query2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
@@ -212,6 +224,9 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(spaceDecoration);
 
         recyclerView.setLayoutManager(layoutManager);
+
+        fcmUrl = "https://fcm.googleapis.com/fcm/send";
+        serverKey = getResources().getString(R.string.server_key);
     }
     public void matchingChange() {
         if(matching.equals("매칭 중")) { // DB의 matching 값이 매칭 중일때
@@ -264,9 +279,62 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
         if (reply.isEmpty()) {
             Toast.makeText(getApplicationContext(), "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show(); //입력을 하지 않고 버튼을 눌렀을때
         } else {
-            CommentItem commentItem = new CommentItem(boardnumber, commentkey, current_user, getTime, reply, replycount);
+            CommentItem commentItem = new CommentItem(boardnumber, commentkey, current_user, getTime, reply, replycount, current_uid);
             databaseReference4.setValue(commentItem); //파이어베이스 업로드 구문
             Toast.makeText(getApplicationContext(), "댓글이 작성 되었습니다.", Toast.LENGTH_SHORT).show();
+
+            alarm_content = "게시물에 새로운 댓글이 달렸습니다.";
+            alarm_title = "용병모집 게시판 댓글알림";
+
+            databaseReference5 = firebaseDatabase.getReference("users");
+            Query query3 = databaseReference5.orderByChild("uid").equalTo(uid);
+
+            if (!(uid.equals(current_uid))) { // 자신의 게시글일 때는 알림을 보내지 않음.
+                query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            User userItem = snapshot.getValue(User.class);
+                            fcmToken = userItem.getUserToken();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+
+                                        JSONObject root = new JSONObject();
+                                        JSONObject notification = new JSONObject();
+                                        notification.put("body", alarm_content);
+                                        notification.put("title", alarm_title);
+                                        root.put("notification", notification);
+                                        root.put("to", fcmToken);
+
+                                        URL Url = new URL(fcmUrl);
+                                        HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
+                                        // URL 연결
+                                        conn.setRequestMethod("POST");
+                                        conn.setDoOutput(true);
+                                        conn.setDoInput(true);
+                                        conn.addRequestProperty("Authorization", "key=" + serverKey);
+                                        conn.setRequestProperty("Accept", "application/json");
+                                        conn.setRequestProperty("Content-type", "application/json");
+                                        OutputStream os = conn.getOutputStream();
+                                        os.write(root.toString().getBytes("utf-8"));
+                                        os.flush();
+                                        conn.getResponseCode();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
     }
 }

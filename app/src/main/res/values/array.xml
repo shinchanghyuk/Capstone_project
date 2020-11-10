@@ -18,7 +18,6 @@
     <string-array name="teamboard_search">
         <item>검색</item>
         <item>지역</item>
-        <item>팀실력</item>
         <item>작성자</item>
     </string-array>
 
@@ -56,7 +55,7 @@
 
     <string-array name="mypage">
         <item>알림여부</item>
-        <item>공지사항</item>
+        <item>아직미정</item>
         <item>로그아웃</item>
         <item>회원탈퇴</item>
     </string-array>

@@ -41,14 +41,14 @@ public class MypageAdapter extends RecyclerView.Adapter<MypageAdapter.ViewHolder
             public void onClick(View v) {
                 switch (position) {
                     case 0:
-                        //  Intent intent = new Intent(v.getContext(), RelativeMyBoardActivity.class);
-                        //  context.startActivity(intent);
+                        Intent intent = new Intent(v.getContext(), AlarmSettingActivity.class);
+                        context.startActivity(intent);
                         break;
                     case 1:
                         break;
                     case 2:
                         dialog1 = new ConfirmDialog(v.getContext());
-                        dialog1.operation("logout", null);
+                        dialog1.operation("logout", "mypage");
                         break;
                     case 3:
                         dialog2 = new ConfirmDialog(v.getContext());

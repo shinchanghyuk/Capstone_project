@@ -16,7 +16,8 @@
         android:id="@+id/Relative_btn"
         style="@style/menuBtn_style"
         android:text="상대매칭"
-        android:layout_marginTop="50dp"
+        android:drawableTop="@drawable/ic_people_black_24dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintLeft_toRightOf="@+id/guideline1"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -24,7 +25,8 @@
         android:id="@+id/Mercenary_btn"
         style="@style/menuBtn_style"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="50dp"
+        android:drawableTop="@drawable/ic_person_black_24dp"
+        android:layout_marginTop="40dp"
         android:text="용병모집"
         app:layout_constraintLeft_toRightOf="@+id/Relative_btn"
         app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -32,6 +34,7 @@
     <Button
         android:id="@+id/Stadium_btn"
         style="@style/menuBtn_style"
+        android:drawableTop="@drawable/ic_location_on_black_24dp"
         android:layout_marginTop="30dp"
         android:text="구장정보 확인"
         app:layout_constraintLeft_toRightOf="@+id/guideline1"
@@ -40,6 +43,7 @@
     <Button
         android:id="@+id/Promotion_btn"
         style="@style/menuBtn_style"
+        android:drawableTop="@drawable/ic_record_voice_over_black_24dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
         android:text="팀 홍보"
@@ -49,17 +53,19 @@
     <Button
         android:id="@+id/Declaration_btn"
         style="@style/menuBtn_style"
+        android:drawableTop="@drawable/ic_settings_black_24dp"
         android:layout_marginTop="30dp"
-        android:text="유저신고"
+        android:text="환경설정"
         app:layout_constraintLeft_toRightOf="@+id/guideline1"
         app:layout_constraintTop_toBottomOf="@+id/Stadium_btn" />
 
     <Button
-        android:id="@+id/Preferences_btn"
+        android:id="@+id/logout_btn"
         style="@style/menuBtn_style"
+        android:drawableTop="@drawable/ic_power_settings_new_black_24dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
-        android:text="환경설정"
+        android:text="로그아웃"
         app:layout_constraintLeft_toRightOf="@+id/Declaration_btn"
         app:layout_constraintTop_toBottomOf="@+id/Promotion_btn" />
 
@@ -75,5 +81,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="15dp" />
+        app:layout_constraintGuide_begin="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
