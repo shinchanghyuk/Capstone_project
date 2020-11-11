@@ -58,7 +58,6 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
 
         databaseReference = firebaseDatabase.getReference("board").child("relative");
 
-        databaseReference3 = firebaseDatabase.getReference("board").child("comment").push();
 
         //댓글 작성시에도 필요해서 메소드 밖으로 꺼내놓음
         auth = FirebaseAuth.getInstance();
@@ -221,8 +220,8 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
         RecyclerDecoration spaceDecoration = new RecyclerDecoration(10);
         recyclerView.addItemDecoration(spaceDecoration);
-
         recyclerView.setLayoutManager(layoutManager);
+
         databaseReference2 = firebaseDatabase.getReference("board").child("comment");
         databaseReference2.orderByChild("boardnumber").equalTo(boardnumber).addValueEventListener(new ValueEventListener() {
             @Override
@@ -280,6 +279,29 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         intent.putExtra("key", key);
         startActivityForResult(intent, 1);
     }
+
+    public void commentDelete(String comnum) {
+
+        databaseReference2 = firebaseDatabase.getReference("board").child("recomment");
+        databaseReference2.orderByChild("commentnum").equalTo(comnum).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference2 = firebaseDatabase.getReference("board").child("comment").child(comnum);
+        databaseReference2.removeValue();
+
+    }
+
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -291,9 +313,11 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
     }
 
     private void upcommnet() { //댓글 작성 버튼 클릭시 구동 부분
+        databaseReference3 = firebaseDatabase.getReference("board").child("comment").push();
+
         replytxt = reply_edit.getText().toString(); // 작성한 글
         String replycount = "0"; //첫 댓글 작성시 답글 수 기본값 0으로 넣어주기
-        commentnum = databaseReference3.push().getKey();
+        commentnum = databaseReference3.getKey();
 
         if (replytxt.isEmpty()) {
             Toast.makeText(getApplicationContext(), "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show(); //입력을 하지 않고 버튼을 눌렀을때
@@ -302,6 +326,7 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
             CommentItem commentItem = new CommentItem(boardnumber, commentnum, current_user, getTime, replytxt, replycount);
             databaseReference3.setValue((commentItem)); //파이어베이스 업로드 구문
             Toast.makeText(getApplicationContext(), "댓글이 작성 되었습니다.", Toast.LENGTH_SHORT).show();
+            reply_edit.setText("");
         }
 
     }

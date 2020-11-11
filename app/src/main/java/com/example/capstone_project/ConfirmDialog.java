@@ -12,9 +12,15 @@ public class ConfirmDialog {
     private Context context;
     private Button okButton, cancelButton;
     private TextView content, title;
+    private String commentnum;
 
     public ConfirmDialog(Context context) {
         this.context = context;
+    }
+
+    public ConfirmDialog(Context context, String commentnum) {
+        this.context = context;
+        this.commentnum = commentnum;
     }
 
     public void operation(final String standard, final String activity) {
@@ -49,6 +55,9 @@ public class ConfirmDialog {
         } else if (standard.equals("withdrawal")) {
             title.setText("회원탈퇴 알림");
             content.setText("회원탈퇴를 하시겠습니까?");
+        } else if (standard.equals("comment")) {
+            title.setText("댓글삭제 알림");
+            content.setText("댓글을 삭제 하시겠습니까?");
         }
 
             dialog.show();
@@ -81,6 +90,12 @@ public class ConfirmDialog {
                         ((MypageActivity) context).logout();
                     } else if (standard.equals("withdrawal")) {
                         ((MypageActivity) context).withdrawal();
+                    }else if (standard.equals("comment")){
+                        if(activity.equals("comment")) {
+                            ((RelativeBoardContentActivity) context).commentDelete(commentnum);
+                        }else if (activity.equals("recomment")){
+                            ((recommentActivity) context).commentDelete(commentnum);
+                        }
                     }
                     dialog.dismiss();
                 }
