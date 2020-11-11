@@ -29,7 +29,7 @@ public class AlarmSettingActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference, databaseReference2;  // 파이버에시스 연결(경로) 선언
     private FirebaseAuth auth; // 파이어베이스 인증 객체
-    private String current_user, current_uid, realarm, mealarm;
+    private String current_user, current_uid, realarm, mealarm, noticealarm;
     public static String userToken, loginWay, redate, replace, medate, meplace; // 게시글을 작성한 사용자의 uid
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +123,7 @@ public class AlarmSettingActivity extends AppCompatActivity {
 
                 databaseReference2 = firebaseDatabase.getReference("users").child(current_uid);
 
-                User user = new User(current_user, current_uid, loginWay, userToken, realarm, mealarm, replace, redate, meplace, medate);
+                User user = new User(current_user, current_uid, loginWay, userToken, realarm, mealarm, replace, redate, meplace, medate, noticealarm);
                 databaseReference2.setValue(user);
 
                 Toast.makeText(AlarmSettingActivity.this, "알람여부를 설정하였습니다.", Toast.LENGTH_SHORT).show();

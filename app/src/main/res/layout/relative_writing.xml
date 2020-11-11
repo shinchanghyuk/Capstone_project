@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <TextView
+        style="@style/text_style"
+        android:id="@+id/writing_tv"
+        android:textSize="18dp"
+        android:text="상대매칭 게시글쓰기"
+        android:layout_marginTop="17dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
         android:id="@+id/place_btn"
         style="@style/relative_btn2"
         android:text="활동지역 설정"
         app:layout_constraintLeft_toRightOf="@+id/place_textView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/writing_tv" />
 
     <TextView
         android:id="@+id/place_textView"
         style="@style/relative_writing_tv"
+        app:layout_constraintBottom_toTopOf="@+id/date_textView"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/date_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/writing_tv" />
 
     <TextView
         android:id="@+id/date_textView"
@@ -40,8 +50,8 @@
 
     <Spinner
         android:id="@+id/endTime"
-        android:layout_marginLeft="5dp"
         style="@style/relative_writing_spinner"
+        android:layout_marginLeft="5dp"
         app:layout_constraintLeft_toRightOf="@+id/startTime"
         app:layout_constraintTop_toBottomOf="@+id/date_btn" />
 
@@ -57,24 +67,24 @@
 
     <EditText
         android:id="@+id/person"
+        style="@style/relative_writing_edit"
         android:layout_width="77dp"
         android:layout_height="35dp"
         android:layout_marginLeft="0dp"
-        style="@style/relative_writing_edit"
         android:hint="인원 수"
         android:inputType="number"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/ability"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_btn" />
 
     <EditText
         android:id="@+id/title_edit"
-        android:layout_width="390dp"
         style="@style/relative_writing_edit"
-        android:editable="true"
+        android:layout_width="390dp"
         android:layout_height="50dp"
-        android:maxLength="20"
+        android:editable="true"
         android:hint="제목을 입력해주세요"
+        android:maxLength="20"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/person" />
@@ -84,10 +94,11 @@
         style="@style/relative_writing_edit"
         android:layout_width="390dp"
         android:layout_height="320dp"
+
         android:editable="true"
+        android:hint="본문을 입력해주세요"
         android:paddingTop="10dp"
         android:textAlignment="center"
-        android:hint="본문을 입력해주세요"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_edit" />
 

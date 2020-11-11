@@ -12,9 +12,15 @@ public class ConfirmDialog {
     private Context context;
     private Button okButton, cancelButton;
     private TextView content, title;
+    private String commentnum;
 
     public ConfirmDialog(Context context) {
         this.context = context;
+    }
+
+    public ConfirmDialog(Context context, String commentnum) {
+        this.context = context;
+        this.commentnum = commentnum;
     }
 
     public void operation(final String standard, final String activity) {
@@ -49,6 +55,9 @@ public class ConfirmDialog {
         } else if (standard.equals("withdrawal")) {
             title.setText("회원탈퇴 알림");
             content.setText("회원탈퇴를 하시겠습니까?");
+        } else if (standard.equals("comment")) {
+            title.setText("댓글삭제 알림");
+            content.setText("댓글을 삭제 하시겠습니까?");
         }
 
             dialog.show();
@@ -56,38 +65,52 @@ public class ConfirmDialog {
                 @Override
                 public void onClick(View view) {
                     if (standard.equals("matching1") || standard.equals("matching2")) {
-                        if(activity.equals("relative")) {
+                        if (activity.equals("relative")) {
                             ((RelativeBoardContentActivity) context).matchingChange();
-                        } else if(activity.equals("mercenary")) {
+                        } else if (activity.equals("mercenary")) {
                             ((MercenaryBoardContentActivity) context).matchingChange();
                         }
                     } else if (standard.equals("delete")) {
-                        if(activity.equals("relative")) {
+                        if (activity.equals("relative")) {
                             ((RelativeBoardContentActivity) context).boardDelete();
-                        } else if(activity.equals("team")) {
+                        } else if (activity.equals("team")) {
                             ((TeamBoardContentActivity) context).boardDelete();
-                        } else if(activity.equals("mercenary")) {
+                        } else if (activity.equals("mercenary")) {
                             ((MercenaryBoardContentActivity) context).boardDelete();
                         }
                     } else if (standard.equals("update")) {
-                        if(activity.equals("relative")) {
+                        if (activity.equals("relative")) {
                             ((RelativeBoardContentActivity) context).boardUpdate();
-                        } else if(activity.equals("team")) {
+                        } else if (activity.equals("team")) {
                             ((TeamBoardContentActivity) context).boardUpdate();
-                        } else if(activity.equals("mercenary")) {
+                        } else if (activity.equals("mercenary")) {
                             ((MercenaryBoardContentActivity) context).boardUpdate();
                         }
                     } else if (standard.equals("logout")) {
-                        if(activity.equals("mypage")) {
-                            ((MypageActivity) context).logout();
-                        } else if(activity.equals("menu")) {
+                        if (activity.equals("mypage")) {
+                            ((MypageActivity) context).userLogout();
+                        } else if (activity.equals("menu")) {
                             ((MenuActivity) context).logout();
+                        } else if (activity.equals("manager")) {
+                            ((MypageActivity) context).managerLogout();
                         }
                     } else if (standard.equals("withdrawal")) {
-                        ((MypageActivity) context).withdrawal();
+                        if (activity.equals("mypage")) {
+                            ((MypageActivity) context).userWithdrawal();
+                        } else if (activity.equals("manager")) {
+                            ((MypageActivity) context).managerWithdrawal();
+                        }
+                    }else if (standard.equals("comment")) {
+                            if (activity.equals("comment")) {
+                                ((RelativeBoardContentActivity) context).commentDelete(commentnum);
+                            } // 여기 용병모집이랑, 팀홍보 넣어야 함
+
+                            else if (activity.equals("recomment")) {
+                                ((RecommentActivity) context).commentDelete(commentnum);
+                            }
+                        }
+                        dialog.dismiss();
                     }
-                    dialog.dismiss();
-                }
             });
 
             cancelButton.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,6 @@
 package com.example.capstone_project;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -45,6 +46,8 @@ public class MypageAdapter extends RecyclerView.Adapter<MypageAdapter.ViewHolder
                         context.startActivity(intent);
                         break;
                     case 1:
+                        Intent intent2 = new Intent(v.getContext(), ManagerWritingActivity.class);
+                        context.startActivity(intent2);
                         break;
                     case 2:
                         dialog1 = new ConfirmDialog(v.getContext());
@@ -52,7 +55,7 @@ public class MypageAdapter extends RecyclerView.Adapter<MypageAdapter.ViewHolder
                         break;
                     case 3:
                         dialog2 = new ConfirmDialog(v.getContext());
-                        dialog2.operation("withdrawal", null);
+                        dialog2.operation("withdrawal", "mypage");
                         break;
                 }
             }

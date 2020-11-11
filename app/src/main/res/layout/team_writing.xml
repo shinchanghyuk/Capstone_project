@@ -4,14 +4,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <TextView
+        style="@style/text_style"
+        android:id="@+id/writing_tv"
+        android:textSize="18dp"
+        android:text="팀 홍보 게시글쓰기"
+        android:layout_marginTop="17dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
     <Button
         android:id="@+id/place_btn"
         style="@style/relative_btn2"
         android:text="활동지역 설정"
         app:layout_constraintLeft_toRightOf="@+id/place_textView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/writing_tv" />
 
     <TextView
         android:id="@+id/place_textView"

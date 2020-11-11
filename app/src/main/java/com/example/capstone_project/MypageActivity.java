@@ -63,82 +63,15 @@ public class MypageActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private GoogleSignInClient googleSignInClient;
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference, databaseReference2, databaseReference3, databaseReference4, databaseReference5;    // 파이버에시스 연결(경로) 선언
-    private String loginWay;
+    private DatabaseReference databaseReference, databaseReference2, databaseReference3,
+            databaseReference4, databaseReference5, databaseReference6;    // 파이버에시스 연결(경로) 선언
+    private String loginWay, manager_uid, manager_name;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mypage);
 
-        myinfo_tv = findViewById(R.id.myinfo_tv);
-        recyclerView = findViewById(R.id.mypage_recyclerview);
-        bottomNavigationView = findViewById(R.id.bottomNavigation);
-
-        bottomNavigationView.setSelectedItemId(R.id.action_five);
-
-        auth = FirebaseAuth.getInstance(); // 파이어베이스 인증 객체 초기화
-        currentUser = auth.getCurrentUser();
-
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("users");
-
-        Query query = databaseReference.orderByChild("uid").equalTo(currentUser.getUid());
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                    User userItem = snapshot.getValue(User.class);
-                    loginWay = userItem.getLoginWay();
-                }
-                if (loginWay.equals("구글")) {
-                    Log.d("dddd", loginWay);
-                    myinfo_tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_light, 0, 0, 0);
-                } else {
-                    Log.d("dddddd1", loginWay);
-                    myinfo_tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.com_facebook_button_icon_blue, 0, 0, 0);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
-            }
-        });
-        myinfo_tv.setText(String.valueOf(" " + currentUser.getDisplayName()) + " 님 환영합니다.");
-
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                //서버의 클라이언트 ID를 메서드에 전달
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
-
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        DividerItemDecoration dividerItemDecoration =
-                new DividerItemDecoration(recyclerView.getContext(), new LinearLayoutManager(this).getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
-        arrayList = new ArrayList<>();
-        arrayList.clear();
-
-        List<String> listPage = Arrays.asList(getResources().getStringArray(R.array.mypage));
-
-        for (int i = 0; i < listPage.size(); i++) {
-            MypageItem mypageItem = new MypageItem();
-            mypageItem.setTitle(listPage.get(i));
-            mypageItem.setMoveImage(R.drawable.ic_arrow_forward_black_24dp);
-            arrayList.add(mypageItem);
-        }
-
-        adapter = new MypageAdapter(arrayList, this);
-        recyclerView.setAdapter(adapter);
-
-        adapter.notifyDataSetChanged();
-
-        bottomNavigationView.setSelectedItemId(R.id.action_five);
+        init();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -171,7 +104,114 @@ public class MypageActivity extends AppCompatActivity {
             }
         });
     }
-    public void logout() {
+    private void init() {
+        myinfo_tv = findViewById(R.id.myinfo_tv);
+        recyclerView = findViewById(R.id.mypage_recyclerview);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
+
+        bottomNavigationView.setSelectedItemId(R.id.action_five);
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                //서버의 클라이언트 ID를 메서드에 전달
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
+
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        DividerItemDecoration dividerItemDecoration =
+                new DividerItemDecoration(recyclerView.getContext(), new LinearLayoutManager(this).getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        arrayList = new ArrayList<>();
+        arrayList.clear();
+
+
+        auth = FirebaseAuth.getInstance(); // 파이어베이스 인증 객체 초기화
+        currentUser = auth.getCurrentUser();
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        databaseReference6 = firebaseDatabase.getReference("manager");
+        Query query = databaseReference6.orderByChild("uid").equalTo(currentUser.getUid());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() { // manager 테이블에 일치하는 uid가 있다면
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Manager managerItem = snapshot.getValue(Manager.class);
+                    manager_uid = managerItem.getUid();
+                    manager_name = managerItem.getName();
+                }
+
+                if (manager_uid != null) {
+                    myinfo_tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_text_dark_normal, 0, 0, 0);
+                    myinfo_tv.setText(String.valueOf(" " + manager_name + " 님 환영합니다."));
+
+                    List<String> listPage = Arrays.asList(getResources().getStringArray(R.array.managerpage));
+                    for (int i = 0; i < listPage.size(); i++) {
+                        MypageItem mypageItem = new MypageItem();
+                        mypageItem.setTitle(listPage.get(i));
+                        mypageItem.setMoveImage(R.drawable.ic_arrow_forward_black_24dp);
+                        arrayList.add(mypageItem);
+                    }
+
+                    adapter = new ManagerpageAdapter(arrayList, MypageActivity.this);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    databaseReference = firebaseDatabase.getReference("users");
+                    Query query2 = databaseReference.orderByChild("uid").equalTo(currentUser.getUid());
+
+                    query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
+                                User userItem = snapshot.getValue(User.class);
+                                loginWay = userItem.getLoginWay();
+                            }
+                            if (loginWay.equals("구글")) {
+                                Log.d("dddd", loginWay);
+                                myinfo_tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_light, 0, 0, 0);
+                            } else {
+                                Log.d("dddddd1", loginWay);
+                                myinfo_tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.com_facebook_button_icon_blue, 0, 0, 0);
+                            }
+
+                            myinfo_tv.setText(String.valueOf(" " + currentUser.getDisplayName()) + " 님 환영합니다.");
+                            List<String> listPage = Arrays.asList(getResources().getStringArray(R.array.mypage));
+
+                            for (int i = 0; i < listPage.size(); i++) {
+                                MypageItem mypageItem = new MypageItem();
+                                mypageItem.setTitle(listPage.get(i));
+                                mypageItem.setMoveImage(R.drawable.ic_arrow_forward_black_24dp);
+                                arrayList.add(mypageItem);
+                            }
+
+                            adapter = new MypageAdapter(arrayList, MypageActivity.this);
+                            recyclerView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+                        }
+                    });
+            }
+        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        bottomNavigationView.setSelectedItemId(R.id.action_five);
+    }
+    public void userLogout() {
         if (currentUser != null) { // 사용자 객체가 안 비어있다면 화면 이동
             auth.signOut();
             LoginManager.getInstance().logOut();
@@ -187,7 +227,23 @@ public class MypageActivity extends AppCompatActivity {
                     });
         }
     }
-    public void withdrawal() {
+    public void managerLogout() {
+        if (currentUser != null) { // 사용자 객체가 안 비어있다면 화면 이동
+            auth.signOut();
+            LoginManager.getInstance().logOut();
+
+            googleSignInClient.signOut().addOnCompleteListener(this,
+                    new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Intent intent = new Intent(MypageActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            Toast.makeText(getApplicationContext(), "로그아웃이 성공적으로 마무리되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+    public void userWithdrawal() {
         auth.signOut();
         LoginManager.getInstance().logOut();
 
@@ -270,5 +326,8 @@ public class MypageActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "회원탈퇴가 성공적으로 마무리되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+    public void managerWithdrawal() {
+
     }
 }

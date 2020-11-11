@@ -36,7 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MercenaryBoardActivity extends AppCompatActivity {
-    Button search_btn, write_btn, alarm_btn;
+    Button search_btn, write_btn, alarm_btn, report_btn;
     Spinner search_spinner;
     BottomNavigationView bottomNavigationView;  // 바텀 네이게이션 뷰 선언
     private RecyclerView recyclerView;  // 리사이클러뷰 선언
@@ -44,8 +44,8 @@ public class MercenaryBoardActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;   // 리사이클러뷰 어댑터 선언
     private ArrayList<MercenaryBoardItem> arrayList; // 아이템 담을 배열리스트 선언
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference, databaseReference2;    // 파이버에시스 연결(경로) 선언
-    private String sort, sort_standard, sort_search, type, type_standard, current_uid, mealarm;
+    private DatabaseReference databaseReference, databaseReference2, databaseReference3;    // 파이버에시스 연결(경로) 선언
+    private String sort, sort_standard, sort_search, type, type_standard, current_uid, mealarm, manager_uid;
     private EditText search_edit; // 사용자가 검색하고자 하는 내용
     private String[] spinnerSearch;
     private RadioGroup type_radio;
@@ -58,10 +58,6 @@ public class MercenaryBoardActivity extends AppCompatActivity {
         setContentView(R.layout.mercenary_board);
 
         init();
-
-        auth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = auth.getCurrentUser();
-        current_uid = firebaseUser.getUid();
 
         // 검색 스피너를 눌렀을 때 동작
         search_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -241,11 +237,41 @@ public class MercenaryBoardActivity extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        current_uid = firebaseUser.getUid();
+
+        databaseReference3 = firebaseDatabase.getReference("manager");
+        Query query = databaseReference3.orderByChild("uid").equalTo(current_uid);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() { // manager 테이블에 일치하는 uid가 있다면
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Manager managerItem = snapshot.getValue(Manager.class);
+                    manager_uid = managerItem.getUid();
+                }
+
+                if (manager_uid != null) {
+                    write_btn.setVisibility(View.INVISIBLE);
+                    alarm_btn.setVisibility(View.INVISIBLE);
+                } else {
+                    write_btn.setVisibility(View.VISIBLE);
+                    alarm_btn.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
         databaseReference = firebaseDatabase.getReference("board").child("mercenary");
 
-        Query query = databaseReference.orderByChild("day"); //매칭일자에 따라 정렬
+        Query query2 = databaseReference.orderByChild("day"); //매칭일자에 따라 정렬
 
-        query.addValueEventListener(new ValueEventListener() {
+        query2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
