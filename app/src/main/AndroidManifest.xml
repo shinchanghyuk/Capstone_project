@@ -95,6 +95,8 @@
         <activity android:name=".MercenaryWritingActivity"></activity>
         <activity android:name=".MercenaryReviseActivity"></activity>
         <activity android:name=".AlarmSettingActivity"></activity>
+        <activity android:name=".ManagerWritingActivity"></activity>
+        <activity android:name=".RecommentActivity"></activity>
     </application>
 
 </manifest>

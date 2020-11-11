@@ -62,7 +62,7 @@ public class MercenaryWritingActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
     private DatabaseReference databaseReference, databaseReference2;    // 파이버에시스 연결(경로) 선언
     private FirebaseAuth auth; // 파이어베이스 인증 객체
-    private int spinnerNum1, spinnerNum2; // 파이어베이스 안에 있는 데이터 갯수(게시판 갯수)
+    private int spinnerNum1, spinnerNum2;
     private RadioGroup type_radio;
     private RadioButton radio1, radio2;
 

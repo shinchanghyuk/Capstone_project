@@ -4,12 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <TextView
+        style="@style/text_style"
+        android:id="@+id/writing_tv"
+        android:textSize="18dp"
+        android:text="용병모집 게시글쓰기"
+        android:layout_marginTop="17dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <RadioGroup
         style="@style/radio_button_style"
         android:id="@+id/type_radio"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/writing_tv"
         app:layout_constraintLeft_toLeftOf="parent">
         <RadioButton
             android:layout_width="wrap_content"

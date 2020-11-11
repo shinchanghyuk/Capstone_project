@@ -1,11 +1,11 @@
 package com.example.capstone_project;
 
 public class User {
-    private String name, uid, loginWay, userToken, replace, redate, meplace, medate, realarm, mealarm;
+    private String name, uid, loginWay, userToken, replace, redate, meplace, medate, realarm, mealarm, noticealarm;
     public User() {
     }
 
-    public User(String name, String uid, String loginWay, String userToken, String realarm, String mealarm, String replace, String redate, String meplace, String medate) {
+    public User(String name, String uid, String loginWay, String userToken, String realarm, String mealarm, String replace, String redate, String meplace, String medate, String noticealarm) {
         this.name = name;
         this.uid = uid;
         this.loginWay = loginWay;
@@ -16,16 +16,26 @@ public class User {
         this.medate = medate;
         this.realarm = realarm;
         this.mealarm = mealarm;
+        this.noticealarm = noticealarm;
     }
 
-    public User(String name, String uid, String loginWay, String userToken, String realarm, String mealarm) {
+    public User(String name, String uid, String loginWay, String userToken, String realarm, String mealarm, String noticealarm) {
         this.name = name;
         this.uid = uid;
         this.loginWay = loginWay;
         this.userToken = userToken;
         this.realarm = realarm;
         this.mealarm = mealarm;
+        this.noticealarm = noticealarm;
     }
+    public String getNoticealarm() {
+        return noticealarm;
+    }
+
+    public void setNoticealarm(String noticealarm) {
+        this.noticealarm = noticealarm;
+    }
+
 
     public String getRealarm() {
         return realarm;

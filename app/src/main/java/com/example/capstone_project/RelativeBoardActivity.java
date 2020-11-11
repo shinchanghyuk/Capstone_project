@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,9 +46,9 @@ public class RelativeBoardActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;   // 리사이클러뷰 어댑터 선언
     private ArrayList<RelativeBoardItem> arrayList; // 아이템 담을 배열리스트 선언
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference, databaseReference2;    // 파이버에시스 연결(경로) 선언
+    private DatabaseReference databaseReference, databaseReference2, databaseReference3;    // 파이버에시스 연결(경로) 선언
     private FirebaseAuth auth; // 파이어베이스 인증 객체
-    private String sort, sort_standard, sort_search, current_uid, realarm;
+    private String sort, sort_standard, sort_search, current_uid, realarm, manager_uid;
     private EditText search_edit; // 사용자가 검색하고자 하는 내용
     private String[] spinnerSearch;
     private BottomNavigationView bottomNavigationView;
@@ -58,10 +59,6 @@ public class RelativeBoardActivity extends AppCompatActivity {
         setContentView(R.layout.relative_board);
 
         init();
-
-        auth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = auth.getCurrentUser();
-        current_uid = firebaseUser.getUid();
 
         // 검색 스피너를 눌렀을 때 동작
         search_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -89,9 +86,9 @@ public class RelativeBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 databaseReference2 = firebaseDatabase.getReference("users");
-                Query query2 = databaseReference2.orderByChild("uid").equalTo(current_uid);
+                Query query = databaseReference2.orderByChild("uid").equalTo(current_uid);
 
-                query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
@@ -203,36 +200,66 @@ public class RelativeBoardActivity extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("board").child("relative");
 
-        Query query = databaseReference.orderByChild("day"); //매칭일자에 따라 정렬
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        current_uid = firebaseUser.getUid();
 
-        query.addValueEventListener(new ValueEventListener() {
+        databaseReference3 = firebaseDatabase.getReference("manager");
+        Query query = databaseReference3.orderByChild("uid").equalTo(current_uid);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() { // manager 테이블에 일치하는 uid가 있다면
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Manager managerItem = snapshot.getValue(Manager.class);
+                    manager_uid = managerItem.getUid();
+                }
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                    RelativeBoardItem relativeBoardItem = snapshot.getValue(RelativeBoardItem.class); // RelativeBoardItem 객체에 데이터를 담음
-                    arrayList.add(relativeBoardItem);
-
+                if (manager_uid != null) {
+                    write_btn.setVisibility(View.INVISIBLE);
+                    alarm_btn.setVisibility(View.INVISIBLE);
+                } else {
+                    write_btn.setVisibility(View.VISIBLE);
+                    alarm_btn.setVisibility(View.VISIBLE);
+                }
             }
-                adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+                }
+            });
+
+                databaseReference = firebaseDatabase.getReference("board").child("relative");
+
+                Query query2 = databaseReference.orderByChild("day"); //매칭일자에 따라 정렬
+
+                query2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
+                            RelativeBoardItem relativeBoardItem = snapshot.getValue(RelativeBoardItem.class); // RelativeBoardItem 객체에 데이터를 담음
+                            arrayList.add(relativeBoardItem);
+
+                        }
+                        adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                adapter = new RelativeBoardAdapter(arrayList, this);
+                recyclerView.setAdapter(adapter);
+
+                spinnerSearch = getResources().getStringArray(R.array.relativeboard_search);
+                SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerSearch, this);
+                search_spinner.setAdapter(spinnerAdapter);
+
+                bottomNavigationView.setSelectedItemId(R.id.action_one);
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        adapter = new RelativeBoardAdapter(arrayList, this);
-        recyclerView.setAdapter(adapter);
-
-        spinnerSearch = getResources().getStringArray(R.array.relativeboard_search);
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerSearch, this);
-        search_spinner.setAdapter(spinnerAdapter);
-
-        bottomNavigationView.setSelectedItemId(R.id.action_one);
-}
-}
+        }

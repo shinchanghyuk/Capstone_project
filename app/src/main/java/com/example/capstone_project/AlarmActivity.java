@@ -40,7 +40,7 @@ public class AlarmActivity extends AppCompatActivity {
     private TextView place_textView, date_textView;
     private Button place_btn, confirm_btn, date_btn;
     private String date="", choicePlace="", currentUser, name, uid, loginWay, userToken, number, replace="", redate="",
-        meplace="", medate="", realarm, mealarm;
+        meplace="", medate="", realarm, mealarm, noticealarm;
     Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog dialog;
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
@@ -153,15 +153,16 @@ public class AlarmActivity extends AppCompatActivity {
                         medate = userItem.getMedate();
                         realarm = userItem.getRealarm();
                         mealarm = userItem.getMealarm();
+                        noticealarm = userItem.getNoticealarm();
                     }
 
                     databaseReference2 = databaseReference.child(uid);
 
                     if (number.equals("1")) {
-                        user = new User(name, uid, loginWay, userToken, realarm, mealarm, choicePlace, date, meplace, medate);
+                        user = new User(name, uid, loginWay, userToken, realarm, mealarm, choicePlace, date, meplace, medate , noticealarm);
 
                     } else if (number.equals("2")) {
-                        user = new User(name, uid, loginWay, userToken, realarm, mealarm, replace, redate, choicePlace, date);
+                        user = new User(name, uid, loginWay, userToken, realarm, mealarm, replace, redate, choicePlace, date, noticealarm);
 
                     }
                     databaseReference2.setValue(user);

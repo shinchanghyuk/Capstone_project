@@ -22,7 +22,6 @@
         android:layout_width="150dp"
         android:layout_height="13dp"
         android:layout_margin="5dp"
-        android:layout_marginLeft="5dp"
         android:textSize="12dp"
         app:layout_constraintLeft_toRightOf="@+id/replyName"
         app:layout_constraintTop_toTopOf="parent" />
