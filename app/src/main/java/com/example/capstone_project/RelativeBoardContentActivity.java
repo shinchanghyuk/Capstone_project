@@ -49,12 +49,6 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
 
         init();
 
-        long now = System.currentTimeMillis();
-        Date mDate = new Date(now);
-
-        SimpleDateFormat simpleDate = new SimpleDateFormat("MM월 dd일 hh:mm:ss"); //수정(김)
-        getTime = simpleDate.format(mDate);
-
 
         databaseReference = firebaseDatabase.getReference("board").child("relative");
 
@@ -114,34 +108,6 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         });
 
 
-        //리사이클러뷰 사용 과정
-        arrayList = new ArrayList<>();
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        //해당 게시글에 달린 댓글만 추려서 리사이클러뷰에 넣는 구문
-        databaseReference2.orderByChild("boardnumber").equalTo(boardnumber).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                arrayList.clear();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    CommentItem commentItem = snapshot.getValue(CommentItem.class);
-                    arrayList.add(commentItem);
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        adapter = new CommentAdapter(arrayList, this);
-        recyclerView.setAdapter(adapter);
 
 
         matching_btn.setOnClickListener(new View.OnClickListener() {
@@ -208,9 +174,14 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-
         Intent intent = getIntent();
         boardnumber = intent.getStringExtra("boardnumber"); // 누른 게시글의 번호
+
+        long now = System.currentTimeMillis();
+        Date mDate = new Date(now);
+        SimpleDateFormat simpleDate = new SimpleDateFormat("MM월 dd일 hh:mm:ss"); //수정(김)
+        getTime = simpleDate.format(mDate);
+
 
         arrayList = new ArrayList<>();
         recyclerView.setHasFixedSize(true);

@@ -257,7 +257,6 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
     private void upcomment() { //댓글 작성 버튼 클릭시 구동 부분
         reply = reply_edit.getText().toString(); // 작성한 글
         String replycount = "0"; //첫 댓글 작성시 답글 수 기본값 0으로 넣어주기
-
         databaseReference4 = databaseReference3.push();
         commentkey = databaseReference4.getKey();
 
@@ -267,6 +266,7 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
             CommentItem commentItem = new CommentItem(boardnumber, commentkey, current_user, getTime, reply, replycount);
             databaseReference4.setValue(commentItem); //파이어베이스 업로드 구문
             Toast.makeText(getApplicationContext(), "댓글이 작성 되었습니다.", Toast.LENGTH_SHORT).show();
+            reply_edit.setText("");
         }
     }
 }
