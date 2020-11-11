@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
     private ArrayList<CommentItem> arrayList;
-    private String commentnumber, user, writetime, content, recomcount,current_user , commentnum;
+    private String user, writetime, content, recomcount,current_user , commentnum;
     private Context context;
     private FirebaseAuth auth;
 
@@ -44,8 +44,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.writetime.setText(writetime);
         holder.content.setText(content);
         holder.recomcount.setText(recomcount);
-        commentnumber = arrayList.get(position).getCommentnum();
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

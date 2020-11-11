@@ -49,9 +49,7 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
 
         init();
 
-
         databaseReference = firebaseDatabase.getReference("board").child("relative");
-
 
         //댓글 작성시에도 필요해서 메소드 밖으로 꺼내놓음
         auth = FirebaseAuth.getInstance();
@@ -181,7 +179,6 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         Date mDate = new Date(now);
         SimpleDateFormat simpleDate = new SimpleDateFormat("MM월 dd일 hh:mm:ss"); //수정(김)
         getTime = simpleDate.format(mDate);
-
 
         arrayList = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
