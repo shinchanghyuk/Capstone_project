@@ -24,6 +24,11 @@ package com.example.capstone_project;
         import com.google.firebase.database.Query;
         import com.google.firebase.database.ValueEventListener;
 
+        import org.json.JSONObject;
+
+        import java.io.OutputStream;
+        import java.net.HttpURLConnection;
+        import java.net.URL;
         import java.text.SimpleDateFormat;
         import java.util.ArrayList;
         import java.util.Date;
@@ -32,110 +37,25 @@ package com.example.capstone_project;
 
 public class MercenaryBoardContentActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference, databaseReference2, databaseReference3, databaseReference4;    // 파이버에시스 연결(경로) 선언
+    private DatabaseReference databaseReference, databaseReference2, databaseReference3, databaseReference4,
+            databaseReference5, databaseReference6;    // 파이버에시스 연결(경로) 선언
     private TextView matching_tv, place_tv, date_tv, person_tv, ability_tv, content_tv, title_tv, time_tv;
     private Button matching_btn, update_btn, delete_btn, list_btn, reply_btn;
-    private String matching, day, title, content, ability, starttime, endtime, person, user, current_user, boardnumber, key, place, type;
-    private String commentkey, getTime, reply;
+    private String matching, day, title, content, ability, starttime, endtime, person, user, current_user, boardnumber,
+            key, place, type, commentkey, getTime, reply, fcmUrl, serverKey, fcmToken, alarm_content, alarm_title, current_uid;
     private FirebaseAuth auth; // 파이어베이스 인증 객체
     private EditText reply_edit;
     private ArrayList<CommentItem> arrayList; //댓글 아이템 담을 배열리스트
     private RecyclerView recyclerView; // 댓글 리사이클러뷰
     private RecyclerView.LayoutManager layoutManager; //댓글 리사이클러뷰 레이아웃 매니저
     private RecyclerView.Adapter adapter; //댓글 리사이클러뷰 어댑터
+    public static String manager_uid, manager_name, uid;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mercenary_board_content);
 
         init();
-
-        long now = System.currentTimeMillis();
-        Date mDate = new Date(now);
-
-        SimpleDateFormat simpleDate = new SimpleDateFormat("MM월 dd일 hh:mm:ss");
-        getTime = simpleDate.format(mDate);
-
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("board").child("mercenary");
-        databaseReference3 = firebaseDatabase.getReference("board").child("comment");
-
-        Query query = databaseReference.orderByChild("boardnumber").equalTo(boardnumber);
-
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
-                    MercenaryBoardItem mercenaryBoardItem = snapshot.getValue(MercenaryBoardItem.class);
-                    // MercenaryBoardItem 객체에 데이터를 담음
-                    key = snapshot.getKey();
-                    matching = mercenaryBoardItem.getMatching();
-                    place = mercenaryBoardItem.getPlace();
-                    day = mercenaryBoardItem.getDay();
-                    title = mercenaryBoardItem.getTitle();
-                    type = mercenaryBoardItem.getType();
-                    content = mercenaryBoardItem.getContent();
-                    ability = mercenaryBoardItem.getAbility();
-                    starttime = mercenaryBoardItem.getStarttime();
-                    endtime = mercenaryBoardItem.getEndtime();
-                    person = mercenaryBoardItem.getPerson();
-                    user = mercenaryBoardItem.getUser();
-                }
-
-                matching_tv.setText(type + " " + matching);
-                place_tv.setText(place);
-                date_tv.setText(day);
-                time_tv.setText(starttime + " ~ " + endtime);
-                title_tv.setText(title);
-                person_tv.setText(person);
-                ability_tv.setText(ability);
-                content_tv.setText(content);
-
-                auth = FirebaseAuth.getInstance();
-                FirebaseUser firebaseUser = auth.getCurrentUser();
-                current_user = firebaseUser.getDisplayName();
-
-                if(current_user.equals(user)) {
-                    matching_tv.setTextSize(15);
-                    matching_btn.setVisibility(View.VISIBLE);
-                    update_btn.setVisibility(View.VISIBLE);
-                    delete_btn.setVisibility(View.VISIBLE);
-                }
-
-                if(matching.equals("매칭완료")) {
-                    matching_tv.setTextSize(13);
-                    matching_btn.setText("매칭취소");
-                }else if(matching.equals("매칭 중")){
-                    matching_tv.setTextSize(15);
-                    matching_btn.setText("매칭완료");
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        databaseReference3.orderByChild("boardnumber").equalTo(boardnumber).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                arrayList.clear();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    CommentItem commentItem = snapshot.getValue(CommentItem.class);
-                    arrayList.add(commentItem);
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
-            }
-        });
-        adapter = new CommentAdapter(arrayList, this);
-        recyclerView.setAdapter(adapter);
 
         matching_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +96,7 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
         reply_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                upcomment();
+                commentInsert();
                 reply_edit.setText(null);
             }
         });
@@ -212,6 +132,128 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(spaceDecoration);
 
         recyclerView.setLayoutManager(layoutManager);
+
+        fcmUrl = "https://fcm.googleapis.com/fcm/send";
+        serverKey = getResources().getString(R.string.server_key);
+
+        long now = System.currentTimeMillis();
+        Date mDate = new Date(now);
+
+        SimpleDateFormat simpleDate = new SimpleDateFormat("MM월 dd일 hh:mm:ss");
+        getTime = simpleDate.format(mDate);
+
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        current_user = firebaseUser.getDisplayName();
+        current_uid = firebaseUser.getUid();
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        databaseReference6 = firebaseDatabase.getReference("manager");
+        Query query = databaseReference6.orderByChild("uid").equalTo(current_uid);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() { // manager 테이블에 일치하는 uid가 있다면
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Manager managerItem = snapshot.getValue(Manager.class);
+                    manager_uid = managerItem.getUid();
+                    manager_name = managerItem.getName();
+                }
+
+                if (manager_uid != null) {
+                    matching_btn.setVisibility(View.INVISIBLE);
+                    update_btn.setVisibility(View.INVISIBLE);
+                    delete_btn.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        databaseReference = firebaseDatabase.getReference("board").child("mercenary");
+
+        Query query2 = databaseReference.orderByChild("boardnumber").equalTo(boardnumber);
+
+        query2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
+                    MercenaryBoardItem mercenaryBoardItem = snapshot.getValue(MercenaryBoardItem.class);
+                    // MercenaryBoardItem 객체에 데이터를 담음
+                    key = snapshot.getKey();
+                    matching = mercenaryBoardItem.getMatching();
+                    place = mercenaryBoardItem.getPlace();
+                    day = mercenaryBoardItem.getDay();
+                    title = mercenaryBoardItem.getTitle();
+                    type = mercenaryBoardItem.getType();
+                    content = mercenaryBoardItem.getContent();
+                    ability = mercenaryBoardItem.getAbility();
+                    starttime = mercenaryBoardItem.getStarttime();
+                    endtime = mercenaryBoardItem.getEndtime();
+                    person = mercenaryBoardItem.getPerson();
+                    user = mercenaryBoardItem.getUser();
+                    uid = mercenaryBoardItem.getUid();
+                }
+
+                matching_tv.setText(type + " " + matching);
+                place_tv.setText(place);
+                date_tv.setText(day);
+                time_tv.setText(starttime + " ~ " + endtime);
+                title_tv.setText(title);
+                person_tv.setText(person);
+                ability_tv.setText(ability);
+                content_tv.setText(content);
+
+                if(current_user.equals(user)) {
+                    matching_btn.setVisibility(View.VISIBLE);
+                    update_btn.setVisibility(View.VISIBLE);
+                    delete_btn.setVisibility(View.VISIBLE);
+
+                    if(matching.equals("매칭완료")) {
+                        matching_tv.setTextSize(13);
+                        matching_btn.setText("매칭취소");
+                    }else if(matching.equals("매칭 중")){
+                        matching_tv.setTextSize(15);
+                        matching_btn.setText("매칭완료");
+                    }
+                } else {
+                    matching_tv.setTextSize(15);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        databaseReference3 = firebaseDatabase.getReference("board").child("comment");
+        Query query3 = databaseReference3.orderByChild("boardnumber").equalTo(boardnumber);
+
+        query3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    CommentItem commentItem = snapshot.getValue(CommentItem.class);
+                    arrayList.add(commentItem);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+        adapter = new CommentAdapter(arrayList, this);
+        recyclerView.setAdapter(adapter);
     }
     public void matchingChange() {
         if(matching.equals("매칭 중")) { // DB의 matching 값이 매칭 중일때
@@ -254,19 +296,93 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
             }
         }
     }
-    private void upcomment() { //댓글 작성 버튼 클릭시 구동 부분
+    private void commentInsert() { //댓글 작성 버튼 클릭시 구동 부분
         reply = reply_edit.getText().toString(); // 작성한 글
         String replycount = "0"; //첫 댓글 작성시 답글 수 기본값 0으로 넣어주기
+
         databaseReference4 = databaseReference3.push();
         commentkey = databaseReference4.getKey();
 
         if (reply.isEmpty()) {
             Toast.makeText(getApplicationContext(), "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show(); //입력을 하지 않고 버튼을 눌렀을때
         } else {
-            CommentItem commentItem = new CommentItem(boardnumber, commentkey, current_user, getTime, reply, replycount);
+            CommentItem commentItem = new CommentItem(boardnumber, commentkey, current_user, getTime, reply, replycount, current_uid);
             databaseReference4.setValue(commentItem); //파이어베이스 업로드 구문
             Toast.makeText(getApplicationContext(), "댓글이 작성 되었습니다.", Toast.LENGTH_SHORT).show();
             reply_edit.setText("");
+
+            alarm_content = "게시물에 새로운 댓글이 달렸습니다.";
+            alarm_title = "용병모집 게시판 댓글알림";
+
+            databaseReference5 = firebaseDatabase.getReference("users");
+            Query query3 = databaseReference5.orderByChild("uid").equalTo(uid);
+
+            if (!(uid.equals(current_uid))) { // 자신의 게시글일 때는 알림을 보내지 않음.
+                query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            User userItem = snapshot.getValue(User.class);
+                            fcmToken = userItem.getUserToken();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+
+                                        JSONObject root = new JSONObject();
+                                        JSONObject notification = new JSONObject();
+                                        notification.put("body", alarm_content);
+                                        notification.put("title", alarm_title);
+                                        root.put("notification", notification);
+                                        root.put("to", fcmToken);
+
+                                        URL Url = new URL(fcmUrl);
+                                        HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
+                                        // URL 연결
+                                        conn.setRequestMethod("POST");
+                                        conn.setDoOutput(true);
+                                        conn.setDoInput(true);
+                                        conn.addRequestProperty("Authorization", "key=" + serverKey);
+                                        conn.setRequestProperty("Accept", "application/json");
+                                        conn.setRequestProperty("Content-type", "application/json");
+                                        OutputStream os = conn.getOutputStream();
+                                        os.write(root.toString().getBytes("utf-8"));
+                                        os.flush();
+                                        conn.getResponseCode();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
+    }
+    public void commentDelete(String comnum) {
+
+        databaseReference2 = firebaseDatabase.getReference("board").child("recomment");
+        databaseReference2.orderByChild("commentnum").equalTo(comnum).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference2 = firebaseDatabase.getReference("board").child("comment").child(comnum);
+        databaseReference2.removeValue();
+
     }
 }

@@ -5,35 +5,31 @@
         android:id="@+id/action_one"
         android:enabled="true"
         android:icon="@drawable/ic_people_black_24dp"
-        android:title="상대매칭"
-        app:showAsAction="always" />
+        android:title="상대매칭" />
 
     <item
         android:id="@+id/action_two"
         android:enabled="true"
         android:icon="@drawable/ic_person_black_24dp"
-        android:title="용병모집"
-        app:showAsAction="always"  />
+        android:title="용병모집" />
 
     <item
         android:id="@+id/action_three"
         android:enabled="true"
         android:icon="@drawable/ic_record_voice_over_black_24dp"
-        android:title="팀 홍보"
-        app:showAsAction="always"  />
+        android:title="팀 홍보" />
 
     <item
         android:id="@+id/action_four"
         android:enabled="true"
         android:icon="@drawable/ic_location_on_black_24dp"
         android:title="구장정보"
-        app:showAsAction="always" />
+       />
 
     <item
         android:id="@+id/action_five"
         android:enabled="true"
         android:icon="@drawable/ic_settings_black_24dp"
-        android:title="내 정보"
-        app:showAsAction="always"  />
+        android:title="내 정보" />
 
 </menu>

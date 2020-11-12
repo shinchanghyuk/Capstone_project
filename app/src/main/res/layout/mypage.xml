@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/mypage_tv"
@@ -53,15 +54,24 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="30dp" />
 
+    <View
+        android:id="@+id/line3"
+        style="@style/view_style"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/BottomNavigation"
-        style="@style/BottomNavigation_style"
-        app:itemIconSize="30dp"
-        app:itemBackground="@color/title"
-        app:itemIconTint="@drawable/bottomnavi_item_color"
-        app:labelVisibilityMode="unlabeled"
+        android:id="@+id/bottomNavigation"
+        style="@style/bottomNavigation_style"
+        app:itemIconSize="20dp"
+        app:itemIconTint="@drawable/bottomnavi_background"
+        app:itemTextColor="@drawable/bottomnavi_background"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/menu" />
+        app:menu="@menu/menu"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

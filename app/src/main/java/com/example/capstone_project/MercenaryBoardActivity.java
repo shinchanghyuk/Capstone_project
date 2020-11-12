@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,7 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MercenaryBoardActivity extends AppCompatActivity {
-    Button search_btn, write_btn, alarm_btn;
+    Button search_btn, write_btn, alarm_btn, report_btn;
     Spinner search_spinner;
     BottomNavigationView bottomNavigationView;  // 바텀 네이게이션 뷰 선언
     private RecyclerView recyclerView;  // 리사이클러뷰 선언
@@ -42,12 +44,13 @@ public class MercenaryBoardActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;   // 리사이클러뷰 어댑터 선언
     private ArrayList<MercenaryBoardItem> arrayList; // 아이템 담을 배열리스트 선언
     private FirebaseDatabase firebaseDatabase;  // 파이어베이스 데이터베이스 객체 선언
-    private DatabaseReference databaseReference;    // 파이버에시스 연결(경로) 선언
-    private String sort, sort_standard, sort_search, type, type_standard;
+    private DatabaseReference databaseReference, databaseReference2, databaseReference3;    // 파이버에시스 연결(경로) 선언
+    private String sort, sort_standard, sort_search, type, type_standard, current_uid, mealarm, manager_uid;
     private EditText search_edit; // 사용자가 검색하고자 하는 내용
     private String[] spinnerSearch;
     private RadioGroup type_radio;
     private RadioButton radio1, radio2;
+    private FirebaseAuth auth; // 파이어베이스 인증 객체
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +84,31 @@ public class MercenaryBoardActivity extends AppCompatActivity {
         alarm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MercenaryBoardActivity.this, RelativeAlarmActivity.class);
-                startActivity(intent);
+                databaseReference2 = firebaseDatabase.getReference("users");
+                Query query2 = databaseReference2.orderByChild("uid").equalTo(current_uid);
+
+                query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
+                            User userItem = snapshot.getValue(User.class);
+                            mealarm = userItem.getMealarm();
+                        }
+
+                        if (mealarm.equals("o")) {
+                        Intent intent = new Intent(MercenaryBoardActivity.this, AlarmActivity.class);
+                        intent.putExtra("number", "2");
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "알림여부를 허용하시기 바랍니다.", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
@@ -199,23 +225,53 @@ public class MercenaryBoardActivity extends AppCompatActivity {
         write_btn = findViewById(R.id.write_btn);
         alarm_btn = findViewById(R.id.alarm_btn);
         search_btn = findViewById(R.id.search_btn);
-        bottomNavigationView = findViewById(R.id.BottomNavigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
         type_radio = findViewById(R.id.type_radio);
         radio1 = findViewById(R.id.radio1);
         radio2 = findViewById(R.id.radio2);
 
-        recyclerView = findViewById(R.id.relativeBoard_Recycler);
+        recyclerView = findViewById(R.id.mercenaryBoard_Recycler);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         arrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        current_uid = firebaseUser.getUid();
+
+        databaseReference3 = firebaseDatabase.getReference("manager");
+        Query query = databaseReference3.orderByChild("uid").equalTo(current_uid);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() { // manager 테이블에 일치하는 uid가 있다면
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Manager managerItem = snapshot.getValue(Manager.class);
+                    manager_uid = managerItem.getUid();
+                }
+
+                if (manager_uid != null) {
+                    write_btn.setVisibility(View.INVISIBLE);
+                    alarm_btn.setVisibility(View.INVISIBLE);
+                } else {
+                    write_btn.setVisibility(View.VISIBLE);
+                    alarm_btn.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
         databaseReference = firebaseDatabase.getReference("board").child("mercenary");
 
-        Query query = databaseReference.orderByChild("day"); //매칭일자에 따라 정렬
+        Query query2 = databaseReference.orderByChild("day"); //매칭일자에 따라 정렬
 
-        query.addValueEventListener(new ValueEventListener() {
+        query2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
@@ -239,5 +295,7 @@ public class MercenaryBoardActivity extends AppCompatActivity {
         spinnerSearch = getResources().getStringArray(R.array.mercenaryboard_search);
         SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerSearch, this);
         search_spinner.setAdapter(spinnerAdapter);
+
+        bottomNavigationView.setSelectedItemId(R.id.action_two);
     }
 }

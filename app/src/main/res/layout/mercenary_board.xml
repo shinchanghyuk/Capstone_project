@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/background">>
 
     <Spinner
         android:id="@+id/search_spinner"
@@ -92,33 +93,36 @@
             android:layout_marginBottom="5dp">
 
             <TextView
-                style="@style/table_text_style"
+                style="@style/table_title_style"
                 android:layout_width="80dp"
-                android:gravity="left"
                 android:layout_marginLeft="10dp"
-                android:textSize="15dp"
-                android:text="매칭현황" />
+                android:gravity="left"
+                android:text="매칭현황"
+                android:textSize="15dp" />
 
             <TextView
-                style="@style/table_text_style"
-                android:textSize="15dp"
-                android:layout_marginLeft="30dp"
-                android:layout_width="80dp"
-                android:text="제목" />
-
-            <TextView
-                style="@style/table_text_style"
-                android:textSize="15dp"
-                android:layout_marginLeft="100dp"
-                android:layout_width="40dp"
-                android:text="일자" />
-
-            <TextView
-                style="@style/table_text_style"
-                android:textSize="15dp"
-                android:layout_marginLeft="6.5dp"
+                style="@style/table_title_style"
                 android:layout_width="50dp"
-                android:text="작성자" />
+                android:layout_marginLeft="35dp"
+                android:gravity="left"
+                android:text="제목"
+                android:textSize="15dp" />
+
+            <TextView
+                style="@style/table_title_style"
+                android:layout_width="40dp"
+                android:layout_marginLeft="133dp"
+                android:gravity="left"
+                android:text="일자"
+                android:textSize="15dp" />
+
+            <TextView
+                style="@style/table_title_style"
+                android:layout_width="50dp"
+                android:layout_marginLeft="4.5dp"
+                android:gravity="left"
+                android:text="작성자"
+                android:textSize="15dp" />
         </TableRow>
     </TableLayout>
 
@@ -131,22 +135,30 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/relativeBoard_Recycler"
+        android:id="@+id/mercenaryBoard_Recycler"
         style="@style/recycler_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mercenaryBoard_title" />
 
+    <View
+        android:id="@+id/line2"
+        style="@style/view_style"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/BottomNavigation"
-        style="@style/BottomNavigation_style"
-        app:itemIconSize="30dp"
-        app:itemBackground="@color/title"
-        app:itemIconTint="@drawable/bottomnavi_item_color"
-        app:labelVisibilityMode="unlabeled"
+        android:id="@+id/bottomNavigation"
+        style="@style/bottomNavigation_style"
+        app:itemIconSize="20dp"
+        app:itemIconTint="@drawable/bottomnavi_background"
+        app:itemTextColor="@drawable/bottomnavi_background"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/menu" />
+        app:menu="@menu/menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
     private ArrayList<CommentItem> arrayList;
-    private String user, writetime, content, recomcount,current_user , commentnum;
+    private String user, current_user, commentnum;
     private Context context;
     private FirebaseAuth auth;
 
@@ -26,9 +26,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         this.arrayList = arrayList;
         this.context = context;
     }
-
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.relative_comment, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -36,44 +35,36 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
         user = arrayList.get(position).getUser();
-        writetime = arrayList.get(position).getWritetime();
-        content = arrayList.get(position).getContent();
-        recomcount = "답글 " + arrayList.get(position).getRecomcount()+ "개";
-
         holder.user.setText(user);
-        holder.writetime.setText(writetime);
-        holder.content.setText(content);
-        holder.recomcount.setText(recomcount);
+        holder.writetime.setText(arrayList.get(position).getWritetime());
+        holder.content.setText(arrayList.get(position).getContent());
+        holder.recomcount.setText("답글 " + arrayList.get(position).getRecomcount()+ "개");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 commentnum = arrayList.get(position).getCommentnum();
-                Intent intent = new Intent(v.getContext(), recommentActivity.class);
-
+                Intent intent = new Intent(v.getContext(), RecommentActivity.class);
                 intent.putExtra("commentnum", commentnum);
                 context.startActivity(intent);
-
             }
         });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+
                 auth = FirebaseAuth.getInstance();
                 FirebaseUser firebaseUser = auth.getCurrentUser();
                 current_user = firebaseUser.getDisplayName();
                 commentnum = arrayList.get(position).getCommentnum();
+
                 if (current_user.equals(user)){
                     ConfirmDialog dialog = new ConfirmDialog(context, commentnum);
                     dialog.operation("comment", "comment");
-
                 } else {
                     // 사용자와 댓글 작성자가 다를시 작동구문 (신고)
                 }
-
-
                 return false;
             }
         });

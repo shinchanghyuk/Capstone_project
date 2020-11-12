@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    android:background="#f2f2f2"
-    >
-
+    android:background="#f2f2f2">
 
     <TextView
         android:id="@+id/recommentUser"
@@ -23,12 +21,11 @@
         style="@style/recycler_text_style"
         android:layout_width="wrap_content"
         android:layout_height="15dp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="20dp"
         android:textSize="12dp"
         app:layout_constraintLeft_toRightOf="@+id/recommentUser"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 
     <TextView
         android:id="@+id/recommentTxt"

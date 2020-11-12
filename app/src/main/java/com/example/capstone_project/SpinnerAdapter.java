@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class SpinnerAdapter extends BaseAdapter {
     private Context context;
     private String[] spinnerDate;
-    private TextView data_textView;
+    private TextView date_textView;
 
     public SpinnerAdapter(String[] spinnerDate, Context context) {
         this.spinnerDate = spinnerDate;
@@ -40,8 +40,8 @@ public class SpinnerAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.spinner, null);
         }
 
-        data_textView = convertView.findViewById(R.id.data_textView);
-        data_textView.setText(spinnerDate[position]);
+        date_textView = convertView.findViewById(R.id.date_textView);
+        date_textView.setText(spinnerDate[position]);
 
         return convertView;
     }
