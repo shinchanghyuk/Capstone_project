@@ -44,6 +44,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.writetime.setText(writetime);
         holder.content.setText(content);
         holder.recomcount.setText(recomcount);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
