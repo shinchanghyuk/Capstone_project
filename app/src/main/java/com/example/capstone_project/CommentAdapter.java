@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.autofill.AutofillId;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,13 +19,15 @@ import java.util.ArrayList;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
     private ArrayList<CommentItem> arrayList;
-    private String user, current_user, commentnum;
+    private String user, current_user, current_uid, commentnum, uid, board;
     private Context context;
     private FirebaseAuth auth;
 
-    public CommentAdapter(ArrayList<CommentItem> arrayList, Context context) {
+
+    public CommentAdapter(ArrayList<CommentItem> arrayList, Context context, String board) {
         this.arrayList = arrayList;
         this.context = context;
+        this.board = board;
     }
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment, parent, false);
@@ -54,14 +57,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             @Override
             public boolean onLongClick(View view) {
 
+                uid = arrayList.get(position).getUid();
                 auth = FirebaseAuth.getInstance();
                 FirebaseUser firebaseUser = auth.getCurrentUser();
-                current_user = firebaseUser.getDisplayName();
+                current_uid = firebaseUser.getUid();
                 commentnum = arrayList.get(position).getCommentnum();
 
-                if (current_user.equals(user)){
+                if (current_uid.equals(uid)){
                     ConfirmDialog dialog = new ConfirmDialog(context, commentnum);
-                    dialog.operation("comment", "comment");
+                    if(board.equals("Realtive")) {
+                        dialog.operation("comment", "Realtive");
+                    } else if (board.equals("Mercenary")) {
+                        dialog.operation("comment", "Mercenary");
+                    } else {
+                        dialog.operation("comment", "Team");
+                    }
                 } else {
                     // 사용자와 댓글 작성자가 다를시 작동구문 (신고)
                 }

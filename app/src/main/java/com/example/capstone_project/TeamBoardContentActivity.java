@@ -88,6 +88,7 @@ public class TeamBoardContentActivity extends AppCompatActivity {
                     ability = teamBoardItem.getAbility();
                     person = teamBoardItem.getPerson();
                     user = teamBoardItem.getUser();
+                    uid = teamBoardItem.getUid();
                 }
 
                 matching_tv.setText(matching);
@@ -131,7 +132,7 @@ public class TeamBoardContentActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
             }
         });
-        adapter = new CommentAdapter(arrayList, this);
+        adapter = new CommentAdapter(arrayList, this, "Team");
         recyclerView.setAdapter(adapter);
 
         update_btn.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +162,7 @@ public class TeamBoardContentActivity extends AppCompatActivity {
         reply_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                upcomment();
+                commentInsert();
                 reply_edit.setText(null);
             }
         });
@@ -201,11 +202,43 @@ public class TeamBoardContentActivity extends AppCompatActivity {
         serverKey = getResources().getString(R.string.server_key);
     }
     public void boardDelete() {
+
+        databaseReference2 = firebaseDatabase.getReference("board").child("recomment");
+        databaseReference2.orderByChild("boardnumber").equalTo(key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        databaseReference2 = firebaseDatabase.getReference("board").child("comment");
+        databaseReference2.orderByChild("boardnumber").equalTo(key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    snapshot.getRef().removeValue();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
         databaseReference2 = firebaseDatabase.getReference("board").child("team").child(key);
         databaseReference2.removeValue();
         Intent intent = new Intent(TeamBoardContentActivity.this, TeamBoardActivity.class);
         startActivity(intent);
-}
+    }
 
     public void boardUpdate() {
         databaseReference2 = firebaseDatabase.getReference("board").child("team").child(key);
@@ -224,7 +257,7 @@ public class TeamBoardContentActivity extends AppCompatActivity {
         }
     }
 
-    private void upcomment() { //댓글 작성 버튼 클릭시 구동 부분
+    private void commentInsert() { //댓글 작성 버튼 클릭시 구동 부분
         reply = reply_edit.getText().toString(); // 작성한 글
         String replycount = "0"; //첫 댓글 작성시 답글 수 기본값 0으로 넣어주기
 
@@ -292,4 +325,24 @@ public class TeamBoardContentActivity extends AppCompatActivity {
                 }
             }
         }
+    public void commentDelete(String comnum) {
+
+        databaseReference2 = firebaseDatabase.getReference("board").child("recomment");
+        databaseReference2.orderByChild("commentnum").equalTo(comnum).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference2 = firebaseDatabase.getReference("board").child("comment").child(comnum);
+        databaseReference2.removeValue();
+
+    }
 }

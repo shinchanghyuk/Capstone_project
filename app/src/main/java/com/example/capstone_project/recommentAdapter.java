@@ -14,14 +14,14 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
-public class recommentAdapter extends RecyclerView.Adapter<recommentAdapter.ViewHolder> {
+public class RecommentAdapter extends RecyclerView.Adapter<RecommentAdapter.ViewHolder> {
 
-    private ArrayList<recommentItem> arrayList;
-    private String recommentnum, current_user, User, recomnum;
+    private ArrayList<RecommentItem> arrayList;
+    private String recommentnum, current_uid, recomnum, uid;
     private Context context;
     private FirebaseAuth auth;
 
-    public recommentAdapter(ArrayList<recommentItem> arrayList, Context context) {
+    public RecommentAdapter(ArrayList<RecommentItem> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
 
@@ -36,23 +36,24 @@ public class recommentAdapter extends RecyclerView.Adapter<recommentAdapter.View
 
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
-        User = arrayList.get(position).getUser();
-        holder.user.setText(User);
+        holder.user.setText(arrayList.get(position).getUser());
         holder.writetime.setText(arrayList.get(position).getWritetime());
         holder.content.setText(arrayList.get(position).getContent());
         recommentnum = arrayList.get(position).getRecommentnum();
+
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+
+                uid = arrayList.get(position).getUid();
                 auth = FirebaseAuth.getInstance();
                 FirebaseUser firebaseUser = auth.getCurrentUser();
-                current_user = firebaseUser.getDisplayName();
+                current_uid = firebaseUser.getUid();
+
                 recomnum = arrayList.get(position).getRecommentnum();
-                if (current_user.equals(User)) {
+                if (current_uid.equals(uid)) {
                     ConfirmDialog confirmDialog = new ConfirmDialog(context, recomnum);
                     confirmDialog.operation("comment", "recomment");
-
-
                 } else {
                     // 현 유저와 작성자가 다를시 작동 구문 ( 신고 )
 

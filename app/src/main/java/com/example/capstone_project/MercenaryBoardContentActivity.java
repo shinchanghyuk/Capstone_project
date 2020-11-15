@@ -252,7 +252,7 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
             }
         });
-        adapter = new CommentAdapter(arrayList, this);
+        adapter = new CommentAdapter(arrayList, this, "Mercenary");
         recyclerView.setAdapter(adapter);
     }
     public void matchingChange() {
@@ -274,6 +274,38 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
         matching_tv.setText(matching);
     }
     public void boardDelete() {
+
+        databaseReference2 = firebaseDatabase.getReference("board").child("recomment");
+        databaseReference2.orderByChild("boardnumber").equalTo(key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        databaseReference2 = firebaseDatabase.getReference("board").child("comment");
+        databaseReference2.orderByChild("boardnumber").equalTo(key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    snapshot.getRef().removeValue();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
         databaseReference2 = firebaseDatabase.getReference("board").child("mercenary").child(key);
         databaseReference2.removeValue();
         Intent intent = new Intent(MercenaryBoardContentActivity.this, MercenaryBoardActivity.class);

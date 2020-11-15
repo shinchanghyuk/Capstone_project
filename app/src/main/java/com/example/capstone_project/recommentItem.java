@@ -1,41 +1,78 @@
 package com.example.capstone_project;
 
-public class recommentItem {
-    private String user, writetime, content, commentnum, recommentnum;
+public class RecommentItem {
+    private String user, writetime, content, commentnum, recommentnum, uid, boardnumber;
 
-    public recommentItem(String commentnum, String recommentnum, String user, String writetime, String content) {
+    public RecommentItem(String commentnum, String boardnumber , String recommentnum, String user, String writetime, String content, String uid) {
 
         this.commentnum = commentnum;
+        this.boardnumber = boardnumber;
         this.recommentnum = recommentnum;
         this.user = user;
         this.writetime = writetime;
         this.content = content;
+        this.uid = uid;
 
     }
 
-    public recommentItem() { }
+    public RecommentItem() {
+    }
 
-    public String getCommentnum() {return commentnum;}
+    public String getCommentnum() {
+        return commentnum;
+    }
 
-    public void setCommentnum(String commentnum) {this.commentnum = commentnum; }
+    public void setCommentnum(String commentnum) {
+        this.commentnum = commentnum;
+    }
 
-    public String getRecommentnum() {return recommentnum;}
+    public String getBoardnumber() {
+        return boardnumber;
+    }
 
-    public void setRecommentnum(String recommentnum) { this.recommentnum = recommentnum; }
+    public void setBoardnumber(String boardnumber) {
+        this.boardnumber = boardnumber;
+    }
 
-    public String getUser() {return user;}
+    public String getRecommentnum() {
+        return recommentnum;
+    }
 
-    public void setUser(String user) {this.user = user;}
+    public void setRecommentnum(String recommentnum) {
+        this.recommentnum = recommentnum;
+    }
 
-    public String getWritetime() { return writetime; }
+    public String getUser() {
+        return user;
+    }
 
-    public void setWritetime(String writetime) { this.writetime = writetime; }
+    public void setUser(String user) {
+        this.user = user;
+    }
 
-    public String getContent() { return content;}
+    public String getWritetime() {
+        return writetime;
+    }
 
-    public void setContent(String content) { this.content = content; }
+    public void setWritetime(String writetime) {
+        this.writetime = writetime;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
 
 }
-
-

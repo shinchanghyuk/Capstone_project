@@ -12,7 +12,7 @@ public class ConfirmDialog {
     private Context context;
     private Button okButton, cancelButton;
     private TextView content, title;
-
+    private String commentnum;
     public ConfirmDialog(Context context) {
         this.context = context;
     }
@@ -100,16 +100,18 @@ public class ConfirmDialog {
                             ((MypageActivity) context).managerWithdrawal();
                         }
                     }else if (standard.equals("comment")) {
-                            if (activity.equals("comment")) {
-                                ((RelativeBoardContentActivity) context).commentDelete(commentnum);
-                            } // 여기 용병모집이랑, 팀홍보 넣어야 함
-
-                            else if (activity.equals("recomment")) {
-                                ((RecommentActivity) context).commentDelete(commentnum);
-                            }
+                        if (activity.equals("Realtive")) {
+                            ((RelativeBoardContentActivity) context).commentDelete(commentnum);
+                        } else if (activity.equals("Mercenary")) {
+                            ((MercenaryBoardContentActivity) context).commentDelete(commentnum);
+                        } else {
+                            ((TeamBoardContentActivity) context).commentDelete(commentnum);
                         }
-                        dialog.dismiss();
+                    } else if (activity.equals("recomment")) {
+                                ((RecommentActivity) context).commentDelete(commentnum);
                     }
+                    dialog.dismiss();
+                }
             });
 
             cancelButton.setOnClickListener(new View.OnClickListener() {

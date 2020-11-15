@@ -51,6 +51,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private SignInButton google_login_btn; // 구글 로그인 버튼
@@ -217,27 +219,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                 userUid = userItem.getUid(); // uid의 데이터가 있으면 기존 사용자
                             }
 
-                            if (userUid == null) { // uid의 데이터가 없으면 신규 사용자이며, users 테이블에 값을 저장 후 로그인 동작
-                                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
-                                    @Override
-                                    public void onSuccess(InstanceIdResult instanceIdResult) {
-                                        userToken = instanceIdResult.getToken();
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
+                                @Override
+                                public void onSuccess(InstanceIdResult instanceIdResult) {
+                                    userToken = instanceIdResult.getToken();
+                                    databaseReference2 = firebaseDatabase.getReference("users").child(currentUser.getUid());
+
+                                    if (userUid == null) { // uid의 데이터가 없으면 신규 사용자이며, users 테이블에 값을 저장 후 로그인 동작
 
                                         realarm = "o";
                                         mealarm = "o";
                                         noticealarm = "o";
-                                        databaseReference2 = firebaseDatabase.getReference("users").child(currentUser.getUid());
                                         User user = new User(currentUser.getDisplayName(), currentUser.getUid(), loginWay, userToken, realarm, mealarm, noticealarm);
                                         databaseReference2.setValue(user);
                                         // 이름, uid, 로그인 경로, 기기토큰을 담아서 users 테이블에 저장
-                                    }
-                                });
-                            }
+                                    } else {
+                                        Map<String, Object> tokenChange = new HashMap<>();
+                                        tokenChange.put("userToken", userToken);
+                                        databaseReference2.updateChildren(tokenChange);
 
-                            Toast.makeText(MainActivity.this, currentUser.getDisplayName() + " 님 환영합니다.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                            startActivity(intent);
-                            // 로그인 성공 했으므로 화면 이동
+                                    }
+                                    Toast.makeText(MainActivity.this, currentUser.getDisplayName() + " 님 환영합니다.", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                                    startActivity(intent);
+                                    // 로그인 성공 했으므로 화면 이동
+                                }
+                            });
                         }
 
                         @Override
