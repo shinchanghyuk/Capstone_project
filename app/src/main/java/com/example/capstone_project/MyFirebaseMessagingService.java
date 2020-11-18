@@ -12,9 +12,10 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.capstone_project.mercenary.MercenaryBoardActivity;
+import com.example.capstone_project.relative.RelativeBoardActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 

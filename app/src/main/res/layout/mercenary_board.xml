@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/background">>
+    android:background="@color/background">
 
     <Spinner
         android:id="@+id/search_spinner"
@@ -28,19 +28,20 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_spinner" />
 
-    <Button
+    <ImageButton
         android:id="@+id/search_btn"
         style="@style/relative_btn"
         android:layout_width="80dp"
         android:layout_margin="7dp"
         android:text="검색"
+        android:src="@drawable/ic_search_black_24dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
         style="@style/radio_button_style"
         android:id="@+id/type_radio"
-        app:layout_constraintTop_toBottomOf="@+id/tv1"
+        app:layout_constraintTop_toBottomOf="@+id/mercenary_title"
         app:layout_constraintLeft_toLeftOf="parent">
         <RadioButton
             android:layout_width="wrap_content"
@@ -55,24 +56,24 @@
             android:text="팀" />
     </RadioGroup>
 
-    <Button
+    <ImageButton
         android:id="@+id/write_btn"
         style="@style/relative_btn"
+        android:src="@drawable/ic_create_black_24dp"
         android:layout_width="80dp"
-        android:text="글쓰기"
         app:layout_constraintRight_toLeftOf="@+id/alarm_btn"
         app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
-    <Button
+    <ImageButton
         android:id="@+id/alarm_btn"
         style="@style/relative_btn"
         android:layout_width="80dp"
-        android:text="알림"
+        android:src="@drawable/ic_notifications_active_black_24dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
     <TextView
-        android:id="@+id/tv1"
+        android:id="@+id/mercenary_title"
         style="@style/text_style"
         android:layout_marginTop="23dp"
         android:text="등록된 게시글"

@@ -29,7 +29,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/writing_tv" />
 
-    <TextView
+     <TextView
         android:id="@+id/date_textView"
         style="@style/relative_writing_tv"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -42,18 +42,31 @@
         app:layout_constraintLeft_toRightOf="@+id/date_textView"
         app:layout_constraintTop_toBottomOf="@+id/place_btn" />
 
+    <TextView
+        android:id="@+id/stadium_textView"
+        style="@style/relative_writing_tv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_btn" />
+
+    <Button
+        android:id="@+id/stadium_btn"
+        style="@style/relative_btn2"
+        android:text="경기장소 설정"
+        app:layout_constraintLeft_toRightOf="@+id/stadium_textView"
+        app:layout_constraintTop_toBottomOf="@+id/date_btn" />
+
     <Spinner
         android:id="@+id/startTime"
         style="@style/relative_writing_spinner"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/stadium_btn" />
 
     <Spinner
         android:id="@+id/endTime"
         style="@style/relative_writing_spinner"
         android:layout_marginLeft="5dp"
         app:layout_constraintLeft_toRightOf="@+id/startTime"
-        app:layout_constraintTop_toBottomOf="@+id/date_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/stadium_btn" />
 
     <Spinner
         android:id="@+id/ability"
@@ -63,7 +76,7 @@
         android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toRightOf="@+id/endTime"
         app:layout_constraintRight_toLeftOf="@+id/person"
-        app:layout_constraintTop_toBottomOf="@+id/date_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/stadium_btn"/>
 
     <EditText
         android:id="@+id/person"
@@ -75,7 +88,7 @@
         android:inputType="number"
         app:layout_constraintLeft_toRightOf="@+id/ability"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/stadium_btn"/>
 
     <EditText
         android:id="@+id/title_edit"
@@ -83,8 +96,8 @@
         android:layout_width="390dp"
         android:layout_height="50dp"
         android:editable="true"
-        android:hint="제목을 입력해주세요"
-        android:maxLength="20"
+        android:hint="제목을 입력해주세요(최대 18자)"
+        android:maxLength="18"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/person" />
@@ -93,8 +106,7 @@
         android:id="@+id/content_edit"
         style="@style/relative_writing_edit"
         android:layout_width="390dp"
-        android:layout_height="320dp"
-
+        android:layout_height="270dp"
         android:editable="true"
         android:hint="본문을 입력해주세요"
         android:paddingTop="10dp"

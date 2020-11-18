@@ -28,20 +28,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_spinner" />
 
-    <Button
+    <ImageButton
         android:id="@+id/search_btn"
         style="@style/relative_btn"
         android:layout_width="80dp"
         android:layout_margin="7dp"
+        android:src="@drawable/ic_search_black_24dp"
         android:text="검색"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/write_btn"
         style="@style/relative_btn"
         android:layout_width="80dp"
-        android:text="글쓰기"
+        android:src="@drawable/ic_create_black_24dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
@@ -53,7 +54,7 @@
         app:layout_constraintGuide_begin="58dp" />
 
     <TextView
-        android:id="@+id/tv1"
+        android:id="@+id/team_title"
         style="@style/text_style"
         android:layout_marginTop="23dp"
         android:text="등록된 게시글"
@@ -78,7 +79,7 @@
                 android:layout_width="80dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
-                android:text="매칭현황"
+                android:text="모집현황"
                 android:textSize="15dp" />
 
             <TextView

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/report_title"
+        style="@style/text_style"
+        android:layout_marginTop="23dp"
+        android:text="신고 게시물"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TableLayout
+        android:id="@+id/board_title"
+        style="@style/table_style"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/report_title">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                style="@style/table_title_style"
+                android:layout_width="80dp"
+                android:layout_marginLeft="5dp"
+                android:gravity="left"
+                android:text="게시판 유형"
+                android:textSize="15dp" />
+
+            <TextView
+                style="@style/table_title_style"
+                android:layout_width="60dp"
+                android:layout_marginLeft="35dp"
+                android:gravity="left"
+                android:text="신고사유"
+                android:textSize="15dp" />
+
+            <TextView
+                style="@style/table_title_style"
+                android:layout_width="60dp"
+                android:layout_marginLeft="113dp"
+                android:gravity="left"
+                android:text="신고일자"
+                android:textSize="15dp" />
+
+            <TextView
+                style="@style/table_title_style"
+                android:layout_width="50dp"
+                android:gravity="left"
+                android:text="신고자"
+                android:textSize="15dp" />
+        </TableRow>
+    </TableLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reportBoard_Recycler"
+        style="@style/recycler_style"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/board_title" />
+
+    <View
+        android:id="@+id/line2"
+        style="@style/view_style"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        style="@style/bottomNavigation_style"
+        app:itemIconSize="20dp"
+        app:itemIconTint="@drawable/bottomnavi_background"
+        app:itemTextColor="@drawable/bottomnavi_background"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

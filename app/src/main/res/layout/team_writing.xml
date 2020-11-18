@@ -16,7 +16,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-
     <Button
         android:id="@+id/place_btn"
         style="@style/relative_btn2"
@@ -82,8 +81,8 @@
         style="@style/relative_writing_edit"
         android:editable="true"
         android:layout_height="50dp"
-        android:maxLength="15"
-        android:hint="제목을 입력해주세요"
+        android:maxLength="18"
+        android:hint="제목을 입력해주세요(최대 18자)"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/person" />

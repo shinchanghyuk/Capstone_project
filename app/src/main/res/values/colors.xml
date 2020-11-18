@@ -7,4 +7,5 @@
     <color name="line">#D2D2D2</color>
     <color name="background">#ffffff</color>
     <color name="viewBackground">#f8f9fa</color>
+    <color name="matchingColor">#FF0000</color>
 </resources>
