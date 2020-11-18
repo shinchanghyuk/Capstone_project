@@ -7,7 +7,7 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
     <permission
-        android:name="com.example.capstone_project.StadiumSelectActivity.permission.MAPS_RECEIVE"
+        android:name="com.example.capstone_project.stadium.StadiumSelectActivity.permission.MAPS_RECEIVE"
         android:label="signiture" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -77,26 +77,30 @@
 
         <activity android:name=".MenuActivity"></activity>
         <activity android:name=".MainActivity"></activity>
-        <activity android:name=".RelativeBoardActivity"></activity>
-        <activity android:name=".RelativeWritingActivity"></activity>
-        <activity android:name=".AlarmActivity"></activity>
-        <activity android:name=".PlaceActivity"></activity>
-        <activity android:name=".RelativeBoardContentActivity"></activity>
-        <activity android:name=".StadiumSelectActivity"></activity>
-        <activity android:name=".StadiumDetailsActivity"></activity>
-        <activity android:name=".MypageActivity"></activity>
-        <activity android:name=".RelativeReviseActivity"></activity>
-        <activity android:name=".TeamBoardActivity"></activity>
-        <activity android:name=".TeamWritingActivity"></activity>
-        <activity android:name=".TeamBoardContentActivity"></activity>
-        <activity android:name=".TeamReviseActivity"></activity>
-        <activity android:name=".MercenaryBoardActivity"></activity>
-        <activity android:name=".MercenaryBoardContentActivity"></activity>
-        <activity android:name=".MercenaryWritingActivity"></activity>
-        <activity android:name=".MercenaryReviseActivity"></activity>
-        <activity android:name=".AlarmSettingActivity"></activity>
-        <activity android:name=".ManagerWritingActivity"></activity>
-        <activity android:name=".RecommentActivity"></activity>
+        <activity android:name=".relative.RelativeBoardActivity"></activity>
+        <activity android:name=".relative.RelativeWritingActivity"></activity>
+        <activity android:name=".alarm.AlarmActivity"></activity>
+        <activity android:name=".place.PlaceActivity"></activity>
+        <activity android:name=".relative.RelativeBoardContentActivity"></activity>
+        <activity android:name=".stadium.StadiumSelectActivity"></activity>
+        <activity android:name=".stadium.StadiumDetailsActivity"></activity>
+        <activity android:name=".mypage.MypageActivity"></activity>
+        <activity android:name=".relative.RelativeReviseActivity"></activity>
+        <activity android:name=".team.TeamBoardActivity"></activity>
+        <activity android:name=".team.TeamWritingActivity"></activity>
+        <activity android:name=".team.TeamBoardContentActivity"></activity>
+        <activity android:name=".team.TeamReviseActivity"></activity>
+        <activity android:name=".mercenary.MercenaryBoardActivity"></activity>
+        <activity android:name=".mercenary.MercenaryBoardContentActivity"></activity>
+        <activity android:name=".mercenary.MercenaryWritingActivity"></activity>
+        <activity android:name=".mercenary.MercenaryReviseActivity"></activity>
+        <activity android:name=".alarm.AlarmSettingActivity"></activity>
+        <activity android:name=".comment.RecommentActivity"></activity>
+        <activity android:name=".notice.NoticeBoardActivity"></activity>
+        <activity android:name=".notice.NoticeWritingActivity"></activity>
+        <activity android:name=".notice.NoticeBoardContentActivity"></activity>
+        <activity android:name=".notice.NoticeReviseActivity"></activity>
+        <activity android:name=".report.ReportHistoryActivity"></activity>
     </application>
 
 </manifest>

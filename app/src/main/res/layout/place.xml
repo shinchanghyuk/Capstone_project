@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">>
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/region_tv"
@@ -31,7 +31,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/total_recyclerview" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         style="@style/place_recycler_style"
         android:id="@+id/gu_recyclerview1"
@@ -40,7 +39,6 @@
         android:layout_marginRight="16dp"
         android:layout_marginLeft="20dp"/>
 
-
     <androidx.recyclerview.widget.RecyclerView
         style="@style/place_recycler_style"
         android:id="@+id/gu_recyclerview2"
@@ -48,7 +46,6 @@
         app:layout_constraintTop_toBottomOf="@+id/total_recyclerview"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="20dp"/>
-
 
     <Button
         android:id="@+id/confirm_btn"

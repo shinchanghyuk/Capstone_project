@@ -29,6 +29,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/process_btn"
+        style="@style/relative_btn"
+        android:visibility="gone"
+        android:text="조치완료"
+        app:layout_constraintRight_toLeftOf="@+id/delete_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/delete_btn"
         style="@style/relative_btn"
         android:visibility="gone"
@@ -46,7 +54,6 @@
     <Button
         android:id="@+id/list_btn"
         style="@style/relative_btn"
-        android:layout_width="80dp"
         android:text="목록"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

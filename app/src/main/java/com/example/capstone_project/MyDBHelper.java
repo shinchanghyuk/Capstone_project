@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDBHelper extends SQLiteOpenHelper {
     public MyDBHelper(Context context) {
-        //db생성, 첫 작업이기에 old version이 null
+
         super(context, "stadiumDB", null, 1);
     }
 

@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/date_textView"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:text="지역설정"
+        android:text="일자설정"
         android:textSize="18dp"
         android:id="@+id/date_btn" />
 
@@ -75,7 +75,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="40dp"
         android:layout_marginTop="20dp"
-        android:text="설정확인" />
+        android:text="확인" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

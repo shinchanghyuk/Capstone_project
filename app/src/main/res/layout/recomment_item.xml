@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/recommentUser"
         style="@style/recycler_text_style"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="15dp"
         android:layout_margin="5dp"
         android:textSize="14dp"
