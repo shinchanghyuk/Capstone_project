@@ -34,8 +34,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class RelativeWritingActivity extends AppCompatActivity {
 
@@ -53,6 +56,7 @@ public class RelativeWritingActivity extends AppCompatActivity {
     private DatabaseReference relative_database, user_database; // 파이버에시스 연결(경로) 선언
     private FirebaseAuth auth; // 파이어베이스 인증 객체
     private int spinnerNum1, spinnerNum2; // 사용자가 선택한 스피너의 목록 위치를 가져오기 위한 int 변수 선언
+    private List<String> seoul_gu, incheon_gu; // 서울 구, 인천 구를 담는 배열리스트
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +198,7 @@ public class RelativeWritingActivity extends AppCompatActivity {
         // 해당 게시물을 relative 키에 새로 넣기 위한 파이어베이스 경로 설정
         auth = FirebaseAuth.getInstance();
         // 파이어베이스 인증 객체 생성
-        FirebaseUser user = auth.getCurrentUser();
+        final FirebaseUser user = auth.getCurrentUser();
         // 인증 객체를 통해서 현재 접속한 유저의 정보를 얻을 수 있는 파이어베이스유저 객체 생성
 
         total_user = user.getDisplayName();
@@ -230,10 +234,60 @@ public class RelativeWritingActivity extends AppCompatActivity {
             alarm_content = "입력하신 조건과 부합하는 게시글이 등록되었습니다.";
             // 받고자 하는 매칭지역 및 매칭날짜가 일치하는 사용자에게 보낼 알림 제목 및 내용을 변수에 넣음
 
+            seoul_gu = Arrays.asList(getResources().getStringArray(R.array.seoul_gu));
+            incheon_gu = Arrays.asList(getResources().getStringArray(R.array.incheon_gu));
+            // 게시물 작성자 사용자가 선택한 지역 구가 어디 지역인지 비교하기 위해 사용
+
             user_database = firebaseDatabase.getReference("users");
             // 상대매칭 알림을 받겠다고 한 유저들에게 알림을 보내기 위한 파이어베이스 경로 설정
+
+            Query seoul_query = user_database.orderByChild("replace").equalTo("서울전체");
+            // users 키에 있는 사용자들 중 replace가 서울전체인 사용자들을 query에 담음
+            Query incheon_query = user_database.orderByChild("replace").equalTo("인천전체");
+            // users 키에 있는 사용자들 중 replace가 인천전체인 사용자들을 query에 담음
             Query query = user_database.orderByChild("replace").equalTo(choicePlace);
             // users 키에 있는 사용자들의 replace와 게시물 작성자가 설정한 place를 비교
+
+            seoul_query.addListenerForSingleValueEvent(new ValueEventListener() { // 사용자 중 알림 조건이 서울전체 일때
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        User userItem = snapshot.getValue(User.class);
+                        if (Arrays.asList(seoul_gu).contains(choicePlace)) { // 서울에 있는 구와 게시물 작성자가 설정한 지역을 비교
+                            if (userItem.getRedate().equalsIgnoreCase(total_day)) { // 매칭날짜도 비교함
+                                fcmToken = userItem.getUserToken(); // 해당되는 사용자들의 알림 토큰을 가져와 변수에 넣음
+                                notification(fcmToken);
+                                // 해당 사용자들의 알림 토큰을 가지고 notification 메소드 호출
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            incheon_query.addListenerForSingleValueEvent(new ValueEventListener() { // 사용자 중 알림 조건이 인천전체 일때
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        User userItem = snapshot.getValue(User.class);
+                        if (Arrays.asList(incheon_gu).contains(choicePlace)) { // 인천에 있는 구와 게시물 작성자가 설정한 지역을 비교
+                            if (userItem.getRedate().equalsIgnoreCase(total_day)) { // 매칭날짜도 비교함
+                                fcmToken = userItem.getUserToken(); // 해당되는 사용자들의 알림 토큰을 가져와 변수에 넣음
+                                notification(fcmToken);
+                                // 해당 사용자들의 알림 토큰을 가지고 notification 메소드 호출
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
             query.addListenerForSingleValueEvent(new ValueEventListener() { // 알림 조건이 일치하는 사용자들에게 알림을 전송
                 @Override
@@ -242,34 +296,8 @@ public class RelativeWritingActivity extends AppCompatActivity {
                         User userItem = snapshot.getValue(User.class);
                         if (userItem.getRedate().equalsIgnoreCase(total_day)) { // 매칭날짜도 비교함
                             fcmToken = userItem.getUserToken(); // 해당되는 사용자들의 알림 토큰을 가져와 변수에 넣음
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-
-                                        JSONObject root = new JSONObject();
-                                        JSONObject notification = new JSONObject();
-                                        notification.put("body", alarm_content);
-                                        notification.put("title", alarm_title);
-                                        root.put("notification", notification);
-                                        root.put("to", fcmToken);
-                                        URL Url = new URL(fcmUrl);
-                                        HttpURLConnection conn = (HttpURLConnection) Url.openConnection(); // URL 연결
-                                        conn.setRequestMethod("POST");
-                                        conn.setDoOutput(true);
-                                        conn.setDoInput(true);
-                                        conn.addRequestProperty("Authorization", "key=" + serverKey);
-                                        conn.setRequestProperty("Accept", "application/json");
-                                        conn.setRequestProperty("Content-type", "application/json");
-                                        OutputStream os = conn.getOutputStream();
-                                        os.write(root.toString().getBytes("utf-8"));
-                                        os.flush();
-                                        conn.getResponseCode();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }).start();
+                            notification(fcmToken);
+                            // 해당 사용자들의 알림 토큰을 가지고 notification 메소드 호출
                         }
                     } // 해당되는 사용자들에게 알림을 보내는 구문
                 }
@@ -282,7 +310,35 @@ public class RelativeWritingActivity extends AppCompatActivity {
             finish();
         }
     }
-
+    public void notification(final String fcmToken) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject root = new JSONObject();
+                    JSONObject notification = new JSONObject();
+                    notification.put("body", alarm_content);
+                    notification.put("title", alarm_title);
+                    root.put("notification", notification);
+                    root.put("to", fcmToken);
+                    URL Url = new URL(fcmUrl);
+                    HttpURLConnection conn = (HttpURLConnection) Url.openConnection(); // URL 연결
+                    conn.setRequestMethod("POST");
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+                    conn.addRequestProperty("Authorization", "key=" + serverKey);
+                    conn.setRequestProperty("Accept", "application/json");
+                    conn.setRequestProperty("Content-type", "application/json");
+                    OutputStream os = conn.getOutputStream();
+                    os.write(root.toString().getBytes("utf-8"));
+                    os.flush();
+                    conn.getResponseCode();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start(); // 해당되는 사용자들에게 알림을 보내는 구문
+    }
     // 사용자가 매칭지역을 선택하고 돌아왔을 때 동작
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

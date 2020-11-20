@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Capstone_project</string>
+    <string name="app_name">운동하자</string>
     <string name="id">test</string>
     <string name="passwd">test</string>
     <string name="kakao_app_key">64f2934f655e4c837f9056e25680c827</string>
@@ -7,4 +7,5 @@
     <string name="facebook_login_protocol_scheme" translatable="false">fb396945631467029</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="server_key">AAAAwcJJmOM:APA91bE34bs0X0FpQJXrueZSlloMKepSQR1PQPYQAF6XYKpcNhPS1fyf-g9pQdYdqGAv2UdpG7oQZnsk2Hq3lI9fUmoP09yeOstBD6g-cJTSFWKwIDfu51x_x1L_IJEKcEWT5_qRexEV</string>
+
 </resources>

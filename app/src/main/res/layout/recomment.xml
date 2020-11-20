@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_margin="10dp"
+            android:textStyle="bold"
             android:fontFamily="@font/nanumsquare_acb"
             android:textColor="#ffffff"
             android:textSize="17dp"

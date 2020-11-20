@@ -28,12 +28,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_spinner" />
 
-    <Button
+    <ImageButton
         android:id="@+id/search_btn"
         style="@style/relative_btn"
         android:layout_width="80dp"
         android:layout_margin="7dp"
         android:text="검색"
+        android:src="@drawable/ic_search_black_24dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,12 +52,21 @@
         map:cameraZoom="15" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/stadiumBoard_Recycler"
+        android:id="@+id/stadium_Recycler"
         style="@style/recycler_style"
+        android:layout_marginTop="10dp"
         android:layout_height="300dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/stadium_map"/>
+
+    <View
+        android:id="@+id/line2"
+        style="@style/view_style"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"

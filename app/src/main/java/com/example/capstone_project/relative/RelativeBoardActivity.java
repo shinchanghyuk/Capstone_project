@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.capstone_project.MenuActivity;
 import com.example.capstone_project.R;
 import com.example.capstone_project.SpinnerAdapter;
 import com.example.capstone_project.User;
@@ -316,6 +317,7 @@ public class RelativeBoardActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(relative_adapter);
         // 리사이클러뷰에 상대매칭 게시판에 등록 된 데이터들을 담음
+        relative_adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
 
         spinnerSearch = getResources().getStringArray(R.array.board_search);
         // array.xml에 있는 데이터들을 가져와 문자열 배열 변수에 값을 넣음
@@ -323,5 +325,12 @@ public class RelativeBoardActivity extends AppCompatActivity {
         SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerSearch, this);
         search_spinner.setAdapter(spinnerAdapter);
         // spinnerAdapter 객체를 생성해 검색 스피너에 담음
+    }
+    @Override
+    // 뒤로 가기 이벤트가 발생되었을 때 동작
+    public void onBackPressed() {
+        Intent intent = new Intent(RelativeBoardActivity.this, MenuActivity.class);
+        startActivity(intent);
+        // 메뉴 화면으로 이동
     }
 }

@@ -8,22 +8,24 @@
     android:background="@color/background"
     tools:context=".MainActivity">
 
-<TextView
-    style="@style/text_style"
-    android:text="구장이름"
-    android:layout_marginLeft="20dp"
-    android:id="@+id/stadium_nameTv"
-    app:layout_constraintTop_toBottomOf="@+id/guideline"
-    app:layout_constraintLeft_toLeftOf="parent" />
+    <TextView
+        android:id="@+id/stadium_textView"
+        style="@style/text_style"
+        android:layout_marginLeft="20dp"
+        android:text="구장이름"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
-<ImageView
-    android:layout_margin="10dp"
-    android:id="@+id/stadium_imageView"
-    android:layout_width="match_parent"
-    android:layout_height="210dp"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/stadium_nameTv"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/stadium_recyclerview"
+        style="@style/recycler_style"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="210dp"
+        app:layout_constraintTop_toBottomOf="@+id/stadium_textView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TableLayout
         android:layout_margin="10dp"
@@ -32,7 +34,7 @@
         android:background="@drawable/table_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stadium_imageView">
+        app:layout_constraintTop_toBottomOf="@+id/stadium_recyclerview">
 
         <TableRow
             android:layout_gravity="center"
@@ -101,6 +103,27 @@
             </TextView>
             <TextView
                 android:id="@+id/stadium_tele"
+                style="@style/table_text_style2">
+            </TextView>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                style="@style/table_text_style"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_background"
+                android:text="홈 페이지">
+            </TextView>
+            <TextView
+                android:id="@+id/stadium_page"
+                android:linksClickable="true"
+                android:autoLink="web"
+                android:ems="13"
+                android:ellipsize="end"
                 style="@style/table_text_style2">
             </TextView>
         </TableRow>

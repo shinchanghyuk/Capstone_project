@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.capstone_project.R;
-import com.example.capstone_project.RecyclerDecoration;
 import com.example.capstone_project.User;
 import com.example.capstone_project.comment.CommentAdapter;
 import com.example.capstone_project.comment.CommentItem;
@@ -191,7 +190,7 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {   // 반복문으로 데이터리스트를 추출
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터리스트를 추출
                                 ReportItem reportItem = snapshot.getValue(ReportItem.class);
                                 // RelativeBoardItem 객체에 데이터를 담음
                                 reportnum = reportItem.getReportnumber();
@@ -242,11 +241,6 @@ public class RelativeBoardContentActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         // 리사이클러뷰에 LinearLayoutManager 객체 지정
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), new LinearLayoutManager(this).getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        RecyclerDecoration spaceDecoration = new RecyclerDecoration(10);
-        recyclerView.addItemDecoration(spaceDecoration);
 
         fcmUrl = "https://fcm.googleapis.com/fcm/send";
         serverKey = getResources().getString(R.string.server_key);

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.capstone_project.MainActivity;
+import com.example.capstone_project.MenuActivity;
 import com.example.capstone_project.R;
 import com.example.capstone_project.User;
 import com.example.capstone_project.mercenary.MercenaryBoardActivity;
@@ -354,5 +355,12 @@ public class MypageActivity extends AppCompatActivity {
                         // 삭제 후 MainActivity로 이동되며, Toast 메세지 전송
                     }
                 });
+    }
+    @Override
+    // 뒤로 가기 이벤트가 발생되었을 때 동작
+    public void onBackPressed() {
+        Intent intent = new Intent(MypageActivity.this, MenuActivity.class);
+        startActivity(intent);
+        // 메뉴 화면으로 이동
     }
 }
