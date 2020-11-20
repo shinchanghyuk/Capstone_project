@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.capstone_project.MenuActivity;
 import com.example.capstone_project.R;
 import com.example.capstone_project.SpinnerAdapter;
 import com.example.capstone_project.User;
@@ -371,5 +372,12 @@ public class MercenaryBoardActivity extends AppCompatActivity {
         SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerSearch, this);
         search_spinner.setAdapter(spinnerAdapter);
         // 검색 스피너 생성
+    }
+    @Override
+    // 뒤로 가기 이벤트가 발생되었을 때 동작
+    public void onBackPressed() {
+        Intent intent = new Intent(MercenaryBoardActivity.this, MenuActivity.class);
+        startActivity(intent);
+        // 메뉴 화면으로 이동
     }
 }

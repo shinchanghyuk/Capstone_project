@@ -20,16 +20,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GuPlaceAdapter extends RecyclerView.Adapter<GuPlaceAdapter.ViewHolder> {
-    private SparseBooleanArray mSelectedItems = new SparseBooleanArray(0);
-    // position 별 선택상태를 저장하는 구조
     private ArrayList<PlaceItem> arrayList; // placeItem 아이템 선언
     private Context context;
     private static int size; // 사용자가 선택한 지역의 수
+    private String choicePlace; // 사용자가 선택한 구를 담는 변수
 
-    public GuPlaceAdapter(ArrayList<PlaceItem> arrayList, Context context, int size) {
+    public GuPlaceAdapter(ArrayList<PlaceItem> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
-        this.size = size;
     }
 
     public GuPlaceAdapter(int size) {
@@ -48,37 +46,31 @@ public class GuPlaceAdapter extends RecyclerView.Adapter<GuPlaceAdapter.ViewHold
         holder.gu.setText(arrayList.get(position).getRegion());
         // 리사이클러뷰 목록들을 구성하고 있는 텍스트 뷰에 값을 넣는 역할을 함
 
-        if (holder.isItemSelected(position)) {
-            holder.itemView.setEnabled(false);
-            holder.itemView.setAlpha((float) 0.7);
-            holder.itemView.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            // 사용자가 선택한 지역의 위치에 있는 리사이클러뷰 목록은 비 활성화
-        } else {
-            holder.itemView.setEnabled(true);
-            holder.itemView.setAlpha(1);
-            holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
-        } // 사용자가 선택한 지역의 위치가 아닌 리사이클러뷰 목록들은 활성화
-
         holder.itemView.setOnClickListener(new View.OnClickListener() { // 리사이클러뷰 목록을 클릭했을 때
             public void onClick(View v) {
                 if (size < 1) { // 사용자가 선택한 지역이 없을 때
-                    holder.toggleItemSelected(position);
-                    // 사용자가 선택한 position만 계속 선택되게 함
-                    String choiceRegion = arrayList.get(position).getRegion();
+                    choicePlace = arrayList.get(position).getRegion(); // 사용자가 선택한 구를 변수에 담음
+
                     size++; // 사용자가 지역을 선택했으므로 증가시킴
-                    ((PlaceActivity) context).choice(choiceRegion, position);
+
+                    ((PlaceActivity) context).choice(choicePlace, position);
                     // 선택한 지역과 그 지역의 위치를 가지고 placeActivity로 이동
+
+                    Toast.makeText(v.getContext(), choicePlace + "를 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                    // 사용자가 지역을 선택했으므로 Toast 메세지 전송
                 } else {
                     Toast.makeText(v.getContext(), "이미 지역을 선택하였습니다.", Toast.LENGTH_SHORT).show();
-                    // 사용자가 지역을 선택했으므로 Toast 메세지 전송
+                    // 이미 사용자가 지역을 선택했었으므로 Toast 메세지 전송
                 }
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return arrayList.size();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView gu;
         // 리사이클러뷰의 목록들을 담당하고 있는 텍스트 뷰를 선언
@@ -88,38 +80,7 @@ public class GuPlaceAdapter extends RecyclerView.Adapter<GuPlaceAdapter.ViewHold
 
             gu = itemView.findViewById(R.id.place_recycler_item);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    toggleItemSelected(position);
-                }
-            });
-        }
-
-        private void toggleItemSelected(int position) {
-            if (mSelectedItems.get(position, false) == true) {
-                mSelectedItems.delete(position);
-                notifyItemChanged(position);
-            } else {
-                mSelectedItems.put(position, true);
-                notifyItemChanged(position);
-            }
-        }
-
-        private boolean isItemSelected(int position) {
-            return mSelectedItems.get(position, false);
-        }
-
-        public void clearSelectedItem() {
-            int position;
-
-            for (int i = 0; i < mSelectedItems.size(); i++) {
-                position = mSelectedItems.keyAt(i);
-                mSelectedItems.put(position, false);
-                notifyItemChanged(position);
-            }
-
-            mSelectedItems.clear();
         }
     }
 }
+

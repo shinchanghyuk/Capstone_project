@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.capstone_project.R;
-import com.example.capstone_project.RecyclerDecoration;
 import com.example.capstone_project.User;
 import com.example.capstone_project.comment.CommentAdapter;
 import com.example.capstone_project.comment.CommentItem;
@@ -243,11 +242,6 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         // 리사이클러뷰에 LinearLayoutManager 객체 지정
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), new LinearLayoutManager(this).getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        RecyclerDecoration spaceDecoration = new RecyclerDecoration(10);
-        recyclerView.addItemDecoration(spaceDecoration);
 
         fcmUrl = "https://fcm.googleapis.com/fcm/send";
         serverKey = getResources().getString(R.string.server_key);

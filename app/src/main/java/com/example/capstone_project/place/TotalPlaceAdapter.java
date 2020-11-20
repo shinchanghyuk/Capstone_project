@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,8 +41,11 @@ public class TotalPlaceAdapter extends RecyclerView.Adapter<TotalPlaceAdapter.Vi
             @Override
             public void onClick(View v) {
                 String total = arrayList.get(position).getRegion();
-                ((PlaceActivity) context).cancel(total);
+                ((PlaceActivity) context).cancel();
                 // 사용자가 선택했던 지역과 PlaceActivitiy의 cancel 메소드로 이동
+
+                Toast.makeText(v.getContext(), total + " 선택을 취소하였습니다.", Toast.LENGTH_SHORT).show();
+                // 사용자가 지역을 선택했으므로 Toast 메세지 전송
             }
         });
     }

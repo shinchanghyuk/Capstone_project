@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.capstone_project.R;
-import com.example.capstone_project.RecyclerDecoration;
 import com.example.capstone_project.User;
 import com.example.capstone_project.mypage.Manager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -204,11 +203,6 @@ public class RecommentActivity extends AppCompatActivity {
         Intent intent = getIntent();
         commentnum = intent.getStringExtra("commentnum");
         // 해당 게시물의 댓글번호를 가져와 commentnum 변수에 넣음
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), new LinearLayoutManager(this).getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        RecyclerDecoration spaceDecoration = new RecyclerDecoration(10);
-        recyclerView.addItemDecoration(spaceDecoration);
 
         arrayList = new ArrayList<>();
         // 대댓글들을 담을 배열리스트 생성

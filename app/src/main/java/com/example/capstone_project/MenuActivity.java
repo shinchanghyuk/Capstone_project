@@ -14,6 +14,7 @@ import com.example.capstone_project.dialog.ConfirmDialog;
 import com.example.capstone_project.mercenary.MercenaryBoardActivity;
 import com.example.capstone_project.mypage.MypageActivity;
 import com.example.capstone_project.relative.RelativeBoardActivity;
+import com.example.capstone_project.stadium.StadiumDetailsActivity;
 import com.example.capstone_project.stadium.StadiumSelectActivity;
 import com.example.capstone_project.team.TeamBoardActivity;
 import com.facebook.login.LoginManager;
@@ -30,6 +31,8 @@ public class MenuActivity extends AppCompatActivity {
     private FirebaseAuth auth; // 파이어베이스 인증 객체
     private String current_uid; // 현재 접속한 사용자의 uid
     private GoogleSignInClient googleSignInClient; // 구글 API 클라이언트 객체
+    private long backKeyPressedTime = 0;
+    private Toast toast; // 뒤로 가기 이벤트와 관련하여 사용자에게 알려주기
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +138,28 @@ public class MenuActivity extends AppCompatActivity {
                         }
                     });
             // 사용자가 구글 로그인 시 로그아웃 동작
+        }
+    }
+
+    // 뒤로 가기 이벤트가 발생되었을 때 동작
+    public void onBackPressed() {
+
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG);
+            toast.show(); // Toast 메세지 전소
+            return;
+            // 사용자가 뒤로가기 버튼을 한번 눌렀을 때 동작
+        }
+
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            toast.cancel(); // 전에 동작되던 Toast 메세지 취소
+            toast = Toast.makeText(this,"이용해 주셔서 감사합니다.",Toast.LENGTH_LONG);
+            toast.show(); // 새로운 Toast 메세지 전송
+            // 사용자가 뒤로가기를 2초안에 두번 눌렀을 때 동작
+
+            finishAffinity(); // 애플리케이션을 종료함
+            System.runFinalization(); // 현재 작업중인 쓰레드가 다 종료되면, 종료
         }
     }
 }
