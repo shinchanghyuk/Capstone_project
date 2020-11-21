@@ -59,7 +59,7 @@ public class MercenaryBoardContentActivity extends AppCompatActivity {
     private RecyclerView recyclerView; // 댓글 리사이클러뷰
     private RecyclerView.LayoutManager layoutManager; // 댓글 리사이클러뷰 레이아웃 매니저
     private RecyclerView.Adapter adapter; // 댓글 리사이클러뷰 어댑터
-    public static String manager_uid="", manager_name, uid, reportnum; // 관리자의 이름과 uid, 사용자의 uid, 신고number을 담을 정적변수 선언
+    public static String manager_uid="", manager_name, uid, reportnum=""; // 관리자의 이름과 uid, 사용자의 uid, 신고number을 담을 정적변수 선언
 
 
     protected void onCreate(Bundle savedInstanceState) {
