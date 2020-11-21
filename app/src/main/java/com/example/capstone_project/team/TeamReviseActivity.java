@@ -114,7 +114,7 @@ public class TeamReviseActivity extends AppCompatActivity {
         name_edit = findViewById(R.id.name);
 
         Intent intent = getIntent();
-        boardnumber = intent.getStringExtra("bordernumber"); // 해당 게시글의 번호
+        boardnumber = intent.getStringExtra("boardnumber"); // 해당 게시글의 번호
 
         spinnerAbility = getResources().getStringArray(R.array.ability);
         // array.xml에 있는 데이터들을 가져와 문자열 배열 변수에 값을 넣음
@@ -227,6 +227,7 @@ public class TeamReviseActivity extends AppCompatActivity {
             boardChange.put("title", title);
             boardChange.put("content", content);
             boardChange.put("ability", ability);
+            boardChange.put("writetime", writeTime);
             // 게시물 형식이 담긴 변수가 Map 형식으로 담기게 됨
 
             team_database.updateChildren(boardChange);
