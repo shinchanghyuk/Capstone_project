@@ -248,12 +248,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                 // uid의 데이터가 있으면 기존 사용자
                             }
 
-                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
-                                @Override
-                                public void onSuccess(InstanceIdResult instanceIdResult) {
-                                    userToken = instanceIdResult.getToken();
-                                    user_database2 = user_database.child(firebaseUser.getUid());
-                                    // users 키에 접근하기 위한 파이어베이스 경로 설정
+                                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
+                                        @Override
+                                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                                            userToken = instanceIdResult.getToken();
+                                            user_database2 = user_database.child(firebaseUser.getUid());
+                                            // users 키에 접근하기 위한 파이어베이스 경로 설정
 
                                     if (userUid == null) { // 신규 사용자 일 경우
                                         realarm = "o"; mealarm = "o"; noticealarm = "o";

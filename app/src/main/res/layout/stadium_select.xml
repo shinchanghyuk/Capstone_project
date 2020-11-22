@@ -47,15 +47,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line"
-        map:cameraTargetLat="37.568256"
-        map:cameraTargetLng="126.897240"
         map:cameraZoom="15" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/stadium_Recycler"
         style="@style/recycler_style"
         android:layout_marginTop="10dp"
-        android:layout_height="300dp"
+        android:layout_height="230dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/stadium_map"/>
