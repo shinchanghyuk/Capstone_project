@@ -18,7 +18,7 @@
     <string-array name="stadium_search">
         <item>검색</item>
         <item>지역</item>
-        <item>장소</item>
+        <item>이름</item>
     </string-array>
 
     <string-array name="notice_search">

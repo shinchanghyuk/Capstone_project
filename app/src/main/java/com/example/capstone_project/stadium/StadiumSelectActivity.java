@@ -29,6 +29,7 @@ import com.example.capstone_project.SpinnerAdapter;
 import com.example.capstone_project.mercenary.MercenaryBoardActivity;
 import com.example.capstone_project.mypage.MypageActivity;
 import com.example.capstone_project.relative.RelativeBoardActivity;
+import com.example.capstone_project.relative.RelativeBoardItem;
 import com.example.capstone_project.team.TeamBoardActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,8 +54,8 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
     private RecyclerView recyclerView; // 리사이클러뷰 선언
     private Spinner search_spinner; // 검색 스피너 선언
     private RecyclerView.LayoutManager layoutManager; // 레이아웃 매니저 선언
-    private RecyclerView.Adapter search_adapter; // 리사이클러뷰 어댑터 선언
-    private ArrayList<StadiumItem> search_arrayList; // 아이템 담을 배열리스트 선언
+    private RecyclerView.Adapter search_adapter, stadium_adapter; // 리사이클러뷰 어댑터 선언
+    private ArrayList<StadiumItem> search_arrayList, stadium_arrayList; // 아이템 담을 배열리스트 선언
     private EditText search_edit; // 사용자의 검색 내용을 담을 edit 선언
     private String[] spinnerSearch; // 검색 스피너 목록들을 담을 문자열 배열선언
     private BottomNavigationView bottomNavigationView; // 바텀 네비게이션 뷰 선언
@@ -107,7 +108,7 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
                                         search_arrayList.add(stadiumItem);
                                         // 사용자가 입력한 내용이 데이터베이스에 포함되어 있을 때 배열리스트에 추가
                                     }
-                                } else if (sort.equals("장소")) { // 제목으로 검색할 때
+                                } else if (sort.equals("이름")) { // 제목으로 검색할 때
                                     if (stadiumItem.getName().contains(sort_search)) {
                                         search_arrayList.add(stadiumItem);
                                         // 사용자가 입력한 내용이 데이터베이스에 포함되어 있을 때 배열리스트에 추가
@@ -117,6 +118,8 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
 
                             if (search_arrayList.size() == 0) { // 사용자의 검색 조건에 해당하는 경기장이 없을 때
                                 Toast.makeText(getApplicationContext(), "원하시는 조건의 경기장 정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                recyclerView.setAdapter(stadium_adapter); // 모든 경기장 정보 데이터들을 담음
+                                stadium_adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
                             } else {
                                 Collections.reverse(search_arrayList); // 배열리스트를 내림차순으로 정렬
                                 search_edit.setText(null); // 검색 내용 초기화
@@ -175,10 +178,11 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap; // 구글 맵 변수를 넣음
 
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.568256, 126.897240),15));
-        // 구글맵 카메라 초기값 설정
+       // gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.568256, 126.897240),15));
+        //        // 구글맵 카메라 초기값 설정
+
         gMap.getUiSettings().setZoomControlsEnabled(true);
-        // ?
+        // 구글맵을 움직일 수 있게 설정
 
         // stadium에 있는 모든 경기장를 토대로 마커를 설정함
         stadium_database.addListenerForSingleValueEvent(new ValueEventListener() { // stadium 키에 있는 경기장 접근
@@ -205,6 +209,7 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
         gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                Log.d("c",marker.toString());
                 Intent intent = new Intent(StadiumSelectActivity.this, StadiumDetailsActivity.class);
                 intent.putExtra("stadium_name", stadium_name);
                 startActivity(intent);
@@ -234,10 +239,43 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
         recyclerView.setLayoutManager(layoutManager);
         // 리사이클러뷰에 LinearLayoutManager 객체 지정
 
+        stadium_arrayList = new ArrayList<>();
+        // 데이터베이스에 있는 경기장 데이터들을 담을 배열리스트 생성
         search_arrayList = new ArrayList<>();
         // 사용자의 검색조건에 해당되는 경기장 데이터들을 담을 배열 리스트 생성
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        // 파이어베이스 데이터베이스 객체 생성
+        stadium_database = firebaseDatabase.getReference("stadium");
+        // 해당 게시물을 relative 키에 새로 넣기 위한 파이어베이스 경로 설정
+        Query query = stadium_database.orderByChild("name"); // 경기장 이름 순으로 정렬
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                stadium_arrayList.clear(); // 배열리스트 초기화
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터리스트를 추출
+                    StadiumItem stadiumItem = snapshot.getValue(StadiumItem.class);
+                    // RelativeBoardItem 객체에 데이터를 담음
+                    stadium_arrayList.add(stadiumItem); // 모든 경기장 정보들을 배열리스트에 추가
+            }
+                stadium_adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "데이터베이스 오류", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        stadium_adapter = new StadiumAdapter(stadium_arrayList, this);
         search_adapter = new StadiumAdapter(search_arrayList, this);
         // StadiumAdapter 객체들을 생성
+
+        recyclerView.setAdapter(stadium_adapter);
+        // 경기장 정보 데이터들을 담음
+        search_adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+
         spinnerSearch = getResources().getStringArray(R.array.stadium_search);
         // array.xml에 있는 데이터들을 가져와 문자열 배열 변수에 값을 넣음
 
@@ -250,13 +288,10 @@ public class StadiumSelectActivity extends AppCompatActivity implements OnMapRea
        recyclerView.addItemDecoration(dividerItemDecoration);
         // 리사이클러뷰 목록을 구별하기 위해 밑선을 추가
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        // 파이어베이스 데이터베이스 객체 생성
-        stadium_database = firebaseDatabase.getReference("stadium");
-        // 해당 게시물을 relative 키에 새로 넣기 위한 파이어베이스 경로 설정
-
         mapFrag =  (MapFragment) getFragmentManager().findFragmentById(R.id.stadium_map);
         mapFrag.getMapAsync(this);
+
+
     }
     public void map(String stadium_name) {
         this.stadium_name = stadium_name; // 사용자가 선택한 경기장 이름을 변수에 담음

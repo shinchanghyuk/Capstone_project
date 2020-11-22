@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".MainActivity">
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/stadium_textView"
@@ -122,7 +120,8 @@
                 android:id="@+id/stadium_page"
                 android:linksClickable="true"
                 android:autoLink="web"
-                android:ems="13"
+                android:textSize="10dp"
+                android:minLines="2"
                 android:ellipsize="end"
                 style="@style/table_text_style2">
             </TextView>

@@ -28,7 +28,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class AlarmActivity extends AppCompatActivity {
     Calendar myCalendar = Calendar.getInstance();
@@ -77,15 +79,6 @@ public class AlarmActivity extends AppCompatActivity {
             public void onClick(View v) {
                 alarmData();
                 // alarmData 메소드 호출
-                if (number.equals("1")) {
-                    Intent intent = new Intent(getApplicationContext(), RelativeBoardActivity.class);
-                    startActivity(intent);
-                    // RelativeBoardActivity로 이동
-                } else if (number.equals("2")) {
-                    Intent intent = new Intent(getApplicationContext(), MercenaryBoardActivity.class);
-                    startActivity(intent);
-                    // MercenaryBoardActivity로 이동
-                }
             }
         });
     }
@@ -104,6 +97,15 @@ public class AlarmActivity extends AppCompatActivity {
         Intent intent = getIntent();
         number = intent.getStringExtra("number");
         // 버튼을 누른 게시판을 구별함(1이면 상대매칭, 2이면 용병모집)
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        // 파이어베이스 데이터베이스 객체 생성
+        auth = FirebaseAuth.getInstance();
+        // 파이어베이스 인증 객체 생성
+        FirebaseUser currentUser = auth.getCurrentUser();
+        // 인증 객체를 통해서 현재 접속한 유저의 정보를 얻을 수 있는 파이어베이스유저 객체 생성
+        current_uid = currentUser.getUid();
+        // 현재 접속한 사용자의 uid을 가져옴
     }
 
     private DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
@@ -135,19 +137,6 @@ public class AlarmActivity extends AppCompatActivity {
 
     // 확인 눌렀을 때 호출되는 메소드
     private void alarmData() {
-        if (choicePlace.isEmpty() || date.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "빈칸 없이 모두다 입력해주세요", Toast.LENGTH_SHORT).show();
-            // 사용자가 빈칸없이 선택하지 않았을 때 Toast 메세지 전송
-        } else {
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            // 파이어베이스 데이터베이스 객체 생성
-            auth = FirebaseAuth.getInstance();
-            // 파이어베이스 인증 객체 생성
-            FirebaseUser currentUser = auth.getCurrentUser();
-            // 인증 객체를 통해서 현재 접속한 유저의 정보를 얻을 수 있는 파이어베이스유저 객체 생성
-            current_uid = currentUser.getUid();
-            // 현재 접속한 사용자의 uid을 가져옴
-
             user_database = firebaseDatabase.getReference("users");
             // 알림 데이터를 설정하기 위한 파이어베이스 경로 설정
             Query query = user_database.orderByChild("uid").equalTo(current_uid);
@@ -173,27 +162,37 @@ public class AlarmActivity extends AppCompatActivity {
                         // 데이터베이스에서 일치하는 사용자의 정보들을 가져옴
                     }
 
-                   user_database2 = user_database.child(uid);
+                    user_database2 = user_database.child(uid);
                     // 현재 사용자의 users 키에 접근하기 위한 파이어베이스 경로 설정
 
-                    if (number.equals("1")) {
-                        user = new User(name, uid, loginWay, userToken, realarm, mealarm, choicePlace, date, meplace, medate, noticealarm);
-                        // 상대매칭 게시판의 알림 설정 일때
-                    } else if (number.equals("2")) {
-                        user = new User(name, uid, loginWay, userToken, realarm, mealarm, replace, redate, choicePlace, date, noticealarm);
-                        // 용병모집 게시판의 알림 설정 일때
+                    if (choicePlace.isEmpty() || date.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "빈칸 없이 알림 조건을 설정해주세요.", Toast.LENGTH_SHORT).show();
+                        // 사용자가 빈칸없이 선택하지 않았을 때 Toast 메세지 전송
+                    } else {
+                        if (number.equals("1")) {
+                            user = new User(name, uid, loginWay, userToken, realarm, mealarm, choicePlace, date, meplace, medate, noticealarm);
+                            // 상대매칭 게시판의 알림 설정 일때
+                            Intent intent = new Intent(getApplicationContext(), RelativeBoardActivity.class);
+                            startActivity(intent);
+                            // RelativeBoardActivity로 이동
+                        } else if (number.equals("2")) {
+                            user = new User(name, uid, loginWay, userToken, realarm, mealarm, replace, redate, choicePlace, date, noticealarm);
+                            // 용병모집 게시판의 알림 설정 일때
+                            Intent intent = new Intent(getApplicationContext(), MercenaryBoardActivity.class);
+                            startActivity(intent);
+                            // MercenaryBoardActivity로 이동
+                        }
+
+                        user_database2.setValue(user);
+                        // 해당 유저의 알림조건 설정 파이어베이스 업로드 구문
+                        Toast.makeText(getApplicationContext(), "알림조건이 설정되었습니다.", Toast.LENGTH_SHORT).show(); // Toast 메세지 전송
                     }
-                    user_database2.setValue(user);
-                    // 해당 유저의 알림조건 설정 파이어베이스 업로드 구문
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            });
-
-            Toast.makeText(getApplicationContext(), "알림조건이 설정되었습니다.", Toast.LENGTH_SHORT).show(); // Toast 메세지 전송
-        }
+        });
     }
 }

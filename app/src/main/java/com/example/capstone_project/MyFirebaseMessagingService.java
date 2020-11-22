@@ -54,8 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void sendNotification(String messageTitle, String messageBody){
-
+    private void sendNotification(String messageTitle, String messageBody) {
         if (messageTitle.equals("상대매칭 게시판 알림") || messageTitle.equals("상대매칭 게시판 댓글알림")) {
             intent = new Intent(this, RelativeBoardActivity.class);
             // 상대매칭 게시판 일 때
@@ -66,14 +65,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             // 용병모집 게시판 일 때
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             // Activity가 스택의 맨 위에 존재 하는 경우에 기존 Activity를 재활용
-        } else if(messageTitle.equals("공지사항 알림")) {
+        } else if (messageTitle.equals("공지사항 알림")) {
             intent = new Intent(this, NoticeBoardActivity.class);
             // 공지사항 게시판 일 때
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             // Activity가 스택의 맨 위에 존재 하는 경우에 기존 Activity를 재활용
+        } else if (messageTitle.equals("댓글답글 알림")) {
+            intent = new Intent(this, MenuActivity.class);
+            // 답글이 달렸을때
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            // Activity가 스택의 맨 위에 존재 하는 경우에 기존 Activity를 재활용
         }
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         // pendingIntent를 통해 notification을 클릭하면 각 알림의 종류에 따른 액티비티 실행
 
         String channelId = getString(R.string.default_notification_channel_id); // 채널 id를 변수에 넣음
@@ -93,7 +97,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent); // 알람을 눌렀을 때 실행할 인텐트 설정
 
         NotificationManager notificationManager =
-                (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // Notification 채널을 설정
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //OREO API 26 이상에서는 채널 필요

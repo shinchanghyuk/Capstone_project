@@ -125,7 +125,7 @@ public class PlaceActivity extends AppCompatActivity {
             gu_arrayList.add(placeItem);
         } // listGu에 해당하는 데이터를 배열리스트에 담음
 
-        gu_adapter = new GuPlaceAdapter(gu_arrayList, this);
+        gu_adapter = new GuPlaceAdapter(gu_arrayList, this, choiceNumber);
         // GuPlaceAdapter 객체를 생성
         gu_recyclerView.setAdapter(gu_adapter);
         // 리사이클러뷰에 구 데이터들을 담음
@@ -144,6 +144,8 @@ public class PlaceActivity extends AppCompatActivity {
 
     // 사용자가 선택한 구를 띄워주는 역할
     public void total() {
+     total_arrayList.clear(); // 선택한 총 지역 구 데이터를 담는 배열리스트 초기화 / 이미 지역이 선택 된 후 다시 지역을 선택하려고 할 때 초기화
+
         if (!(choicePlace.equals("x"))) { // 선택된 구 지역이 있을 때
             totalPlaceItem = new TotalPlaceItem();
             totalPlaceItem.setRegion(choicePlace);
@@ -162,13 +164,13 @@ public class PlaceActivity extends AppCompatActivity {
 
     // 사용자가 선택한 구 지역 데이터를 없애길 원할 때 동작
     public void cancel() {
-        total_arrayList.clear(); // 선택한 총 지역 구 데이터를 담는 배열리스트 초기화
-
         choicePlace = "x"; // 선택한 구 지역 초기화
         choiceNumber = 0; // 선택한 구 지역 수도 0으로 수 변경
 
         gu_adapter = new GuPlaceAdapter(choiceNumber); // size 변경하기 위함
         gu_adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
-        total(); // total 메소드 호출
+
+        total();
+        // total 메소드 호출
     }
 }

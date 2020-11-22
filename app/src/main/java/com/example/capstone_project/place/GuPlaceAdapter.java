@@ -25,9 +25,10 @@ public class GuPlaceAdapter extends RecyclerView.Adapter<GuPlaceAdapter.ViewHold
     private static int size; // 사용자가 선택한 지역의 수
     private String choicePlace; // 사용자가 선택한 구를 담는 변수
 
-    public GuPlaceAdapter(ArrayList<PlaceItem> arrayList, Context context) {
+    public GuPlaceAdapter(ArrayList<PlaceItem> arrayList, Context context, int size) {
         this.arrayList = arrayList;
         this.context = context;
+        this.size = size;
     }
 
     public GuPlaceAdapter(int size) {
